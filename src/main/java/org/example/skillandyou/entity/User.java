@@ -8,7 +8,10 @@ import org.example.skillandyou.entity.enums.Status;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import java.math.BigDecimal;
@@ -79,12 +82,7 @@ public class User {
         if (status == null) status = Status.ACTIVE;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_skill",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
-    private Set<Skill> skills = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserSkill> userSkills = new ArrayList<>();
 
 }

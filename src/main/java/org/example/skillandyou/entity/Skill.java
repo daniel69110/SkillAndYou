@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import jakarta.persistence.ManyToMany;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -30,8 +33,8 @@ public class Skill {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @ManyToMany(mappedBy = "skills")
-    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "skill", cascade = CascadeType.ALL)
+    private List<UserSkill> userSkills = new ArrayList<>();
 
 
 }
