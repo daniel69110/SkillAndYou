@@ -1,5 +1,6 @@
 package org.example.skillandyou.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,7 @@ public class Skill {
     private String description;
 
     @OneToMany(mappedBy = "skill", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UserSkill> userSkills = new ArrayList<>();
 
 

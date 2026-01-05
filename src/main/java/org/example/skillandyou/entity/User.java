@@ -1,5 +1,6 @@
 package org.example.skillandyou.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.skillandyou.entity.enums.Role;
@@ -83,6 +84,7 @@ public class User {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UserSkill> userSkills = new ArrayList<>();
 
 }
