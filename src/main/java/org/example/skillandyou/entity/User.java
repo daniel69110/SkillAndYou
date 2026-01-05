@@ -5,6 +5,12 @@ import lombok.*;
 import org.example.skillandyou.entity.enums.Role;
 import org.example.skillandyou.entity.enums.Status;
 
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import java.util.HashSet;
+import java.util.Set;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -45,9 +51,16 @@ public class User {
     @Column(nullable = false, length = 20)
     private Status status;
 
+    @Column(length = 100)
     private String city;
+
+    @Column(length = 20)
     private String postalCode;
+
+    @Column(length = 100)
     private String country;
+
+    @Column(length = 255)
     private String photoUrl;
 
     @Lob
@@ -65,4 +78,13 @@ public class User {
         if (role == null) role = Role.USER;
         if (status == null) status = Status.ACTIVE;
     }
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_skill",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private Set<Skill> skills = new HashSet<>();
+
 }
