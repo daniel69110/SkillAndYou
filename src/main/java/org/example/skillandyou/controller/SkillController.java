@@ -3,6 +3,7 @@ package org.example.skillandyou.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.entity.Skill;
 import org.example.skillandyou.repository.SkillRepository;
+import org.example.skillandyou.service.SkillService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,15 +13,30 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class SkillController {
-    private final SkillRepository skillRepository;
+    private final SkillService skillService;
 
     @GetMapping
-    public List<Skill> getAll(){
-        return skillRepository.findAll();
+    public List<Skill> getAll() {
+        return skillService.getAllSkills();
+    }
+
+    @GetMapping("/{id}")
+    public Skill getById(@PathVariable Long id) {
+        return skillService.getSkillById(id);
     }
 
     @PostMapping
     public Skill create(@RequestBody Skill skill) {
-        return skillRepository.save(skill);
+        return skillService.createSkill(skill);
+    }
+
+    @PutMapping("/{id}")
+    public Skill update(@PathVariable Long id, @RequestBody Skill skill) {
+        return skillService.updateSkill(id, skill);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        skillService.deleteSkill(id);
     }
 }
