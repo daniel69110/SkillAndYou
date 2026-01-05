@@ -25,5 +25,7 @@ public class ReviewController {
     public List<Review> getUserReviews(@PathVariable Long userId) {
         return reviewService.getReviewsByUser(userId);
     }
+
+
 }
 

@@ -1,19 +1,26 @@
 package org.example.skillandyou.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.entity.User;
+import org.example.skillandyou.repository.ReviewRepository;
 import org.example.skillandyou.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+
     }
 
     public User getUserById(Long id) {
@@ -43,5 +50,27 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    public void recalculateAverageRating(Long userId) {
+        List<Review> reviews = reviewRepository.findByReviewedId(userId);
+        if (reviews.isEmpty()) {
+            User user = userRepository.findById(userId).orElseThrow();
+            user.setAverageRating(null);
+            userRepository.save(user);
+            return;
+        }
+
+        BigDecimal average = reviews.stream()
+                .map(Review::getRating)
+                .filter(Objects::nonNull)
+                .map(r -> BigDecimal.valueOf(r))
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .divide(BigDecimal.valueOf(reviews.size()), 2, RoundingMode.HALF_UP);
+
+        User user = userRepository.findById(userId).orElseThrow();
+        user.setAverageRating(average);
+        userRepository.save(user);
+    }
+
 }
 

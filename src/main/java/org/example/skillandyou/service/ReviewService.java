@@ -7,7 +7,7 @@ import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.entity.User;
 import org.example.skillandyou.repository.ExchangeRepository;
 import org.example.skillandyou.repository.ReviewRepository;
-import org.example.skillandyou.repository.UserRepository;
+import org.example.skillandyou.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,11 +18,11 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ExchangeRepository exchangeRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public Review createReview(Long exchangeId, Long reviewerId, ReviewRequestDTO dto) {
         Exchange exchange = exchangeRepository.findById(exchangeId).orElseThrow();
-        User reviewer = userRepository.findById(reviewerId).orElseThrow();
+        User reviewer = userService.getUserById(reviewerId);
 
         // Vérif : reviewer = requester OU receiver
         if (!exchange.getRequester().getId().equals(reviewerId) &&
@@ -34,7 +34,6 @@ public class ReviewService {
             throw new IllegalStateException("Déjà évalué cet échange !");
         }
 
-
         Review review = Review.builder()
                 .exchange(exchange)
                 .reviewer(reviewer)
@@ -43,11 +42,15 @@ public class ReviewService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        return reviewRepository.save(review);
+        Review saved = reviewRepository.save(review);
+
+
+        userService.recalculateAverageRating(reviewerId);
+
+        return saved;
     }
 
     public List<Review> getReviewsByUser(Long userId) {
         return reviewRepository.findByReviewerId(userId);
     }
 }
-

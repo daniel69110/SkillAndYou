@@ -21,6 +21,11 @@ public class ExchangeController {
         return exchangeService.getAllExchanges();
     }
 
+    @GetMapping("/{id}")
+    public ExchangeDTO getExchangeById(@PathVariable Long id) {
+        return exchangeService.getExchangeById(id);
+    }
+
     @GetMapping("/requester/{userId}")
     public List<ExchangeDTO> getByRequester(@PathVariable Long userId) {
         return exchangeService.getExchangesByRequester(userId);
@@ -35,4 +40,17 @@ public class ExchangeController {
     public ExchangeDTO create(@RequestBody Exchange exchange) {
         return exchangeService.createExchange(exchange);
     }
+
+    @PutMapping("/{id}/accept")
+    public ExchangeDTO accept(@PathVariable Long id, @RequestParam Long receiverId) {
+        return exchangeService.acceptExchange(id, receiverId);
+    }
+
+    @PutMapping("/{id}/complete")
+    public ExchangeDTO complete(@PathVariable Long id, @RequestParam Long userId) {
+        return exchangeService.completeExchange(id, userId);
+    }
+
+
+
 }
