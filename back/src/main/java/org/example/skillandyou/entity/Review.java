@@ -13,17 +13,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exchange_id")
-    private Exchange exchange;
+    @Column(name = "exchange_id", nullable = false)
+    private Long exchangeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reviewer_id")
-    private User reviewer;
+    @Column(name = "reviewer_id", nullable = false)
+    private Long reviewerId;
+
+    @Column(name = "reviewed_user_id", nullable = false)
+    private Long reviewedUserId;
 
     @Column(nullable = false)
     private Integer rating;
@@ -32,7 +34,5 @@ public class Review {
     private String comment;
 
     private LocalDateTime createdAt = LocalDateTime.now();
-
-
 }
 

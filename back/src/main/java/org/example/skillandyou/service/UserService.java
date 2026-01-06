@@ -52,7 +52,7 @@ public class UserService {
     }
 
     public void recalculateAverageRating(Long userId) {
-        List<Review> reviews = reviewRepository.findByReviewedId(userId);
+        List<Review> reviews = reviewRepository.findByReviewedUserId(userId);
         if (reviews.isEmpty()) {
             User user = userRepository.findById(userId).orElseThrow();
             user.setAverageRating(null);
