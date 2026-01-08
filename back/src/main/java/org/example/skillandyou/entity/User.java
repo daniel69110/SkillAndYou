@@ -91,4 +91,10 @@ public class User {
     @JsonIgnore
     private List<Suspension> suspensions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "reporter") @JsonIgnore private List<Report> reports;
+    @OneToMany(mappedBy = "reportedUser") @JsonIgnore private List<Report> reportedReports;
+    @OneToMany(mappedBy = "admin") @JsonIgnore private List<Report> processedReports;
+
+
+
 }

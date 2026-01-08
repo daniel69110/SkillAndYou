@@ -7,7 +7,7 @@ import org.example.skillandyou.entity.enums.ExchangeStatus;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Exchanges")
+@Table(name = "exchanges")
 @Getter
 @Setter
 @AllArgsConstructor
