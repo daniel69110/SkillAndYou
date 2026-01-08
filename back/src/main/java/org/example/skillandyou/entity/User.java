@@ -87,4 +87,8 @@ public class User {
     @JsonIgnore
     private List<UserSkill> userSkills = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Suspension> suspensions = new ArrayList<>();
+
 }
