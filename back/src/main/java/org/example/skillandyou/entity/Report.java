@@ -15,21 +15,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Report {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
-    @Column(name = "reporterId")
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reporterId", nullable = false)
     private User reporter;
 
-    @Column(name = "reportedUserId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reportedUserId", nullable = false)
     private User reportedUser;
 
-    @Column(name = "exchangeId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exchangeId")
     private Exchange exchange;
@@ -50,7 +46,6 @@ public class Report {
     @Column(name = "processingDate")
     private LocalDateTime processingDate;
 
-    @Column(name = "adminId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adminId")
     private User admin;
