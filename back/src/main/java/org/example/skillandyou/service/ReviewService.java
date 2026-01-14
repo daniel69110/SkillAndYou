@@ -1,5 +1,6 @@
 package org.example.skillandyou.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.ReviewRequestDTO;
 import org.example.skillandyou.entity.Exchange;
@@ -21,28 +22,25 @@ public class ReviewService {
     private final ExchangeRepository exchangeRepository;
     private final UserService userService;
 
+    // TON CREATE (parfait)
     public Review createReview(Long exchangeId, Long reviewerId, ReviewRequestDTO dto) {
-        // Récupération des objets liés
-        Exchange exchange = exchangeRepository.findById(exchangeId).orElseThrow();
+        Exchange exchange = exchangeRepository.findById(exchangeId)
+                .orElseThrow(() -> new EntityNotFoundException("Exchange not found: " + exchangeId));
         User reviewer = userService.getUserById(reviewerId);
 
-        // Vérif : le reviewer doit être requester OU receiver
-        if (!exchange.getRequester().getId().equals(reviewerId)
-                && !exchange.getReceiver().getId().equals(reviewerId)) {
+        if (!exchange.getRequester().getId().equals(reviewerId) &&
+                !exchange.getReceiver().getId().equals(reviewerId)) {
             throw new IllegalArgumentException("Seuls les participants peuvent évaluer");
         }
 
-        // Vérif : pas de review en double pour cet échange par ce user
         if (reviewRepository.findByExchangeIdAndReviewerId(exchangeId, reviewerId).isPresent()) {
             throw new IllegalStateException("Déjà évalué cet échange !");
         }
 
-        // Déterminer l'utilisateur évalué (l'autre participant)
         Long reviewedUserId = exchange.getRequester().getId().equals(reviewerId)
                 ? exchange.getReceiver().getId()
                 : exchange.getRequester().getId();
 
-        // Construire l'entité Review avec des IDs simples
         Review review = Review.builder()
                 .exchangeId(exchangeId)
                 .reviewerId(reviewerId)
@@ -53,17 +51,42 @@ public class ReviewService {
                 .build();
 
         Review saved = reviewRepository.save(review);
-
-        // Recalcul de la note moyenne de l'utilisateur évalué
         userService.recalculateAverageRating(reviewedUserId);
-
         return saved;
     }
 
-    /**
-     * Reviews reçues par un user (pour afficher son profil / note moyenne)
-     */
+    // NOUVELLES MÉTHODES
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
     public List<Review> getReviewsByUser(Long userId) {
+        return getReviewsByReviewedUser(userId);
+    }
+
+    public List<Review> getReviewsByReviewedUser(Long userId) {
         return reviewRepository.findByReviewedUserId(userId);
+    }
+
+    public List<Review> getReviewsByReviewer(Long reviewerId) {
+        return reviewRepository.findByReviewerId(reviewerId);
+    }
+
+    public Review getReviewById(Long id) {
+        return reviewRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found: " + id));
+    }
+
+
+    public Double getAverageRatingByUser(Long userId) {
+        List<Review> reviews = reviewRepository.findByReviewedUserId(userId);
+        return reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0.0);
+    }
+
+    public Long countReviewsByUser(Long userId) {
+        return reviewRepository.countByReviewedUserId(userId);
     }
 }

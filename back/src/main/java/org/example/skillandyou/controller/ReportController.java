@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.ProcessReportRequestDTO;
 import org.example.skillandyou.dto.ReportRequestDTO;
 import org.example.skillandyou.entity.Report;
-import org.example.skillandyou.entity.enums.ReportStatus;
 import org.example.skillandyou.service.ReportService;
 import org.springframework.web.bind.annotation.*;
 

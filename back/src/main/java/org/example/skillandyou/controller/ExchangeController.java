@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.AccepteExchangeRequestDTO;
 import org.example.skillandyou.dto.CreateExchangeRequestDTO;
 import org.example.skillandyou.dto.ExchangeDTO;
-import org.example.skillandyou.entity.Exchange;
 import org.example.skillandyou.service.ExchangeService;
 import org.springframework.web.bind.annotation.*;
 

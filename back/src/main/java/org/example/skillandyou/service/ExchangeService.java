@@ -44,6 +44,7 @@ public class ExchangeService {
     }
 
     public ExchangeDTO createExchange(CreateExchangeRequestDTO request) {
+
         User requester = userRepository.findById(request.getRequesterId())
                 .orElseThrow(() -> new EntityNotFoundException("Requester not found"));
         User receiver = userRepository.findById(request.getReceiverId())

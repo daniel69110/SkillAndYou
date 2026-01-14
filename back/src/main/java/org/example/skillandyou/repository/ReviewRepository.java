@@ -8,19 +8,10 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    // Reviews données par un user (auteur)
-    List<Review> findByReviewerId(Long reviewerId);
-
-    // Reviews reçues par un user (cible)
-    List<Review> findByReviewedUserId(Long reviewedUserId);
-
-
-
-    // Reviews d’un échange
-    List<Review> findByExchangeId(Long exchangeId);
-
-    // Une review précise pour un échange + un reviewer
     Optional<Review> findByExchangeIdAndReviewerId(Long exchangeId, Long reviewerId);
+    List<Review> findByReviewedUserId(Long userId);
+    List<Review> findByReviewerId(Long reviewerId);
+    Long countByReviewedUserId(Long userId);
 }
 
 
