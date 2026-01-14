@@ -1,6 +1,8 @@
 package org.example.skillandyou.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.skillandyou.dto.AccepteExchangeRequestDTO;
+import org.example.skillandyou.dto.CreateExchangeRequestDTO;
 import org.example.skillandyou.dto.ExchangeDTO;
 import org.example.skillandyou.entity.Exchange;
 import org.example.skillandyou.service.ExchangeService;
@@ -37,18 +39,23 @@ public class ExchangeController {
     }
 
     @PostMapping
-    public ExchangeDTO create(@RequestBody Exchange exchange) {
-        return exchangeService.createExchange(exchange);
+    public ExchangeDTO create(@RequestBody CreateExchangeRequestDTO request) {
+        return exchangeService.createExchange(request);
     }
 
     @PutMapping("/{id}/accept")
-    public ExchangeDTO accept(@PathVariable Long id, @RequestParam Long receiverId) {
-        return exchangeService.acceptExchange(id, receiverId);
+    public ExchangeDTO accept(@PathVariable Long id, @RequestBody AccepteExchangeRequestDTO request) {
+        return exchangeService.acceptExchange(id, request.getReceiverId());
     }
 
     @PutMapping("/{id}/complete")
-    public ExchangeDTO complete(@PathVariable Long id, @RequestParam Long userId) {
-        return exchangeService.completeExchange(id, userId);
+    public ExchangeDTO complete(@PathVariable Long id) {
+        return exchangeService.completeExchange(id);
+    }
+
+    @PutMapping("/{id}/cancel")
+    public ExchangeDTO cancel(@PathVariable Long id) {
+        return exchangeService.cancelExchange(id);
     }
 
 

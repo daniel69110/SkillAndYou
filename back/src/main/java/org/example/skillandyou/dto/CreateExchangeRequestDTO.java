@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSummaryDTO {
-    private Long id;
-    private String userName;
-    private String firstName;
-    private String lastName;
+public class CreateExchangeRequestDTO {
+    private Long requesterId;
+    private Long receiverId;
+    private Long offeredSkillId;
+    private Long requestedSkillId;
 }

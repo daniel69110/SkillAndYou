@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSummaryDTO {
-    private Long id;
-    private String userName;
-    private String firstName;
-    private String lastName;
+public class AccepteExchangeRequestDTO {
+    private Long receiverId;
 }
