@@ -93,7 +93,7 @@ public class ExchangeService {
         exchange.setStatus(ExchangeStatus.ACCEPTED);
         exchange.setAcceptanceDate(LocalDateTime.now());
         Exchange saved = exchangeRepository.save(exchange);
-        return entityToDto(saved);  // ← AJOUTE ÇA !
+        return entityToDto(saved);
     }
 
     public ExchangeDTO completeExchange(Long exchangeId, Long userId) {
@@ -104,7 +104,7 @@ public class ExchangeService {
         exchange.setStatus(ExchangeStatus.COMPLETED);
         exchange.setCompletionDate(LocalDateTime.now());
         Exchange saved = exchangeRepository.save(exchange);
-        return entityToDto(saved);  // ← AJOUTE ÇA !
+        return entityToDto(saved);
     }
 
     public ExchangeDTO getExchangeById(Long id) {
