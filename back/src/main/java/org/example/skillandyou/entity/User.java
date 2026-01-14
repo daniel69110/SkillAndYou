@@ -42,9 +42,11 @@ public class User {
     private String lastName;
 
     @Column(nullable = false, unique = true, length = 100)
+    @JsonIgnore
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
