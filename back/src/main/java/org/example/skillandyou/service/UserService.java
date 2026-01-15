@@ -5,6 +5,7 @@ import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.entity.User;
 import org.example.skillandyou.repository.ReviewRepository;
 import org.example.skillandyou.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.util.Objects;
 public class UserService {
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -28,6 +30,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.save(user);
     }
 
@@ -37,7 +42,9 @@ public class UserService {
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
         user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword()); // ⚠️ hash en prod !
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+        }
         user.setBio(userDetails.getBio());
         user.setCity(userDetails.getCity());
         user.setCountry(userDetails.getCountry());

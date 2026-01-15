@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/skills")
@@ -21,16 +22,21 @@ public class SkillController {
         return skillService.getAllSkills();
     }
 
+    @GetMapping("/debug")
+    public Map<String, Object> debug(@AuthenticationPrincipal String principal) {
+        Long userId = Long.parseLong(principal.replace("user-", ""));
+        return Map.of(
+                "principal", principal,
+                "parsedUserId", userId,
+                "skillsCount", skillService.getSkillsByUser(userId).size()
+        );
+    }
+
     @GetMapping("/{id}")
     public Skill getById(@PathVariable Long id) {
         return skillService.getSkillById(id);
     }
 
-    @GetMapping("/my")
-    public List<Skill> getMySkills(@AuthenticationPrincipal String principal) {
-        Long userId = Long.parseLong(principal.replace("user-", ""));
-        return skillService.getSkillsByUser(userId);  // → 1
-    }
 
     @PostMapping
     public Skill create(@RequestBody Skill skill) {

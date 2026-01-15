@@ -3,6 +3,7 @@ package org.example.skillandyou.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.UserSkillDTO;
 import org.example.skillandyou.service.UserSkillService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,13 @@ public class UserSkillController {
                                  @PathVariable Long skillId,
                                  @RequestParam(defaultValue = "3") Integer level) {
         return userSkillService.createUserSkill(userId, skillId, level);
+    }
+
+    @GetMapping("/my")  // ← NOUVEAU
+    public List<UserSkillDTO> getMySkills(@AuthenticationPrincipal String principal) {
+        Long userId = Long.parseLong(principal.replace("user-", ""));
+        System.out.println("DEBUG /my userId=" + userId);
+        return userSkillService.getUserSkills(userId);
     }
 
     @GetMapping
