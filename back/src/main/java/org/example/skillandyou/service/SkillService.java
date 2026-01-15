@@ -20,6 +20,10 @@ public class SkillService {
         return skillRepository.findById(id).orElseThrow();
     }
 
+    public List<Skill> getSkillsByUser(Long userId) {
+        return skillRepository.findSkillsByUserId(userId);
+    }
+
     public Skill createSkill(Skill skill) {
         return skillRepository.save(skill);
     }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.entity.Skill;
 import org.example.skillandyou.repository.SkillRepository;
 import org.example.skillandyou.service.SkillService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class SkillController {
     @GetMapping("/{id}")
     public Skill getById(@PathVariable Long id) {
         return skillService.getSkillById(id);
+    }
+
+    @GetMapping("/my")
+    public List<Skill> getMySkills(@AuthenticationPrincipal String principal) {
+        Long userId = Long.parseLong(principal.replace("user-", ""));
+        return skillService.getSkillsByUser(userId);  // → 1
     }
 
     @PostMapping
