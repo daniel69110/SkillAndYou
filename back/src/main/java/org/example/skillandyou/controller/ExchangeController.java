@@ -5,6 +5,7 @@ import org.example.skillandyou.dto.AccepteExchangeRequestDTO;
 import org.example.skillandyou.dto.CreateExchangeRequestDTO;
 import org.example.skillandyou.dto.ExchangeDTO;
 import org.example.skillandyou.service.ExchangeService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,13 @@ public class ExchangeController {
     @GetMapping("/{id}")
     public ExchangeDTO getExchangeById(@PathVariable Long id) {
         return exchangeService.getExchangeById(id);
+    }
+
+    @GetMapping("/my")
+    public List<ExchangeDTO> getMyExchanges(@AuthenticationPrincipal String principal) {
+        Long userId = Long.parseLong(principal.replace("user-", ""));
+        System.out.println("🔍 Connecté userId=" + userId);
+        return exchangeService.getMyExchanges(userId);
     }
 
     @GetMapping("/requester/{userId}")

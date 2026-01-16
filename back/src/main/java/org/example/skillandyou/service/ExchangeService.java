@@ -31,6 +31,11 @@ public class ExchangeService {
                 .toList();
     }
 
+    public List<ExchangeDTO> getMyExchanges(Long userId) {
+        return exchangeRepository.findMyExchanges(userId)
+                .stream().map(this::entityToDto).toList();
+    }
+
     public List<ExchangeDTO> getExchangesByRequester(Long userId) {
         return exchangeRepository.findByRequester_Id(userId).stream()
                 .map(this::entityToDto)
