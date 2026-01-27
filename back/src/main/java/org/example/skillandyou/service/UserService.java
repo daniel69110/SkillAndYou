@@ -2,8 +2,10 @@ package org.example.skillandyou.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.UpdateUserDTO;
+import org.example.skillandyou.dto.UserSearchDTO;
 import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.entity.User;
+import org.example.skillandyou.entity.enums.Status;
 import org.example.skillandyou.repository.ReviewRepository;
 import org.example.skillandyou.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -86,5 +89,59 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public List<UserSearchDTO> searchUsers(String skillName, String city, String type) {
+        List<User> users;
+
+        if (skillName != null && !skillName.isEmpty()) {
+            // Recherche par compétence
+            users = userRepository.findBySkillName(skillName);
+
+            // Filtre par ville si fournie
+            if (city != null && !city.isEmpty()) {
+                users = users.stream()
+                        .filter(u -> u.getCity() != null &&
+                                u.getCity().toLowerCase().contains(city.toLowerCase()))
+                        .collect(Collectors.toList());
+            }
+
+            // Filtre par type (OFFER/REQUEST) si fourni
+            if (type != null && !type.isEmpty()) {
+                users = users.stream()
+                        .filter(u -> hasSkillWithType(u, skillName, type))
+                        .collect(Collectors.toList());
+            }
+        } else if (city != null && !city.isEmpty()) {
+            // Recherche par ville uniquement
+            users = userRepository.findByCityContainingIgnoreCase(city);
+        } else {
+            // Aucun filtre : retourne tous les users actifs
+            users = userRepository.findByStatus(Status.ACTIVE);
+        }
+
+        return users.stream()
+                .map(this::toSearchDTO)
+                .collect(Collectors.toList());
+    }
+
+    private boolean hasSkillWithType(User user, String skillName, String type) {
+        return user.getUserSkills().stream()
+                .anyMatch(us -> us.getSkill().getName().equalsIgnoreCase(skillName) &&
+                        us.getType().name().equals(type));
+    }
+
+    private UserSearchDTO toSearchDTO(User user) {
+        return new UserSearchDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUserName(),
+                user.getCity(),
+                user.getCountry(),
+                user.getPhotoUrl(),
+                user.getAverageRating() != null ? user.getAverageRating().doubleValue() : null
+        );
+    }
 }
+
+
 

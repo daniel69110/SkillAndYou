@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.RegisterRequestDTO;
 import org.example.skillandyou.dto.UpdateUserDTO;
+import org.example.skillandyou.dto.UserSearchDTO;
 import org.example.skillandyou.entity.User;
-import org.example.skillandyou.entity.enums.Role;
-import org.example.skillandyou.entity.enums.Status;
-import org.example.skillandyou.repository.UserRepository;
 import org.example.skillandyou.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,4 +56,13 @@ public class UserController {
     public void delete(@PathVariable Long id) {
         userService.deleteUser(id);
     }
+
+    @GetMapping("/search")
+    public List<UserSearchDTO> searchUsers(
+            @RequestParam(required = false) String skill,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String type) {
+        return userService.searchUsers(skill, city, type);
+    }
+
 }

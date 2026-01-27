@@ -34,6 +34,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
 
+                        // USER - Search (AVANT /api/users/{id} !)
+                        .requestMatchers(HttpMethod.GET, "/api/users/search").hasRole("USER")
+
                         // USER - Profil
                         .requestMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/users/{id}").hasRole("USER")
@@ -61,6 +64,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
     @Bean
