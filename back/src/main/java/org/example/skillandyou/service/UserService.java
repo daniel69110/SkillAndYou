@@ -1,6 +1,7 @@
 package org.example.skillandyou.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.skillandyou.dto.UpdateUserDTO;
 import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.entity.User;
 import org.example.skillandyou.repository.ReviewRepository;
@@ -37,23 +38,24 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, User userDetails) {
-        User user = getUserById(id);
-        user.setUserName(userDetails.getUserName());
-        user.setFirstName(userDetails.getFirstName());
-        user.setLastName(userDetails.getLastName());
-        user.setEmail(userDetails.getEmail());
-        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-        }
-        user.setBio(userDetails.getBio());
-        user.setCity(userDetails.getCity());
-        user.setCountry(userDetails.getCountry());
-        user.setPostalCode(userDetails.getPostalCode());
-        user.setPhotoUrl(userDetails.getPhotoUrl());
-        user.setStatus(userDetails.getStatus());
-        return userRepository.save(user);
+    public User updateUser(Long id, UpdateUserDTO dto) {
+        User existing = getUserById(id);
+
+
+        if (dto.getFirstName() != null) existing.setFirstName(dto.getFirstName());
+        if (dto.getLastName() != null) existing.setLastName(dto.getLastName());
+        if (dto.getUserName() != null) existing.setUserName(dto.getUserName());
+
+        // Champs optionnels (peuvent être null pour vider)
+        existing.setBio(dto.getBio());
+        existing.setCity(dto.getCity());
+        existing.setCountry(dto.getCountry());
+        existing.setPostalCode(dto.getPostalCode());
+        existing.setPhotoUrl(dto.getPhotoUrl());
+
+        return userRepository.save(existing);
     }
+
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);

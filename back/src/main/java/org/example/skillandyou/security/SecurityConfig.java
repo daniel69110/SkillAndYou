@@ -34,18 +34,22 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
 
-                        // USER (plus spécifique d'abord)
+                        // USER - Profil (AVANT le catch-all ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("USER")    // ← AJOUTE
+                        .requestMatchers(HttpMethod.PUT, "/api/users/{id}").hasRole("USER")    // ← AJOUTE
+
+                        // USER - Skills & Exchanges
                         .requestMatchers("/api/users/{userId}/skills/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/exchanges/**",
                                 "/api/reviews/**", "/api/skills/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/exchanges/**", "/api/reviews/**").hasRole("USER")
 
-                        // ADMIN (général après)
+                        // ADMIN (général après - catch-all)
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/users/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").hasRole("ADMIN")  // ← Reste à la fin
 
                         .anyRequest().denyAll()
                 )
@@ -53,6 +57,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

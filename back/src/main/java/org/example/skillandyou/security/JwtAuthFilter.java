@@ -27,19 +27,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
         String username = null;
+        String role = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
             if (jwtUtil.isValid(jwt)) {
                 Long userId = jwtUtil.getUserId(jwt);
+                role = jwtUtil.getRole(jwt);
                 username = "user-" + userId;
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             List<SimpleGrantedAuthority> authorities = List.of(
-                    new SimpleGrantedAuthority("ROLE_USER")
+                    new SimpleGrantedAuthority("ROLE_" + role)
             );
 
             UsernamePasswordAuthenticationToken authToken =
@@ -48,7 +49,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
-
 
         filterChain.doFilter(request, response);
     }

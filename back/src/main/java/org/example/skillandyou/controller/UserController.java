@@ -3,6 +3,7 @@ package org.example.skillandyou.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.RegisterRequestDTO;
+import org.example.skillandyou.dto.UpdateUserDTO;
 import org.example.skillandyou.entity.User;
 import org.example.skillandyou.entity.enums.Role;
 import org.example.skillandyou.entity.enums.Status;
@@ -49,8 +50,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public User update(@PathVariable Long id, @RequestBody UpdateUserDTO dto) {
+        return userService.updateUser(id, dto);
     }
 
     @DeleteMapping("/{id}")

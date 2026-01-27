@@ -3,6 +3,8 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { Dashboard } from './pages/Dashboard';
 import { RequireAuth } from './auth/RequireAuth';
+import {ProfilePage} from "./pages/ProfilePage.tsx";
+import {EditProfilePage} from "./pages/EditProfilePage.tsx";
 
 function App() {
     return (
@@ -13,6 +15,18 @@ function App() {
             <Route path="/dashboard" element={
                 <RequireAuth>
                     <Dashboard />
+                </RequireAuth>
+            }/>
+
+            <Route path="/profile/:id" element={
+                <RequireAuth>
+                    <ProfilePage />
+                </RequireAuth>
+            } />
+
+            <Route path="/profile/edit" element={
+                <RequireAuth>
+                    <EditProfilePage />
                 </RequireAuth>
             } />
 

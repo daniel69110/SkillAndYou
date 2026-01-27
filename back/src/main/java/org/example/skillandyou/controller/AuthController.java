@@ -38,7 +38,7 @@ public class AuthController {
         }
 
         // 3. JWT
-        String token = jwtUtil.generateToken(user.getId(), user.getUserName());
+        String token = jwtUtil.generateToken(user.getId(), user.getUserName(), user.getRole().name());
 
         // 4. UserDTO
         UserDTO userDTO = new UserDTO(
