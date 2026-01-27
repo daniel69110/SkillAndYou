@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
 export const LoginPage = () => {
@@ -55,6 +55,10 @@ export const LoginPage = () => {
                     Se connecter
                 </button>
             </form>
+            <p style={{ marginTop: '20px', textAlign: 'center' }}>
+                Pas encore de compte ? <Link to="/register">S'inscrire</Link>
+            </p>
+
         </div>
     );
 };
