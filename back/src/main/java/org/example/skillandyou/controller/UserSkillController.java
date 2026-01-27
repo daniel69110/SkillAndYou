@@ -1,6 +1,7 @@
 package org.example.skillandyou.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.skillandyou.dto.AddUserSkillRequestDTO;
 import org.example.skillandyou.dto.UserSkillDTO;
 import org.example.skillandyou.service.UserSkillService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,11 +16,10 @@ import java.util.List;
 public class UserSkillController {
     private final UserSkillService userSkillService;
 
-    @PostMapping("/{skillId}")
+    @PostMapping
     public UserSkillDTO addSkill(@PathVariable Long userId,
-                                 @PathVariable Long skillId,
-                                 @RequestParam(defaultValue = "3") Integer level) {
-        return userSkillService.createUserSkill(userId, skillId, level);
+                                 @RequestBody AddUserSkillRequestDTO request) {
+        return userSkillService.createUserSkill(userId, request.getSkillId(), request.getLevel(), request.getType());
     }
 
     @GetMapping("/my")

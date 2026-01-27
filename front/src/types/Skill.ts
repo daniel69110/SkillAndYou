@@ -10,7 +10,7 @@ export interface UserSkill {
     userId: number;
     skillId: number;
     skill: Skill;
-    type: 'OFFER' | 'REQUEST';  // OFFER = je propose, REQUEST = je cherche
+    type: 'OFFER' | 'REQUEST';
     level?: number;  // 1-5
 }
 

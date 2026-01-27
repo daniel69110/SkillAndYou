@@ -12,7 +12,8 @@ public class UserSkillDTO {
     private Long id;
     private Long userId;
     private Long skillId;
-    private String skillName;
+    private SkillDTO skill;
+    private String type;
     private Integer level;
     private LocalDate acquisitionDate;
 }

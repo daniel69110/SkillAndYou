@@ -2,6 +2,8 @@ package org.example.skillandyou.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.skillandyou.entity.enums.SkillType;
+
 import java.time.LocalDate;
 
 @Entity
@@ -21,7 +23,11 @@ public class UserSkill {
     private Skill skill;
 
     private LocalDate acquisitionDate;
-    private Integer level; // 1-5
+    private Integer level;
+
+    @Enumerated(EnumType.STRING)  // ← AJOUTE
+    @Column(nullable = false)     // ← AJOUTE
+    private SkillType type;
 
     @PrePersist
     protected void onCreate() {

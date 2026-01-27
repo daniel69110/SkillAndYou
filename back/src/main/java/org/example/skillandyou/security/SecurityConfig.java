@@ -34,12 +34,16 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
 
-                        // USER - Profil (AVANT le catch-all ADMIN)
-                        .requestMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("USER")    // ← AJOUTE
-                        .requestMatchers(HttpMethod.PUT, "/api/users/{id}").hasRole("USER")    // ← AJOUTE
+                        // USER - Profil
+                        .requestMatchers(HttpMethod.GET, "/api/users/{id}").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/users/{id}").hasRole("USER")
 
-                        // USER - Skills & Exchanges
-                        .requestMatchers("/api/users/{userId}/skills/**").hasRole("USER")
+                        // USER - Skills
+                        .requestMatchers(HttpMethod.GET, "/api/users/{userId}/skills").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/users/{userId}/skills").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/{userId}/skills/**").hasRole("USER")
+
+                        // USER - Exchanges & Reviews
                         .requestMatchers(HttpMethod.GET, "/api/exchanges/**",
                                 "/api/reviews/**", "/api/skills/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/exchanges/**", "/api/reviews/**").hasRole("USER")
@@ -49,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/users/**").hasRole("ADMIN")  // ← Reste à la fin
+                        .requestMatchers("/api/users/**").hasRole("ADMIN")
 
                         .anyRequest().denyAll()
                 )

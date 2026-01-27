@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { userApi } from '../api/userApi';
+import { skillApi } from '../api/skillApi';
 import { useAuth } from '../auth/AuthContext';
-import type { UserProfile } from '../types';
+import { SkillBadge } from '../components/SkillBadge';
+import { AddSkillModal } from '../components/AddSkillModal';
+import type { UserProfile, UserSkill } from '../types';
 
 export function ProfilePage() {
     const { id } = useParams<{ id: string }>();
@@ -10,6 +13,8 @@ export function ProfilePage() {
     const { user: currentUser, logout } = useAuth();
 
     const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
+    const [showAddModal, setShowAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -27,6 +32,35 @@ export function ProfilePage() {
 
         if (id) fetchProfile();
     }, [id]);
+
+    useEffect(() => {
+        const fetchSkills = async () => {
+            if (!id) return;
+            try {
+                const skills = await skillApi.getUserSkills(Number(id));
+                setUserSkills(skills);
+            } catch (err) {
+                console.error('Failed to load skills');
+            }
+        };
+        if (profile) fetchSkills();
+    }, [id, profile]);
+
+    const handleDeleteSkill = async (userSkillId: number) => {
+        if (!confirm('Supprimer cette compétence ?')) return;
+
+        try {
+            await skillApi.deleteUserSkill(Number(id), userSkillId);
+            setUserSkills(userSkills.filter(s => s.id !== userSkillId));
+        } catch (err) {
+            alert('Erreur lors de la suppression');
+        }
+    };
+
+    const handleSkillAdded = async () => {
+        const skills = await skillApi.getUserSkills(Number(id));
+        setUserSkills(skills);
+    };
 
     const isOwnProfile = currentUser?.id === Number(id);
 
@@ -99,11 +133,50 @@ export function ProfilePage() {
                         color: 'white',
                         fontSize: '0.9em'
                     }}>
-              {profile.status}
-            </span>
+                            {profile.status}
+                        </span>
                     </div>
                 </div>
             </div>
+
+            {/* SECTION COMPÉTENCES */}
+            <div style={{ marginTop: '30px', background: '#f8f9fa', padding: '20px', borderRadius: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                    <h2>Compétences</h2>
+                    {isOwnProfile && (
+                        <button
+                            onClick={() => setShowAddModal(true)}
+                            style={{ padding: '8px 16px', cursor: 'pointer', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}
+                        >
+                            + Ajouter
+                        </button>
+                    )}
+                </div>
+
+                {userSkills.length === 0 ? (
+                    <p style={{ color: '#6c757d' }}>Aucune compétence ajoutée</p>
+                ) : (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {userSkills.map(userSkill => (
+                            <SkillBadge
+                                key={userSkill.id}
+                                userSkill={userSkill}
+                                onDelete={isOwnProfile ? handleDeleteSkill : undefined}
+                                showDelete={isOwnProfile}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* MODAL AJOUT COMPÉTENCE */}
+            {showAddModal && (
+                <AddSkillModal
+                    userId={Number(id)}
+                    onClose={() => setShowAddModal(false)}
+                    onSuccess={handleSkillAdded}
+                />
+            )}
         </div>
     );
 }
