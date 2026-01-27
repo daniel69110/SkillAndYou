@@ -7,6 +7,7 @@ interface AuthContextType {
     user: User | null;
     token: string | null;
     login: (email: string, password: string) => Promise<void>;
+    setAuth: (token: string, user: User) => void;
     logout: () => void;
 }
 
@@ -33,6 +34,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUser(u);
     };
 
+    const setAuth = (token: string, user: User) => {  // ← NOUVEAU
+        localStorage.setItem('token', token);
+        setToken(token);
+        setUser(user);
+    };
+
     const logout = () => {
         localStorage.removeItem('token');
         setToken(null);
@@ -40,7 +47,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, token, login, setAuth, logout }}>
             {children}
         </AuthContext.Provider>
     );
