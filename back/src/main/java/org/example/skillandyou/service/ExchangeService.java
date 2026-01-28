@@ -24,6 +24,7 @@ public class ExchangeService {
     private final ExchangeRepository exchangeRepository;
     private final UserRepository userRepository;
     private final SkillRepository skillRepository;
+    private final NotificationService notificationService;
 
     public List<ExchangeDTO> getAllExchanges() {
         return exchangeRepository.findAll().stream()
@@ -68,6 +69,16 @@ public class ExchangeService {
         exchange.setCreationDate(LocalDateTime.now());
 
         Exchange saved = exchangeRepository.save(exchange);
+
+        notificationService.createNotification(
+                receiver.getId(),
+                "EXCHANGE_CREATED",
+                requester.getFirstName() + " " + requester.getLastName() +
+                        " souhaite échanger avec vous",
+                saved.getId(),
+                requester.getFirstName() + " " + requester.getLastName()
+        );
+
         return entityToDto(saved);
     }
 
@@ -84,7 +95,20 @@ public class ExchangeService {
 
         exchange.setStatus(ExchangeStatus.ACCEPTED);
         exchange.setAcceptanceDate(LocalDateTime.now());
-        return entityToDto(exchangeRepository.save(exchange));
+        Exchange updated = exchangeRepository.save(exchange);
+
+        // 🔔 AJOUTE CETTE NOTIFICATION au requester
+        notificationService.createNotification(
+                exchange.getRequester().getId(),
+                "EXCHANGE_ACCEPTED",
+                exchange.getReceiver().getFirstName() + " " +
+                        exchange.getReceiver().getLastName() + " a accepté votre échange",
+                exchangeId,
+                exchange.getReceiver().getFirstName() + " " +
+                        exchange.getReceiver().getLastName()
+        );
+
+        return entityToDto(updated);
     }
 
     public ExchangeDTO completeExchange(Long exchangeId) {
@@ -97,7 +121,26 @@ public class ExchangeService {
 
         exchange.setStatus(ExchangeStatus.COMPLETED);
         exchange.setCompletionDate(LocalDateTime.now());
-        return entityToDto(exchangeRepository.save(exchange));
+        Exchange updated = exchangeRepository.save(exchange);
+
+        // 🔔 Notification aux 2 participants
+        notificationService.createNotification(
+                exchange.getRequester().getId(),
+                "EXCHANGE_COMPLETED",
+                "L'échange a été marqué comme terminé",
+                exchangeId,
+                "Système"
+        );
+
+        notificationService.createNotification(
+                exchange.getReceiver().getId(),
+                "EXCHANGE_COMPLETED",
+                "L'échange a été marqué comme terminé",
+                exchangeId,
+                "Système"
+        );
+
+        return entityToDto(updated);
     }
 
     public ExchangeDTO cancelExchange(Long exchangeId) {

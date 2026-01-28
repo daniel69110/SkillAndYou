@@ -20,7 +20,12 @@ public class Notification {
 
     private Long userId;
     private String type;
-    private String content;
-    private LocalDateTime creationDate;
-    private Boolean isRead = false;
+    private String message;
+
+
+    private Long exchangeId;
+    private String senderName;
+
+    private Boolean read = false;
+    private LocalDateTime createdAt = LocalDateTime.now();
 }
