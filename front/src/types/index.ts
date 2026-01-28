@@ -6,3 +6,4 @@ export * from './UserProfile';
 export * from './Skill';
 export * from './Search';
 export * from './UpdateUser';
+export * from './Notification.ts';

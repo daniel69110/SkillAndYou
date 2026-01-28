@@ -31,6 +31,7 @@ public class SecurityConfig {
                         // PUBLIC
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()  // 🔔 AJOUTE WebSocket
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
 
@@ -50,7 +51,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/exchanges/**",
                                 "/api/reviews/**", "/api/skills/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/exchanges/**", "/api/reviews/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.PUT, "/api/exchanges/**").hasRole("USER")  // ← AJOUTE CETTE LIGNE
+                        .requestMatchers(HttpMethod.PUT, "/api/exchanges/**").hasRole("USER")
+
+                        // 🔔 AJOUTE Notifications
+                        .requestMatchers(HttpMethod.GET, "/api/notifications/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/notifications/**").hasRole("USER")
 
                         // ADMIN (général après - catch-all)
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
@@ -65,6 +70,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
 
