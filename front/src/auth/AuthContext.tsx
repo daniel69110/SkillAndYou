@@ -1,4 +1,4 @@
-import { createContext, useContext, useState} from 'react';
+import {createContext, useContext, useEffect, useState} from 'react';
 import type { ReactNode } from 'react';
 import type { User } from '../types';
 import { authApi } from '../api/authApi';
@@ -26,6 +26,31 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);  // ← AJOUTÉ
+
+    // ===== NOUVEAU: Recharge token au démarrage =====
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            // Decode JWT pour récupérer user info
+            try {
+                const payload = JSON.parse(atob(storedToken.split('.')[1]));
+                const userFromToken: User = {
+                    id: payload.userId,
+                    email: payload.sub,
+                    firstName: payload.firstName || '',
+                    lastName: payload.lastName || '',
+                    skills: []
+                };
+                setToken(storedToken);
+                setUser(userFromToken);
+            } catch (error) {
+                console.error('Token invalide:', error);
+                localStorage.removeItem('token');
+            }
+        }
+        setLoading(false);
+    }, []);
 
     const login = async (email: string, password: string) => {
         const { token: t, user: u } = await authApi.login({ email, password });
@@ -34,7 +59,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setUser(u);
     };
 
-    const setAuth = (token: string, user: User) => {  // ← NOUVEAU
+    const setAuth = (token: string, user: User) => {
         localStorage.setItem('token', token);
         setToken(token);
         setUser(user);
@@ -45,6 +70,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setToken(null);
         setUser(null);
     };
+
+    // Affiche loader pendant vérification token
+    if (loading) {
+        return <div style={{ padding: '20px', textAlign: 'center' }}>Chargement...</div>;
+    }
 
     return (
         <AuthContext.Provider value={{ user, token, login, setAuth, logout }}>

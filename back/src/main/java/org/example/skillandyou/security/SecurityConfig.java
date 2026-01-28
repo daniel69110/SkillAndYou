@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/exchanges/**",
                                 "/api/reviews/**", "/api/skills/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/exchanges/**", "/api/reviews/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/exchanges/**").hasRole("USER")  // ← AJOUTE CETTE LIGNE
 
                         // ADMIN (général après - catch-all)
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
@@ -64,6 +65,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
 
