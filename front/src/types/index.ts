@@ -4,3 +4,5 @@ export * from './LoginResponse';
 export * from './RegisterRequest';
 export * from './UserProfile';
 export * from './Skill';
+export * from './Search';
+export * from './UpdateUser';

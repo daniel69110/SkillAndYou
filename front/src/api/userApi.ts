@@ -1,25 +1,32 @@
-import axios from 'axios';
-import type { UserProfile, UpdateProfileRequest } from '../types';
-
-const API_URL = 'http://localhost:8080/api';
-
-const getAuthHeader = () => {
-    const token = localStorage.getItem('token');
-    return { Authorization: `Bearer ${token}` };
-};
+import api from './axios';
+import type { User } from '../types/User';
+import type { UpdateUserRequest } from '../types/UpdateUser';
+import type { UserSearchResult, SearchFilters } from '../types/Search';
+import type {UserProfile} from "../types";
 
 export const userApi = {
-    getProfile: async (userId: number): Promise<UserProfile> => {
-        const response = await axios.get(`${API_URL}/users/${userId}`, {
-            headers: getAuthHeader()
-        });
+    getById: async (userId: number): Promise<User> => {
+        const response = await api.get(`/users/${userId}`);
         return response.data;
     },
 
-    updateProfile: async (userId: number, data: UpdateProfileRequest): Promise<UserProfile> => {
-        const response = await axios.put(`${API_URL}/users/${userId}`, data, {
-            headers: getAuthHeader()
-        });
+    getProfile: async (userId: number): Promise<UserProfile> => {
+        const response = await api.get(`/users/${userId}`);
         return response.data;
-    }
+    },
+
+    update: async (userId: number, data: UpdateUserRequest): Promise<User> => {
+        const response = await api.put(`/users/${userId}`, data);
+        return response.data;
+    },
+
+    searchUsers: async (filters: SearchFilters): Promise<UserSearchResult[]> => {
+        const params = new URLSearchParams();
+        if (filters.skill) params.append('skill', filters.skill);
+        if (filters.city) params.append('city', filters.city);
+        if (filters.type) params.append('type', filters.type);
+
+        const response = await api.get(`/users/search?${params.toString()}`);
+        return response.data;
+    },
 };

@@ -5,6 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { RequireAuth } from './auth/RequireAuth';
 import {ProfilePage} from "./pages/ProfilePage.tsx";
 import {EditProfilePage} from "./pages/EditProfilePage.tsx";
+import SearchPage from './pages/SearchPage';
 
 function App() {
     return (
@@ -28,6 +29,10 @@ function App() {
                 <RequireAuth>
                     <EditProfilePage />
                 </RequireAuth>
+            } />
+
+            <Route path="/search" element={
+                <SearchPage />
             } />
 
             <Route path="/" element={<Navigate to="/dashboard" replace />} />

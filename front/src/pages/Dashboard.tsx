@@ -16,6 +16,9 @@ export function Dashboard() {
                         <button onClick={() => navigate(`/profile/${user.id}`)} style={{ padding: '8px 16px', cursor: 'pointer' }}>
                             Mon profil
                         </button>
+                        <button onClick={() => navigate('/search')}>
+                            🔍 Rechercher des utilisateurs
+                        </button>
                         <button onClick={logout} style={{ padding: '8px 16px', cursor: 'pointer' }}>
                             Déconnexion
                         </button>
