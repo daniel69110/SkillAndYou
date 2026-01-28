@@ -6,6 +6,7 @@ import { useAuth } from '../auth/AuthContext';
 import { SkillBadge } from '../components/SkillBadge';
 import { AddSkillModal } from '../components/AddSkillModal';
 import type { UserProfile, UserSkill } from '../types';
+import CreateExchangeModal from "../components/CreateExchangeModal.tsx";
 
 export function ProfilePage() {
     const { id } = useParams<{ id: string }>();
@@ -15,6 +16,7 @@ export function ProfilePage() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -76,6 +78,21 @@ export function ProfilePage() {
                     {isOwnProfile && (
                         <button onClick={() => navigate('/profile/edit')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
                             Éditer
+                        </button>
+                    )}
+                    {!isOwnProfile && (
+                        <button
+                            onClick={() => setShowExchangeModal(true)}
+                            style={{
+                                padding: '8px 16px',
+                                cursor: 'pointer',
+                                background: '#28a745',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            🤝 Proposer un échange
                         </button>
                     )}
                     <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
@@ -175,6 +192,20 @@ export function ProfilePage() {
                     userId={Number(id)}
                     onClose={() => setShowAddModal(false)}
                     onSuccess={handleSkillAdded}
+                />
+            )}
+
+            {/* MODAL PROPOSER ÉCHANGE */}
+            {showExchangeModal && (
+                <CreateExchangeModal
+                    receiverId={profile.id}
+                    receiverName={`${profile.firstName} ${profile.lastName}`}
+                    receiverSkills={userSkills}
+                    onClose={() => setShowExchangeModal(false)}
+                    onSuccess={() => {
+                        alert('Échange proposé !');
+                        navigate('/exchanges');
+                    }}
                 />
             )}
         </div>

@@ -1,0 +1,57 @@
+.exchanges-page {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.exchanges-page h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.exchanges-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.exchanges-filters button {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #007bff;
+    background: white;
+    color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.exchanges-filters button:hover {
+    background: #e7f3ff;
+}
+
+.exchanges-filters button.active {
+    background: #007bff;
+    color: white;
+}
+
+.exchanges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.no-exchanges {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .exchanges-grid {
+        grid-template-columns: 1fr;
+    }
+}

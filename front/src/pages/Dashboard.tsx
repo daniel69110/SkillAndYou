@@ -19,6 +19,9 @@ export function Dashboard() {
                         <button onClick={() => navigate('/search')}>
                             🔍 Rechercher des utilisateurs
                         </button>
+                        <button onClick={() => navigate('/exchanges')}>
+                            📋 Mes échanges
+                        </button>
                         <button onClick={logout} style={{ padding: '8px 16px', cursor: 'pointer' }}>
                             Déconnexion
                         </button>

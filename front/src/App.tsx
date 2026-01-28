@@ -6,6 +6,7 @@ import { RequireAuth } from './auth/RequireAuth';
 import {ProfilePage} from "./pages/ProfilePage.tsx";
 import {EditProfilePage} from "./pages/EditProfilePage.tsx";
 import SearchPage from './pages/SearchPage';
+import ExchangesPage from "./pages/ExchangesPage.tsx";
 
 function App() {
     return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/search" element={
                 <SearchPage />
             } />
+            <Route path="/exchanges" element={<ExchangesPage />} />
 
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
