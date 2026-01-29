@@ -21,6 +21,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ExchangeRepository exchangeRepository;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     // TON CREATE (parfait)
     public Review createReview(Long exchangeId, Long reviewerId, ReviewRequestDTO dto) {
@@ -52,6 +53,17 @@ public class ReviewService {
 
         Review saved = reviewRepository.save(review);
         userService.recalculateAverageRating(reviewedUserId);
+
+        User reviewedUser = userService.getUserById(reviewedUserId);
+        notificationService.createNotification(
+                reviewedUserId,
+                "NEW_REVIEW",
+                reviewer.getFirstName() + " " + reviewer.getLastName() +
+                        " vous a laissé un avis (" + dto.getRating() + " ⭐)",
+                exchangeId,
+                reviewer.getFirstName() + " " + reviewer.getLastName()
+        );
+
         return saved;
     }
 

@@ -31,9 +31,13 @@ public class SecurityConfig {
                         // PUBLIC
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/ws/**").permitAll()  // 🔔 AJOUTE WebSocket
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
+
+                        // ⭐ Ratings publics (AVANT hasRole USER)
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/user/*/rating").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/user/*").permitAll()
 
                         // USER - Search (AVANT /api/users/{id} !)
                         .requestMatchers(HttpMethod.GET, "/api/users/search").hasRole("USER")
@@ -48,12 +52,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/users/{userId}/skills/**").hasRole("USER")
 
                         // USER - Exchanges & Reviews
-                        .requestMatchers(HttpMethod.GET, "/api/exchanges/**",
-                                "/api/reviews/**", "/api/skills/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/exchanges/**", "/api/skills/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/exchanges/**", "/api/reviews/**").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/exchanges/**").hasRole("USER")
 
-                        // 🔔 AJOUTE Notifications
+                        // Notifications
                         .requestMatchers(HttpMethod.GET, "/api/notifications/**").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/notifications/**").hasRole("USER")
 

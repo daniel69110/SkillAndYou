@@ -1,14 +1,17 @@
 package org.example.skillandyou.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.ReviewRequestDTO;
 import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.service.ReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -16,10 +19,14 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping("/{exchangeId}")
-    public ResponseEntity<Review> create(@PathVariable Long exchangeId,
-                                         @RequestParam Long reviewerId,
-                                         @RequestBody ReviewRequestDTO dto) {
+    @PostMapping("/exchange/{exchangeId}")
+    public ResponseEntity<Review> create(
+            @PathVariable Long exchangeId,
+            @Valid @RequestBody ReviewRequestDTO dto,
+            Authentication auth) {
+
+        Long reviewerId = Long.parseLong(auth.getName().replace("user-", ""));
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(reviewService.createReview(exchangeId, reviewerId, dto));
     }
@@ -32,6 +39,15 @@ public class ReviewController {
     @GetMapping("/user/{userId}")
     public List<Review> getByUser(@PathVariable Long userId) {
         return reviewService.getReviewsByReviewedUser(userId);
+    }
+
+    @GetMapping("/user/{userId}/rating")
+    public Map<String, Object> getUserRating(@PathVariable Long userId) {
+        return Map.of(
+                "userId", userId,
+                "averageRating", reviewService.getAverageRatingByUser(userId),
+                "totalReviews", reviewService.countReviewsByUser(userId)
+        );
     }
 
     @GetMapping("/reviewer/{userId}")
