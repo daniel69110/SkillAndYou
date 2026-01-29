@@ -7,8 +7,11 @@ import {ProfilePage} from "./pages/ProfilePage.tsx";
 import {EditProfilePage} from "./pages/EditProfilePage.tsx";
 import SearchPage from './pages/SearchPage';
 import ExchangesPage from "./pages/ExchangesPage.tsx";
+import { useAuth } from './auth/AuthContext';
 
 function App() {
+    const { user } = useAuth();  // ← AJOUTE
+
     return (
         <Routes>
             <Route path="/login" element={<LoginPage />} />
@@ -33,11 +36,24 @@ function App() {
             } />
 
             <Route path="/search" element={
-                <SearchPage />
+                <RequireAuth>
+                    <SearchPage />
+                </RequireAuth>
             } />
-            <Route path="/exchanges" element={<ExchangesPage />} />
 
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/exchanges" element={
+                <RequireAuth>
+                    <ExchangesPage />
+                </RequireAuth>
+            } />
+
+
+            <Route
+                path="/"
+                element={
+                    user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+                }
+            />
         </Routes>
     );
 }

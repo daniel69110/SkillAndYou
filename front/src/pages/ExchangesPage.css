@@ -50,6 +50,20 @@
     font-size: 1.1rem;
 }
 
+/* Badge "Avis déjà laissé" */
+.review-done {
+    margin-top: 16px;
+    padding: 12px;
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+
 @media (max-width: 768px) {
     .exchanges-grid {
         grid-template-columns: 1fr;

@@ -4,15 +4,20 @@ import { useAuth } from '../auth/AuthContext';
 import ExchangeCard from '../components/ExchangeCard';
 import type { Exchange } from '../types/Exchange';
 import './ExchangesPage.css';
+import {ReviewForm} from "../components/ReviewForm.tsx";
+import {reviewApi} from "../api/reviewApi.ts";
 
 const ExchangesPage: React.FC = () => {
     const { user } = useAuth();
     const [exchanges, setExchanges] = useState<Exchange[]>([]);
     const [filter, setFilter] = useState<'all' | 'pending' | 'accepted' | 'completed'>('all');
     const [loading, setLoading] = useState(true);
+    const [reviewingExchangeId, setReviewingExchangeId] = useState<number | null>(null);
+    const [myReviews, setMyReviews] = useState<number[]>([]);
 
     useEffect(() => {
         loadExchanges();
+        loadMyReviews();
     }, []);
 
     const loadExchanges = async () => {
@@ -24,6 +29,19 @@ const ExchangesPage: React.FC = () => {
             console.error('Erreur chargement échanges:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    // ← AJOUTE cette fonction
+    const loadMyReviews = async () => {
+        if (!user) return;
+        try {
+            const { data } = await reviewApi.getByReviewer(user.id);
+            // Extrait les IDs des exchanges déjà reviewés
+            const reviewedExchangeIds = data.map((review: any) => review.exchangeId);
+            setMyReviews(reviewedExchangeIds);
+        } catch (error) {
+            console.error('Erreur chargement reviews:', error);
         }
     };
 
@@ -60,6 +78,17 @@ const ExchangesPage: React.FC = () => {
         } catch (error) {
             alert('Erreur lors de l\'annulation');
         }
+    };
+
+    const handleReviewSuccess = () => {
+        console.log('✅ Review créée pour exchange:', reviewingExchangeId);
+
+
+        if (reviewingExchangeId) {
+            setMyReviews(prev => [...prev, reviewingExchangeId]);
+        }
+
+        setReviewingExchangeId(null);
     };
 
     const filteredExchanges = exchanges.filter(ex => {
@@ -113,16 +142,55 @@ const ExchangesPage: React.FC = () => {
                 </div>
             ) : (
                 <div className="exchanges-grid">
-                    {filteredExchanges.map(exchange => (
-                        <ExchangeCard
-                            key={exchange.id}
-                            exchange={exchange}
-                            currentUserId={user?.id || 0}
-                            onAccept={handleAccept}
-                            onComplete={handleComplete}
-                            onCancel={handleCancel}
-                        />
-                    ))}
+                    {filteredExchanges.map(exchange => {
+                        const hasReviewed = myReviews.includes(exchange.id);  // ← AJOUTE
+
+                        return (
+                            <div key={exchange.id}>
+                                <ExchangeCard
+                                    exchange={exchange}
+                                    currentUserId={user?.id || 0}
+                                    onAccept={handleAccept}
+                                    onComplete={handleComplete}
+                                    onCancel={handleCancel}
+                                />
+
+                                {/* ← MODIFIE : Affiche seulement si pas encore reviewé */}
+                                {exchange.status === 'COMPLETED' && !hasReviewed && (
+                                    <div className="review-section">
+                                        {reviewingExchangeId === exchange.id ? (
+                                            <>
+                                                <button
+                                                    onClick={() => setReviewingExchangeId(null)}
+                                                    className="btn-cancel-review"
+                                                >
+                                                    ✖ Annuler
+                                                </button>
+                                                <ReviewForm
+                                                    exchangeId={exchange.id}
+                                                    onSuccess={handleReviewSuccess}
+                                                />
+                                            </>
+                                        ) : (
+                                            <button
+                                                onClick={() => setReviewingExchangeId(exchange.id)}
+                                                className="btn-review"
+                                            >
+                                                ⭐ Laisser un avis
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* ← AJOUTE Badge "Avis déjà laissé" */}
+                                {exchange.status === 'COMPLETED' && hasReviewed && (
+                                    <div className="review-done">
+                                        ✅ Vous avez déjà laissé un avis
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             )}
         </div>
