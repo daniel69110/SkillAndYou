@@ -67,6 +67,9 @@ public class SecurityConfig {
                         // ADMIN - Reports management
                         .requestMatchers("/api/reports/**").hasRole("ADMIN")
 
+                        // ADMIN - Suspensions management
+                        .requestMatchers("/api/suspensions/**").hasRole("ADMIN")
+
                         // ADMIN - Skills management
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")

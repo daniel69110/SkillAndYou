@@ -19,19 +19,24 @@ public class Suspension {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "adminId", nullable = false)
     private User admin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reportId")
+    private Report report;
 
     @Column(nullable = false)
     private LocalDate startDate;
 
+    @Column(nullable = false)
     private LocalDate endDate;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String reason;
 
     @PrePersist
