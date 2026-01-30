@@ -5,6 +5,8 @@ import { skillApi } from '../api/skillApi';
 import { useAuth } from '../auth/AuthContext';
 import { SkillBadge } from '../components/SkillBadge';
 import { AddSkillModal } from '../components/AddSkillModal';
+import { UserRatingBadge } from '../components/UserRatingBadge';
+import { ReviewList } from '../components/ReviewList';
 import type { UserProfile, UserSkill } from '../types';
 import CreateExchangeModal from "../components/CreateExchangeModal.tsx";
 
@@ -132,11 +134,13 @@ export function ProfilePage() {
                         </div>
                     )}
 
-                    {profile.averageRating !== undefined && profile.averageRating > 0 && (
-                        <div>
-                            <strong>Note moyenne:</strong> ⭐ {profile.averageRating.toFixed(1)} / 5
+                    {/* ⭐ REMPLACE la note moyenne par UserRatingBadge */}
+                    <div>
+                        <strong>Réputation:</strong>
+                        <div style={{ marginTop: '8px' }}>
+                            <UserRatingBadge userId={profile.id} />
                         </div>
-                    )}
+                    </div>
 
                     <div>
                         <strong>Membre depuis:</strong> {new Date(profile.registrationDate).toLocaleDateString('fr-FR')}
@@ -185,6 +189,9 @@ export function ProfilePage() {
                     </div>
                 )}
             </div>
+
+            {/* 💬 SECTION REVIEWS (NOUVEAU) */}
+            <ReviewList userId={profile.id} />
 
             {/* MODAL AJOUT COMPÉTENCE */}
             {showAddModal && (
