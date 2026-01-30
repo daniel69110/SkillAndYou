@@ -15,8 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Report {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reporterId", nullable = false)

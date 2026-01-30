@@ -1,5 +1,6 @@
 package org.example.skillandyou.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import org.example.skillandyou.entity.enums.ReportStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProcessReportRequestDTO {
-    private Long adminId;
+
+    @NotNull
     private ReportStatus status;
 }

@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
 
-                        // ⭐ Ratings publics (AVANT hasRole USER)
+                        // Ratings publics (AVANT hasRole USER)
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*/rating").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*").permitAll()
 
@@ -56,14 +56,23 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/exchanges/**", "/api/reviews/**").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/exchanges/**").hasRole("USER")
 
-                        // Notifications
+                        // USER - Notifications
                         .requestMatchers(HttpMethod.GET, "/api/notifications/**").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/notifications/**").hasRole("USER")
 
-                        // ADMIN (général après - catch-all)
+                        // USER - Reports (créer + voir ses reports)
+                        .requestMatchers(HttpMethod.POST, "/api/reports").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/reports/my-reports").hasRole("USER")
+
+                        // ADMIN - Reports management
+                        .requestMatchers("/api/reports/**").hasRole("ADMIN")
+
+                        // ADMIN - Skills management
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
+
+                        // ADMIN - Users management
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
 

@@ -1,10 +1,14 @@
 package org.example.skillandyou.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.ProcessReportRequestDTO;
 import org.example.skillandyou.dto.ReportRequestDTO;
 import org.example.skillandyou.entity.Report;
 import org.example.skillandyou.service.ReportService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,54 +20,65 @@ import java.util.List;
 public class ReportController {
     private final ReportService reportService;
 
-    // Création d’un report (côté user)
+    // USER: Signaler un utilisateur
     @PostMapping
-    public Report create(@RequestBody ReportRequestDTO request) {
-        return reportService.createReport(
-                request.getReporterId(),
+    public ResponseEntity<Report> create(
+            @Valid @RequestBody ReportRequestDTO request,
+            Authentication auth) {
+
+        Long reporterId = Long.parseLong(auth.getName().replace("user-", ""));
+
+        Report report = reportService.createReport(
+                reporterId,
                 request.getReportedUserId(),
                 request.getExchangeId(),
                 request.getReason(),
                 request.getDescription()
         );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(report);
     }
 
-    // Liste des reports en attente (admin)
+    // USER: Mes signalements créés
+    @GetMapping("/my-reports")
+    public List<Report> getMyReports(Authentication auth) {
+        Long reporterId = Long.parseLong(auth.getName().replace("user-", ""));
+        return reportService.getReportsByReporter(reporterId);
+    }
+
+    // ADMIN: Liste reports en attente
     @GetMapping("/pending")
     public List<Report> getPending() {
         return reportService.getPendingReports();
     }
 
-    // Compteur pending (badge admin)
+    // ADMIN: Compteur pending
     @GetMapping("/pending/count")
     public long countPending() {
         return reportService.countPendingReports();
     }
 
-    // Détail d’un report
+    // ADMIN: Détail d'un report
     @GetMapping("/{id}")
     public Report getById(@PathVariable Long id) {
         return reportService.getById(id);
     }
 
-    // Historique : reports créés par un user
-    @GetMapping("/reporter/{reporterId}")
-    public List<Report> getByReporter(@PathVariable Long reporterId) {
-        return reportService.getReportsByReporter(reporterId);
-    }
-
-    // Historique : reports reçus par un user
+    // ADMIN: Reports reçus par un user
     @GetMapping("/reported/{reportedUserId}")
     public List<Report> getByReportedUser(@PathVariable Long reportedUserId) {
         return reportService.getReportsByReportedUser(reportedUserId);
     }
 
-    // Traitement par un admin
+    // ADMIN: Traiter un report
     @PostMapping("/{id}/process")
-    public Report process(@PathVariable Long id,
-                          @RequestBody ProcessReportRequestDTO request) {  // ← JSON
-        return reportService.processReport(id,
-                request.getAdminId(),
-                request.getStatus());
+    public Report process(
+            @PathVariable Long id,
+            @Valid @RequestBody ProcessReportRequestDTO request,
+            Authentication auth) {
+
+        Long adminId = Long.parseLong(auth.getName().replace("user-", ""));
+
+        return reportService.processReport(id, adminId, request.getStatus());
     }
 }
