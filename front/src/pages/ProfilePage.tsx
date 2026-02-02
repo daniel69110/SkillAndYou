@@ -9,6 +9,7 @@ import { UserRatingBadge } from '../components/UserRatingBadge';
 import { ReviewList } from '../components/ReviewList';
 import type { UserProfile, UserSkill } from '../types';
 import CreateExchangeModal from "../components/CreateExchangeModal.tsx";
+import ReportUserModal from "../components/ReportUserModal.tsx";
 
 export function ProfilePage() {
     const { id } = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ export function ProfilePage() {
     const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -83,19 +85,36 @@ export function ProfilePage() {
                         </button>
                     )}
                     {!isOwnProfile && (
-                        <button
-                            onClick={() => setShowExchangeModal(true)}
-                            style={{
-                                padding: '8px 16px',
-                                cursor: 'pointer',
-                                background: '#28a745',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '4px'
-                            }}
-                        >
-                            🤝 Proposer un échange
-                        </button>
+                        <>
+                            <button
+                                onClick={() => setShowExchangeModal(true)}
+                                style={{
+                                    padding: '8px 16px',
+                                    cursor: 'pointer',
+                                    background: '#28a745',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px'
+                                }}
+                            >
+                                🤝 Proposer un échange
+                            </button>
+
+                            {/* ✅ BOUTON SIGNALER */}
+                            <button
+                                onClick={() => setShowReportModal(true)}
+                                style={{
+                                    padding: '8px 16px',
+                                    cursor: 'pointer',
+                                    background: '#ff6b6b',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px'
+                                }}
+                            >
+                                🚨 Signaler
+                            </button>
+                        </>
                     )}
                     <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
                         Dashboard
@@ -134,7 +153,6 @@ export function ProfilePage() {
                         </div>
                     )}
 
-                    {/* ⭐ REMPLACE la note moyenne par UserRatingBadge */}
                     <div>
                         <strong>Réputation:</strong>
                         <div style={{ marginTop: '8px' }}>
@@ -190,7 +208,7 @@ export function ProfilePage() {
                 )}
             </div>
 
-            {/* 💬 SECTION REVIEWS (NOUVEAU) */}
+            {/* SECTION REVIEWS */}
             <ReviewList userId={profile.id} />
 
             {/* MODAL AJOUT COMPÉTENCE */}
@@ -212,6 +230,19 @@ export function ProfilePage() {
                     onSuccess={() => {
                         alert('Échange proposé !');
                         navigate('/exchanges');
+                    }}
+                />
+            )}
+
+            {/* ✅ MODAL SIGNALER */}
+            {showReportModal && (
+                <ReportUserModal
+                    userId={profile.id}
+                    userName={profile.userName}
+                    onClose={() => setShowReportModal(false)}
+                    onSuccess={() => {
+                        alert('Signalement envoyé avec succès !');
+                        setShowReportModal(false);
                     }}
                 />
             )}

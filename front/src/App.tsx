@@ -8,6 +8,7 @@ import {EditProfilePage} from "./pages/EditProfilePage.tsx";
 import SearchPage from './pages/SearchPage';
 import ExchangesPage from "./pages/ExchangesPage.tsx";
 import { useAuth } from './auth/AuthContext';
+import MyReportsPage from "./pages/MyReportsPage.tsx";
 
 function App() {
     const { user } = useAuth();  // ← AJOUTE
@@ -44,6 +45,12 @@ function App() {
             <Route path="/exchanges" element={
                 <RequireAuth>
                     <ExchangesPage />
+                </RequireAuth>
+            } />
+
+            <Route path="/my-reports" element={
+                <RequireAuth>
+                <MyReportsPage />
                 </RequireAuth>
             } />
 

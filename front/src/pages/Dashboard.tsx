@@ -51,6 +51,13 @@ export function Dashboard() {
                         </button>
 
                         <button
+                            onClick={() => navigate('/my-reports')}
+                            className="action-btn"
+                        >
+                            🚨 Mes signalements
+                        </button>
+
+                        <button
                             onClick={logout}
                             className="action-btn logout-btn"
                         >
