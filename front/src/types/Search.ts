@@ -12,5 +12,6 @@ export interface UserSearchResult {
 export interface SearchFilters {
     skill?: string;
     city?: string;
+    category?: string;
     type?: 'OFFER' | 'REQUEST';
 }

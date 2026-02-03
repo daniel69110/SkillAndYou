@@ -10,6 +10,7 @@ import ExchangesPage from "./pages/ExchangesPage.tsx";
 import { useAuth } from './auth/AuthContext';
 import MyReportsPage from "./pages/MyReportsPage.tsx";
 import AdminReportsPage from "./pages/AdminReportsPage.tsx";
+import AdminSkillsPage from "./pages/AdminSkillPage.tsx";
 
 function App() {
     const { user } = useAuth();
@@ -58,6 +59,9 @@ function App() {
             <Route
                 path="/admin/reports"
                 element={<AdminReportsPage />}
+            />
+            <Route path="/admin/skills"
+                   element={<AdminSkillsPage />}
             />
 
             <Route

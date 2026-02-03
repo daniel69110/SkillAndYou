@@ -3,12 +3,12 @@ import type { Report, ReportStatus, ProcessReportRequest, SuspendUserRequest } f
 
 const API_URL = 'http://localhost:8080/api';
 
-// ✅ Crée une instance axios avec intercepteur
+
 const api = axios.create({
     baseURL: API_URL
 });
 
-// ✅ INTERCEPTEUR : Ajoute automatiquement le token
+
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {

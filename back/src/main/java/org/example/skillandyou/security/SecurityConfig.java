@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/suspensions/**").hasRole("ADMIN")
 
                         // Skills - Gestion ADMIN
+                        .requestMatchers("/api/admin/skills/**").hasRole("ADMIN")  // ← MODIFIEZ ICI
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
@@ -88,13 +89,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
-
-
-
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

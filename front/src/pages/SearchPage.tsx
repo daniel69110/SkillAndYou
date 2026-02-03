@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { userApi } from '../api/userApi';
+import { skillApi } from '../api/skillApi';  // ← AJOUTEZ cet import
 import type { UserSearchResult, SearchFilters } from '../types/Search';
+import type { Skill } from '../types';  // ← AJOUTEZ cet import
 import UserCard from '../components/UserCard';
 import './SearchPage.css';
 
@@ -9,6 +11,31 @@ const SearchPage: React.FC = () => {
     const [results, setResults] = useState<UserSearchResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
+
+    // ← NOUVEAUX STATES
+    const [skills, setSkills] = useState<Skill[]>([]);
+    const [categories, setCategories] = useState<string[]>([]);
+    const [loadingSkills, setLoadingSkills] = useState(true);
+
+    // ← CHARGER LES COMPÉTENCES AU MONTAGE DU COMPOSANT
+    useEffect(() => {
+        const loadSkills = async () => {
+            try {
+                const data = await skillApi.getAllSkills();
+                setSkills(data);
+
+                // Extraire les catégories uniques
+                const uniqueCategories = [...new Set(data.map(s => s.category).filter(Boolean))] as string[];
+                setCategories(uniqueCategories);
+            } catch (error) {
+                console.error('Erreur chargement compétences:', error);
+            } finally {
+                setLoadingSkills(false);
+            }
+        };
+
+        loadSkills();
+    }, []);
 
     const handleSearch = async () => {
         setLoading(true);
@@ -23,18 +50,48 @@ const SearchPage: React.FC = () => {
         }
     };
 
+    // ← FILTRER LES COMPÉTENCES PAR CATÉGORIE SÉLECTIONNÉE
+    const filteredSkills = filters.category
+        ? skills.filter(s => s.category === filters.category)
+        : skills;
+
+    if (loadingSkills) {
+        return <div className="search-page"><p>Chargement...</p></div>;
+    }
+
     return (
         <div className="search-page">
             <h1>🔍 Rechercher des utilisateurs</h1>
 
             <div className="search-filters">
-                <input
-                    type="text"
-                    placeholder="Compétence (ex: React)"
-                    value={filters.skill || ''}
-                    onChange={(e) => setFilters({ ...filters, skill: e.target.value })}
-                />
+                {/* ← SELECT CATÉGORIE */}
+                <select
+                    value={filters.category || ''}
+                    onChange={(e) => setFilters({
+                        ...filters,
+                        category: e.target.value || undefined,
+                        skill: undefined  // Reset skill quand on change de catégorie
+                    })}
+                >
+                    <option value="">Toutes les catégories</option>
+                    {categories.map((cat) => (
+                        <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                </select>
 
+                {/* ← SELECT COMPÉTENCE (filtré par catégorie) */}
+                <select
+                    value={filters.skill || ''}
+                    onChange={(e) => setFilters({ ...filters, skill: e.target.value || undefined })}
+                    disabled={!filters.category && skills.length > 50}  // Désactiver si trop de choix
+                >
+                    <option value="">Toutes les compétences</option>
+                    {filteredSkills.map((skill) => (
+                        <option key={skill.id} value={skill.name}>{skill.name}</option>
+                    ))}
+                </select>
+
+                {/* ← INPUT VILLE (reste en texte libre) */}
                 <input
                     type="text"
                     placeholder="Ville (ex: Lyon)"
@@ -42,13 +99,14 @@ const SearchPage: React.FC = () => {
                     onChange={(e) => setFilters({ ...filters, city: e.target.value })}
                 />
 
+                {/* ← SELECT TYPE */}
                 <select
                     value={filters.type || ''}
                     onChange={(e) => setFilters({ ...filters, type: e.target.value as 'OFFER' | 'REQUEST' | undefined })}
                 >
                     <option value="">Tous les types</option>
-                    <option value="OFFER">Offre</option>
-                    <option value="REQUEST">Demande</option>
+                    <option value="OFFER">Offre cette compétence</option>
+                    <option value="REQUEST">Recherche cette compétence</option>
                 </select>
 
                 <button onClick={handleSearch} className="btn-search">

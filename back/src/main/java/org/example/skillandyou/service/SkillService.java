@@ -25,6 +25,9 @@ public class SkillService {
     }
 
     public Skill createSkill(Skill skill) {
+        if (skillRepository.existsByName(skill.getName())) {
+            throw new IllegalArgumentException("Une compétence avec ce nom existe déjà");
+        }
         return skillRepository.save(skill);
     }
 

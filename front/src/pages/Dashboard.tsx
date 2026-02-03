@@ -90,12 +90,21 @@ export function Dashboard() {
                         </button>
 
                         {user.role === 'ADMIN' && (
-                            <button
-                                onClick={() => navigate('/admin/reports')}
-                                className="action-btn admin-btn"
-                            >
-                                🔧 Administration
-                            </button>
+                            <>
+                                <button
+                                    onClick={() => navigate('/admin/skills')}
+                                    className="action-btn admin-btn"
+                                >
+                                    🎯 Gérer les compétences
+                                </button>
+
+                                <button
+                                    onClick={() => navigate('/admin/reports')}
+                                    className="action-btn admin-btn"
+                                >
+                                    🔧 Administration
+                                </button>
+                            </>
                         )}
 
                         <button

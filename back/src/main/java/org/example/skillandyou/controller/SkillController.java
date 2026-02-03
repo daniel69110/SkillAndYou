@@ -37,19 +37,4 @@ public class SkillController {
         return skillService.getSkillById(id);
     }
 
-
-    @PostMapping
-    public Skill create(@RequestBody Skill skill) {
-        return skillService.createSkill(skill);
-    }
-
-    @PutMapping("/{id}")
-    public Skill update(@PathVariable Long id, @RequestBody Skill skill) {
-        return skillService.updateSkill(id, skill);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        skillService.deleteSkill(id);
-    }
 }

@@ -2,6 +2,7 @@ package org.example.skillandyou.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import jakarta.persistence.ManyToMany;
@@ -25,9 +26,11 @@ public class Skill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Le nom de la compétence est obligatoire")
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
+    @NotBlank(message = "La catégorie est obligatoire")
     @Column(nullable = false, length = 50)
     private String category;
 
