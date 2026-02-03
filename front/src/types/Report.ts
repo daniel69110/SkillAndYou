@@ -3,12 +3,15 @@ export interface Report {
     reporter: {
         id: number;
         userName: string;
+        firstName?: string;
+        lastName?: string;
     };
     reportedUser: {
         id: number;
         userName: string;
         firstName: string;
         lastName: string;
+        email?: string;
     };
     exchange?: {
         id: number;
@@ -24,7 +27,7 @@ export interface Report {
     };
 }
 
-export type ReportStatus = 'PENDING' | 'RESOLVED' | 'REJECTED';
+export type ReportStatus = 'PENDING' | 'RESOLVED' | 'REJECTED' | 'REVIEWED' | 'DISMISSED';
 
 export interface CreateReportDTO {
     reportedUserId: number;

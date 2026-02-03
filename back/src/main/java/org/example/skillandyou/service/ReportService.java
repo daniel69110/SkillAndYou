@@ -91,4 +91,13 @@ public class ReportService {
 
         return reportRepository.save(report);
     }
+
+    public List<Report> getAllReports() {
+        return reportRepository.findAll();
+    }
+
+    public List<Report> getReportsByStatus(ReportStatus status) {
+        return reportRepository.findByStatus(status);
+    }
+
 }

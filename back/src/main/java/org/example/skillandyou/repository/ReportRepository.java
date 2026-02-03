@@ -19,4 +19,5 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     // Historique par status
     List<Report> findByStatus(ReportStatus status);
+
 }

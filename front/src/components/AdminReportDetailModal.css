@@ -1,0 +1,291 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.admin-modal {
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 2px solid #eee;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    color: #d32f2f;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.admin-modal .section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-modal .section:last-child {
+    border-bottom: none;
+}
+
+.admin-modal .section h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.user-details {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.user-details p {
+    margin: 5px 0;
+}
+
+.description-box {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4A90E2;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+/* ============================================
+   ACTIONS SECTION
+============================================ */
+.actions-section {
+    background: #fff9e6;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px solid #ffd54f;
+}
+
+.actions-section h3 {
+    margin-top: 0;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-danger {
+    background: #d32f2f;
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #b71c1c;
+}
+
+.btn-success {
+    background: #4caf50;
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #388e3c;
+}
+
+.btn-secondary {
+    background: #757575;
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #616161;
+}
+
+/* ============================================
+   FORMULAIRE SUSPENSION
+============================================ */
+.suspend-form {
+    background: #ffebee;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px solid #ef5350;
+}
+
+.suspend-form h3 {
+    margin-top: 0;
+    color: #d32f2f;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #4A90E2;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* ============================================
+   BADGES (utilisés dans le modal)
+============================================ */
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-orange {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffb74d;
+}
+
+.badge-green {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+}
+
+.badge-red {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef5350;
+}
+
+/* ============================================
+   SCROLLBAR MODAL
+============================================ */
+.admin-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-modal::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.admin-modal::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.admin-modal::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ============================================
+   RESPONSIVE MODAL
+============================================ */
+@media (max-width: 768px) {
+    .action-buttons {
+        gap: 8px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        max-width: 95vw;
+        margin: 20px;
+    }
+
+    .admin-modal {
+        max-height: 85vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+}

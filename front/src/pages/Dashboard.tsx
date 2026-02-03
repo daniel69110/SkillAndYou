@@ -1,6 +1,8 @@
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from '../hooks/useNotifications';
+import { useEffect } from 'react';
+import axios from 'axios';
 import './Dashboard.css';
 
 export function Dashboard() {
@@ -8,6 +10,36 @@ export function Dashboard() {
     const navigate = useNavigate();
     const { notifications, unreadCount, markAsRead } = useNotifications();
 
+
+    useEffect(() => {
+        const checkSuspension = async () => {
+            if (!user) return;
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://localhost:8080/api/users/${user.id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                // Si user suspendu
+                if (response.data.status === 'SUSPENDED') {
+                    console.log('⚠️ Compte suspendu détecté');
+                    alert('⚠️ Votre compte a été suspendu.');
+                    logout();
+                    navigate('/login?suspended=true');
+                }
+            } catch (error: any) {
+                // Si erreur 403, probablement suspendu
+                if (error.response?.status === 403) {
+                    console.log('⚠️ Accès refusé (probablement suspendu)');
+                    logout();
+                    navigate('/login?suspended=true');
+                }
+            }
+        };
+
+        checkSuspension();
+    }, [user, logout, navigate]);
 
     const recentNotifications = notifications.slice(0, 3);
 
@@ -56,6 +88,15 @@ export function Dashboard() {
                         >
                             🚨 Mes signalements
                         </button>
+
+                        {user.role === 'ADMIN' && (
+                            <button
+                                onClick={() => navigate('/admin/reports')}
+                                className="action-btn admin-btn"
+                            >
+                                🔧 Administration
+                            </button>
+                        )}
 
                         <button
                             onClick={logout}

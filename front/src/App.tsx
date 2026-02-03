@@ -9,9 +9,10 @@ import SearchPage from './pages/SearchPage';
 import ExchangesPage from "./pages/ExchangesPage.tsx";
 import { useAuth } from './auth/AuthContext';
 import MyReportsPage from "./pages/MyReportsPage.tsx";
+import AdminReportsPage from "./pages/AdminReportsPage.tsx";
 
 function App() {
-    const { user } = useAuth();  // ← AJOUTE
+    const { user } = useAuth();
 
     return (
         <Routes>
@@ -54,6 +55,10 @@ function App() {
                 </RequireAuth>
             } />
 
+            <Route
+                path="/admin/reports"
+                element={<AdminReportsPage />}
+            />
 
             <Route
                 path="/"

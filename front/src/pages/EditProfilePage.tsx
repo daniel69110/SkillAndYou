@@ -60,7 +60,7 @@ export function EditProfilePage() {
         setLoading(true);
 
         try {
-            await userApi.updateProfile(user.id, formData);
+            await userApi.update(user.id, formData);
             navigate(`/profile/${user.id}`);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to update profile');

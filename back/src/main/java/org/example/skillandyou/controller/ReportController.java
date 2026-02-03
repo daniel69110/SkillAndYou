@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.ProcessReportRequestDTO;
 import org.example.skillandyou.dto.ReportRequestDTO;
 import org.example.skillandyou.entity.Report;
+import org.example.skillandyou.entity.enums.ReportStatus;
 import org.example.skillandyou.service.ReportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,24 @@ public class ReportController {
     public List<Report> getMyReports(Authentication auth) {
         Long reporterId = Long.parseLong(auth.getName().replace("user-", ""));
         return reportService.getReportsByReporter(reporterId);
+    }
+
+    // ✅ NOUVEAU: ADMIN: Tous les reports (avec filtre optionnel)
+    @GetMapping
+    public List<Report> getAllReports(@RequestParam(required = false) String status) {
+        System.out.println("📋 getAllReports appelé avec status: " + status);
+
+        if (status != null && !status.isEmpty()) {
+            try {
+                ReportStatus reportStatus = ReportStatus.valueOf(status.toUpperCase());
+                return reportService.getReportsByStatus(reportStatus);
+            } catch (IllegalArgumentException e) {
+                System.err.println("❌ Status invalide: " + status);
+                return reportService.getAllReports();
+            }
+        }
+
+        return reportService.getAllReports();
     }
 
     // ADMIN: Liste reports en attente

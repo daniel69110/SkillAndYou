@@ -7,3 +7,5 @@ export * from './Skill';
 export * from './Search';
 export * from './UpdateUser';
 export * from './Notification.ts';
+export * from './Report.ts'
+export * from './Review.ts'
