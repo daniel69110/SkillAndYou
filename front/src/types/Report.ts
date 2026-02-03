@@ -47,3 +47,15 @@ export const REPORT_REASONS = [
 ] as const;
 
 export type ReportReason = typeof REPORT_REASONS[number];
+
+// DTO pour traiter un report (ADMIN)
+export interface ProcessReportRequest {
+    status: 'RESOLVED' | 'REJECTED';
+    adminNote?: string;
+}
+
+// DTO pour suspendre un utilisateur (ADMIN)
+export interface SuspendUserRequest {
+    reason: string;
+    durationDays: number;
+}
