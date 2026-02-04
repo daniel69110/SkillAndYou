@@ -58,7 +58,7 @@ export const LoginPage = () => {
                         <input
                             type="email"
                             className="form-input"
-                            placeholder="votre@email.com"
+                            placeholder="adresse@email.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -70,7 +70,7 @@ export const LoginPage = () => {
                         <input
                             type="password"
                             className="form-input"
-                            placeholder="••••••••"
+                            placeholder="Minimum 6 caractères"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
