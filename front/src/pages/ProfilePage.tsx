@@ -120,7 +120,7 @@ export function ProfilePage() {
                         </>
                     )}
                     <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
-                        Tableau de bord
+                        Mon compte
                     </button>
                 </div>
             </div>

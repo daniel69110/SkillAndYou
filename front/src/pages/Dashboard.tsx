@@ -48,7 +48,7 @@ export function Dashboard() {
 
     return (
         <div className="dashboard">
-            <h1>Votre tableau de bord</h1>
+            <h1>Mon compte</h1>
 
             {user && (
                 <>

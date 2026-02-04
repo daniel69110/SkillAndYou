@@ -52,10 +52,11 @@
 
 .register-brand {
     font-family: 'Inter', sans-serif;
-    font-weight: 400;
     font-size: 50px;
-    letter-spacing: 0.06em;
-    color: #1f2937;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background-clip: text;
+    color: transparent;
 }
 
 /* Formulaires identiques */
