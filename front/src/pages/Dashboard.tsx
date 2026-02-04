@@ -23,7 +23,6 @@ export function Dashboard() {
 
                 // Si user suspendu
                 if (response.data.status === 'SUSPENDED') {
-                    console.log('⚠️ Compte suspendu détecté');
                     alert('⚠️ Votre compte a été suspendu.');
                     logout();
                     navigate('/login?suspended=true');
@@ -31,7 +30,6 @@ export function Dashboard() {
             } catch (error: any) {
                 // Si erreur 403, probablement suspendu
                 if (error.response?.status === 403) {
-                    console.log('⚠️ Accès refusé (probablement suspendu)');
                     logout();
                     navigate('/login?suspended=true');
                 }
@@ -50,11 +48,11 @@ export function Dashboard() {
 
     return (
         <div className="dashboard">
-            <h1>Dashboard SkillSwap</h1>
+            <h1>Votre tableau de bord</h1>
 
             {user && (
                 <>
-                    <p className="welcome-text">Bonjour {user.firstName} {user.lastName} ! 👋</p>
+                    <p className="welcome-text">Bonjour <strong>{user.firstName} {user.lastName} </strong></p>
 
                     {/* Boutons d'action */}
                     <div className="dashboard-actions">
@@ -62,21 +60,21 @@ export function Dashboard() {
                             onClick={() => navigate(`/profile/${user.id}`)}
                             className="action-btn"
                         >
-                            👤 Mon profil
+                            Mon profil
                         </button>
 
                         <button
                             onClick={() => navigate('/search')}
                             className="action-btn"
                         >
-                            🔍 Rechercher des utilisateurs
+                            Rechercher des utilisateurs
                         </button>
 
                         <button
                             onClick={() => navigate('/exchanges')}
                             className="action-btn exchanges-btn"
                         >
-                            📋 Mes échanges
+                            Mes échanges
                             {unreadCount > 0 && (
                                 <span className="badge">{unreadCount}</span>
                             )}
@@ -86,7 +84,7 @@ export function Dashboard() {
                             onClick={() => navigate('/my-reports')}
                             className="action-btn"
                         >
-                            🚨 Mes signalements
+                            Mes signalements
                         </button>
 
                         {user.role === 'ADMIN' && (
@@ -95,7 +93,7 @@ export function Dashboard() {
                                     onClick={() => navigate('/admin/skills')}
                                     className="action-btn admin-btn"
                                 >
-                                    🎯 Gérer les compétences
+                                    Gérer les compétences
                                 </button>
 
                                 <button
@@ -111,7 +109,7 @@ export function Dashboard() {
                             onClick={logout}
                             className="action-btn logout-btn"
                         >
-                            🚪 Déconnexion
+                            Déconnexion
                         </button>
                     </div>
 

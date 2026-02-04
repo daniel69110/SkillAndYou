@@ -15,7 +15,7 @@ import {ProfilePictureUpload} from "../components/ProfilePictureUpload.tsx";
 export function ProfilePage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { user: currentUser, logout } = useAuth();
+    const { user: currentUser} = useAuth();
 
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
@@ -85,7 +85,7 @@ export function ProfilePage() {
                 <div style={{ display: 'flex', gap: '10px' }}>
                     {isOwnProfile && (
                         <button onClick={() => navigate('/profile/edit')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
-                            Éditer
+                            Informations personnelles
                         </button>
                     )}
                     {!isOwnProfile && (
@@ -101,7 +101,7 @@ export function ProfilePage() {
                                     borderRadius: '4px'
                                 }}
                             >
-                                🤝 Proposer un échange
+                                Proposer un échange
                             </button>
 
                             <button
@@ -115,15 +115,12 @@ export function ProfilePage() {
                                     borderRadius: '4px'
                                 }}
                             >
-                                🚨 Signaler
+                                Signaler
                             </button>
                         </>
                     )}
                     <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
-                        Dashboard
-                    </button>
-                    <button onClick={logout} style={{ padding: '8px 16px', cursor: 'pointer', background: '#dc3545', color: 'white', border: 'none' }}>
-                        Déconnexion
+                        Tableau de bord
                     </button>
                 </div>
             </div>

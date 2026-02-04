@@ -12,7 +12,6 @@
 
 .welcome-text {
     font-size: 18px;
-    color: #6b7280;
     margin-bottom: 32px;
 }
 
@@ -28,6 +27,9 @@
     position: relative;
     padding: 20px 24px;
     background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 2px solid #e5e7eb;
     border-radius: 12px;
     font-size: 16px;
@@ -44,9 +46,6 @@
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
-.exchanges-btn {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-}
 
 .logout-btn {
     background: #fef2f2;
