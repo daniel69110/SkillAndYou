@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { authApi } from '../api/authApi';
 import { useAuth } from '../auth/AuthContext';
 import type { RegisterRequest } from '../types';
-import './RegisterPage.css';  // ✅ Nouveau CSS
+import './RegisterPage.css';
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -16,19 +16,44 @@ export function RegisterPage() {
         lastName: '',
         userName: ''
     });
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const [passwordMatchError, setPasswordMatchError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+
+        if (name === 'confirmPassword') {
+            setConfirmPassword(value);
+            // ✅ Validation temps réel
+            if (formData.password && value !== formData.password) {
+                setPasswordMatchError('Les mots de passe ne correspondent pas');
+            } else {
+                setPasswordMatchError('');
+            }
+        } else {
+            setFormData({ ...formData, [name]: value });
+            // ✅ Check match si password change
+            if (confirmPassword && value !== confirmPassword && name === 'password') {
+                setPasswordMatchError('Les mots de passe ne correspondent pas');
+            } else if (name === 'password') {
+                setPasswordMatchError('');
+            }
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // ✅ Validation finale
+        if (formData.password !== confirmPassword) {
+            setPasswordMatchError('Les mots de passe ne correspondent pas');
+            return;
+        }
+
         setError('');
+        setPasswordMatchError('');
         setLoading(true);
 
         try {
@@ -43,8 +68,8 @@ export function RegisterPage() {
     };
 
     return (
-        <div className="register-page">  {/* ✅ Même structure Login */}
-            <div className="register-header">  {/* ✅ Logo + Skill&You */}
+        <div className="register-page">
+            <div className="register-header">
                 <img src="/Logo-removebg.png" alt="SkillSwap" className="register-logo" />
                 <span className="register-brand">Skill&amp;You</span>
             </div>
@@ -116,6 +141,22 @@ export function RegisterPage() {
                             required
                             minLength={6}
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Confirmer mot de passe</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            className="form-input"
+                            placeholder="Répétez le mot de passe"
+                            value={confirmPassword}
+                            onChange={handleChange}
+                            required
+                        />
+                        {passwordMatchError && (
+                            <p className="error-message">{passwordMatchError}</p>
+                        )}
                     </div>
 
                     {error && <p className="error-message">{error}</p>}
