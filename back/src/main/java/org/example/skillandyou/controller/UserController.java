@@ -26,7 +26,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getById(@PathVariable Long id) {
-        return userService.getUserById(id);
+        User user = userService.getUserById(id);
+        System.out.println("👤 Profil chargé backend : id=" + user.getId() + " photoUrl=" + user.getPhotoUrl());
+        return user;
     }
 
     @PostMapping("/register")

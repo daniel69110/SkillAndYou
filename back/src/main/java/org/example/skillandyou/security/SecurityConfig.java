@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,6 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -37,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*/rating").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/*/profile-picture").permitAll()  // ← AJOUTEZ ICI
 
                         // ========== ADMIN ONLY (en premier pour éviter les conflits) ==========
                         // Reports - ADMIN voit et gère TOUS les reports
@@ -52,7 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/suspensions/**").hasRole("ADMIN")
 
                         // Skills - Gestion ADMIN
-                        .requestMatchers("/api/admin/skills/**").hasRole("ADMIN")  // ← MODIFIEZ ICI
+                        .requestMatchers("/api/admin/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
@@ -66,7 +69,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/reports/*").hasRole("ADMIN")
 
                         // ========== USER + ADMIN (routes générales) ==========
-                        // Profils
+                        // Photos de profil - AVANT /api/users/** (IMPORTANT!)
+                        .requestMatchers(HttpMethod.POST, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
+
+                        // Profils (APRÈS les photos)
                         .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/*").hasAnyRole("USER", "ADMIN")
 

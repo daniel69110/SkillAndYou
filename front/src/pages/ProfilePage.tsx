@@ -10,6 +10,7 @@ import { ReviewList } from '../components/ReviewList';
 import type { UserProfile, UserSkill } from '../types';
 import CreateExchangeModal from "../components/CreateExchangeModal.tsx";
 import ReportUserModal from "../components/ReportUserModal.tsx";
+import {ProfilePictureUpload} from "../components/ProfilePictureUpload.tsx";
 
 export function ProfilePage() {
     const { id } = useParams<{ id: string }>();
@@ -23,11 +24,14 @@ export function ProfilePage() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [imageTimestamp, setImageTimestamp] = useState(Date.now());  // ← AJOUTÉ
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const data = await userApi.getProfile(Number(id));
+                console.log('📋 Profil chargé:', data);
+                console.log('📸 photoUrl:', data.photoUrl);
                 setProfile(data);
             } catch (err: any) {
                 setError(err.response?.data?.message || 'Failed to load profile');
@@ -100,7 +104,6 @@ export function ProfilePage() {
                                 🤝 Proposer un échange
                             </button>
 
-                            {/* ✅ BOUTON SIGNALER */}
                             <button
                                 onClick={() => setShowReportModal(true)}
                                 style={{
@@ -126,8 +129,40 @@ export function ProfilePage() {
             </div>
 
             <div style={{ background: '#f8f9fa', padding: '20px', borderRadius: '8px' }}>
-                {profile.photoUrl && (
-                    <img src={profile.photoUrl} alt="Profile" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }} />
+                {isOwnProfile ? (
+                    <ProfilePictureUpload
+                        userId={profile.id}
+                        currentPhotoUrl={profile.photoUrl ? `${profile.photoUrl}?t=${imageTimestamp}` : undefined}
+                        onUploadSuccess={async (newPhotoUrl: string) => {
+                            setProfile(prev =>
+                                prev ? { ...prev, photoUrl: newPhotoUrl } : null
+                            );
+                            setImageTimestamp(Date.now());
+
+                            try {
+                                const freshProfile = await userApi.getProfile(Number(id));
+                                setProfile(freshProfile);
+                            } catch {
+                                // on garde la version locale si le refetch échoue
+                            }
+                        }}
+
+                    />
+
+                ) : (
+                    profile.photoUrl ? (
+                        <img
+                            src={`${profile.photoUrl}?t=${imageTimestamp}`}
+                            alt="Profile"
+                            style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }}
+                        />
+                    ) : (
+                        <img
+                            src="https://via.placeholder.com/150"
+                            alt="Profile"
+                            style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }}
+                        />
+                    )
                 )}
 
                 <div style={{ display: 'grid', gap: '15px' }}>
@@ -234,7 +269,7 @@ export function ProfilePage() {
                 />
             )}
 
-            {/* ✅ MODAL SIGNALER */}
+            {/* MODAL SIGNALER */}
             {showReportModal && (
                 <ReportUserModal
                     userId={profile.id}

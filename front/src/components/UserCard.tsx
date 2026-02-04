@@ -18,7 +18,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         <div className="user-card">
             <div className="user-card-header">
                 <img
-                    src={user.photoUrl || 'https://via.placeholder.com/80'}
+                    src={user.photoUrl ? `${user.photoUrl}?t=${Date.now()}` : 'https://via.placeholder.com/80'}
                     alt={user.userName}
                     className="user-card-photo"
                 />

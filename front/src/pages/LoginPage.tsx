@@ -18,7 +18,7 @@ export const LoginPage = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError('');
-        setIsSuspendedError(false);  // ✅ Reset à chaque tentative
+        setIsSuspendedError(false);
 
         try {
             await login(email, password);
@@ -26,10 +26,10 @@ export const LoginPage = () => {
         } catch (err: any) {
             console.error('Erreur login:', err);
 
-            // ✅ Détecte si c'est une suspension
+
             if (err.message === 'SUSPENDED') {
                 setIsSuspendedError(true);
-                setError('');  // Pas d'erreur générique
+                setError('');
             } else {
                 setError('Email ou mot de passe incorrect');
                 setIsSuspendedError(false);
@@ -41,7 +41,7 @@ export const LoginPage = () => {
         <div style={{ maxWidth: '400px', margin: '100px auto', padding: '20px' }}>
             <h1>SkillSwap Login</h1>
 
-            {/* ✅ Alerte suspension (depuis URL OU erreur login) */}
+
             {(isSuspendedError || suspendedParam) && (
                 <div style={{
                     backgroundColor: '#f8d7da',
@@ -81,7 +81,7 @@ export const LoginPage = () => {
                     />
                 </div>
 
-                {/* ✅ N'affiche l'erreur générique QUE si ce n'est pas une suspension */}
+
                 {error && !isSuspendedError && (
                     <p style={{ color: 'red' }}>{error}</p>
                 )}

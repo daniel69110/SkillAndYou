@@ -11,6 +11,8 @@ import { useAuth } from './auth/AuthContext';
 import MyReportsPage from "./pages/MyReportsPage.tsx";
 import AdminReportsPage from "./pages/AdminReportsPage.tsx";
 import AdminSkillsPage from "./pages/AdminSkillPage.tsx";
+import 'react-image-crop/dist/ReactCrop.css';
+
 
 function App() {
     const { user } = useAuth();
