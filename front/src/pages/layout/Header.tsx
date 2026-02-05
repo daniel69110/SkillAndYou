@@ -12,7 +12,7 @@ export function Header() {
     };
 
     const handleAccueil = () => {
-        navigate('/dashboard');
+        navigate('/');
         setIsMenuOpen(false);
     };
 
@@ -60,18 +60,24 @@ export function Header() {
                     <button className="mobile-menu-btn" onClick={handleMonCompte}>
                         Mon compte
                     </button>
-                    <button className="mobile-menu-btn" onClick={handleEchange}>
-                        Mes Echanges
-                    </button>
-                    <button
-                        className="mobile-menu-btn logout-btn"
-                        onClick={() => {
-                            localStorage.removeItem('token');
-                            navigate('/login');
-                        }}
-                    >
-                        Déconnexion
-                    </button>
+
+
+                    {localStorage.getItem('token') && (
+                        <>
+                            <button className="mobile-menu-btn" onClick={handleEchange}>
+                                Mes Echanges
+                            </button>
+                            <button
+                                className="mobile-menu-btn logout-btn"
+                                onClick={() => {
+                                    localStorage.removeItem('token');
+                                    navigate('/login');
+                                }}
+                            >
+                                Déconnexion
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
         </header>

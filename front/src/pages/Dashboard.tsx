@@ -54,7 +54,7 @@ export function Dashboard() {
                 <>
                     <p className="welcome-text">Bonjour <strong>{user.firstName} {user.lastName} </strong></p>
 
-                    {/* Boutons d'action */}
+
                     <div className="dashboard-actions">
                         <button
                             onClick={() => navigate(`/profile/${user.id}`)}
@@ -113,7 +113,7 @@ export function Dashboard() {
                         </button>
                     </div>
 
-                    {/* Section Notifications récentes */}
+
                     {notifications.length > 0 && (
                         <div className="notifications-section">
                             <div className="section-header">

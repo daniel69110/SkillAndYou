@@ -34,6 +34,7 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: #26364a;
 }
 
 button {
@@ -48,6 +49,9 @@ button {
   transition: border-color 0.25s;
 }
 
+h2, h3{
+  color: #26364a;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -65,3 +69,7 @@ button {
   min-height: 100vh;
 }
 
+p{
+  font-family: 'Inter', sans-serif ;
+  color: #26364a;
+}

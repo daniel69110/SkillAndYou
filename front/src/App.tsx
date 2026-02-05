@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { Dashboard } from './pages/Dashboard';
@@ -7,15 +7,15 @@ import { ProfilePage } from './pages/ProfilePage';
 import { EditProfilePage } from './pages/EditProfilePage';
 import SearchPage from './pages/SearchPage';
 import ExchangesPage from './pages/ExchangesPage';
-import { useAuth } from './auth/AuthContext';
 import MyReportsPage from './pages/MyReportsPage';
 import AdminReportsPage from './pages/AdminReportsPage';
 import AdminSkillsPage from './pages/AdminSkillPage';
 import { MainLayout } from './pages/layout/MainLayout';
 import 'react-image-crop/dist/ReactCrop.css';
+import HomePage from "./pages/Homepage.tsx";
 
 function App() {
-    const { user } = useAuth();
+
 
     return (
         <Routes>
@@ -26,6 +26,8 @@ function App() {
 
             {/*  Pages AVEC Header */}
             <Route element={<MainLayout />}>
+
+                <Route path="/" element={<HomePage />} />
 
                 <Route
                     path="/dashboard"
@@ -57,9 +59,7 @@ function App() {
                 <Route
                     path="/search"
                     element={
-                        <RequireAuth>
                             <SearchPage />
-                        </RequireAuth>
                     }
                 />
 
@@ -84,15 +84,6 @@ function App() {
                 <Route path="/admin/reports" element={<AdminReportsPage />} />
                 <Route path="/admin/skills" element={<AdminSkillsPage />} />
 
-                {/* Redirect racine */}
-                <Route
-                    path="/"
-                    element={
-                        user
-                            ? <Navigate to="/dashboard" replace />
-                            : <Navigate to="/login" replace />
-                    }
-                />
             </Route>
 
         </Routes>

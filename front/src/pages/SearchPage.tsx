@@ -79,7 +79,7 @@ const SearchPage: React.FC = () => {
                     ))}
                 </select>
 
-                {/* ← SELECT COMPÉTENCE (filtré par catégorie) */}
+
                 <select
                     value={filters.skill || ''}
                     onChange={(e) => setFilters({ ...filters, skill: e.target.value || undefined })}
@@ -91,7 +91,7 @@ const SearchPage: React.FC = () => {
                     ))}
                 </select>
 
-                {/* ← INPUT VILLE (reste en texte libre) */}
+
                 <input
                     type="text"
                     placeholder="Ville (ex: Lyon)"
@@ -99,7 +99,7 @@ const SearchPage: React.FC = () => {
                     onChange={(e) => setFilters({ ...filters, city: e.target.value })}
                 />
 
-                {/* ← SELECT TYPE */}
+
                 <select
                     value={filters.type || ''}
                     onChange={(e) => setFilters({ ...filters, type: e.target.value as 'OFFER' | 'REQUEST' | undefined })}

@@ -93,10 +93,9 @@ public class UserService {
         List<User> users;
 
         if (skillName != null && !skillName.isEmpty()) {
-            // Recherche par compétence
-            users = userRepository.findBySkillName(skillName);
 
-            // Filtre par ville si fournie
+            users = userRepository.findUsersBySkillContainingIgnoreCase(skillName);
+
             if (city != null && !city.isEmpty()) {
                 users = users.stream()
                         .filter(u -> u.getCity() != null &&
@@ -104,17 +103,15 @@ public class UserService {
                         .collect(Collectors.toList());
             }
 
-            // Filtre par type (OFFER/REQUEST) si fourni
+            // Filtre type si fourni
             if (type != null && !type.isEmpty()) {
                 users = users.stream()
                         .filter(u -> hasSkillWithType(u, skillName, type))
                         .collect(Collectors.toList());
             }
         } else if (city != null && !city.isEmpty()) {
-            // Recherche par ville uniquement
             users = userRepository.findByCityContainingIgnoreCase(city);
         } else {
-            // Aucun filtre : retourne tous les users actifs
             users = userRepository.findByStatus(Status.ACTIVE);
         }
 

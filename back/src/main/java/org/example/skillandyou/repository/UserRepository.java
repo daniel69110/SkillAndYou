@@ -19,6 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "JOIN u.userSkills us " +
             "JOIN us.skill s " +
             "WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :skillName, '%'))")
-    List<User> findBySkillName(@Param("skillName") String skillName);
+    List<User> findUsersBySkillContainingIgnoreCase(@Param("skillName") String skillName);
 
 }

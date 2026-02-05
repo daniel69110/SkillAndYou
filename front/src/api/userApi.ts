@@ -56,5 +56,16 @@ export const userApi = {
         await axios.delete(`${API_URL}/users/${userId}/profile-picture`, {  // ← axios direct
             headers: { Authorization: `Bearer ${token}` }
         });
-    }
+    },
+
+    searchUsersPublic: async (filters: SearchFilters): Promise<UserSearchResult[]> => {
+        const params = new URLSearchParams();
+        if (filters.skill) params.append('skill', filters.skill);
+        if (filters.city) params.append('city', filters.city);
+        if (filters.type) params.append('type', filters.type);
+
+
+        const response = await axios.get(`${API_URL}/users/search?${params.toString()}`);
+        return response.data;
+    },
 };

@@ -39,7 +39,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*/rating").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/*/profile-picture").permitAll()  // ← AJOUTEZ ICI
+                        .requestMatchers(HttpMethod.GET, "/api/users/*/profile-picture").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/skills").permitAll()
+                        .requestMatchers("/api/users/search").permitAll()
 
                         // ========== ADMIN ONLY (en premier pour éviter les conflits) ==========
                         // Reports - ADMIN voit et gère TOUS les reports

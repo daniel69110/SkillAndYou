@@ -38,5 +38,10 @@ export const skillApi = {
         await axios.delete(`${API_URL}/users/${userId}/skills/${userSkillId}`, {
             headers: getAuthHeader()
         });
+    },
+
+    getAllSkillsPublic: async (): Promise<Skill[]> => {
+        const response = await axios.get(`${API_URL}/skills`);
+        return response.data;
     }
 };
