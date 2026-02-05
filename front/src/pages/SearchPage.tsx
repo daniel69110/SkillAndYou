@@ -12,19 +12,19 @@ const SearchPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
 
-    // ← NOUVEAUX STATES
+
     const [skills, setSkills] = useState<Skill[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [loadingSkills, setLoadingSkills] = useState(true);
 
-    // ← CHARGER LES COMPÉTENCES AU MONTAGE DU COMPOSANT
+
     useEffect(() => {
         const loadSkills = async () => {
             try {
                 const data = await skillApi.getAllSkills();
                 setSkills(data);
 
-                // Extraire les catégories uniques
+
                 const uniqueCategories = [...new Set(data.map(s => s.category).filter(Boolean))] as string[];
                 setCategories(uniqueCategories);
             } catch (error) {
@@ -50,7 +50,6 @@ const SearchPage: React.FC = () => {
         }
     };
 
-    // ← FILTRER LES COMPÉTENCES PAR CATÉGORIE SÉLECTIONNÉE
     const filteredSkills = filters.category
         ? skills.filter(s => s.category === filters.category)
         : skills;
@@ -64,7 +63,7 @@ const SearchPage: React.FC = () => {
             <h1>🔍 Rechercher des utilisateurs</h1>
 
             <div className="search-filters">
-                {/* ← SELECT CATÉGORIE */}
+
                 <select
                     value={filters.category || ''}
                     onChange={(e) => setFilters({
