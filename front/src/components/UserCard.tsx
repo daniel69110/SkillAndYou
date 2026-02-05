@@ -31,11 +31,14 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                 </div>
             </div>
 
-            {user.averageRating !== null && (
-                <div className="user-card-rating">
-                    ⭐ {user.averageRating.toFixed(1)} / 5
-                </div>
-            )}
+            <div className="user-card-rating">
+                {user.averageRating !== null ? (
+                    `⭐ ${user.averageRating.toFixed(1)} / 5`
+                ) : (
+                    "📝 Pas de note"
+                )}
+            </div>
+
 
             <button onClick={handleViewProfile} className="btn-view-profile">
                 Voir profil
