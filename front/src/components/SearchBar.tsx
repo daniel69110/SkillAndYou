@@ -90,7 +90,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ showResults = true }) => {
                     onChange={(e) => setFilters({...filters, city: e.target.value})}
                 />
 
-                <button onClick={handleSearch} disabled={loading}>
+                <button onClick={handleSearch} disabled={loading} className={"btn btn-search"}>
                     {loading ? '🔍' : 'Rechercher'}
                 </button>
 

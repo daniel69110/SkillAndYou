@@ -108,7 +108,7 @@ const SearchPage: React.FC = () => {
                     <option value="REQUEST">Recherche cette compétence</option>
                 </select>
 
-                <button onClick={handleSearch} className="btn-search">
+                <button onClick={handleSearch} className="btn btn-search">
                     Rechercher
                 </button>
             </div>

@@ -59,11 +59,6 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
-    .search-filters {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1.25rem;
-    }
 
     .search-filters input,
     .search-filters select {
