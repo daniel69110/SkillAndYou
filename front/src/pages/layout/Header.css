@@ -45,8 +45,22 @@
 
 .header-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
+
+.header-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.accueil-btn {
+    background: transparent;
+    color: #111827;
+    border: 1px solid #000;
+    font-weight: 600;
+}
+
+
 
 
 @media (max-width: 768px) {
@@ -65,5 +79,88 @@
     .header-btn {
         padding: 8px 16px;
         font-size: 14px;
+    }
+}
+
+.burger-btn {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+
+.burger-line {
+    width: 24px;
+    height: 3px;
+    background: #111827;
+    transition: 0.3s;
+    transform-origin: center;
+}
+.burger-line.open:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.burger-line.open:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-line.open:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.mobile-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    min-width: 160px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.3s ease;
+    z-index: 101;
+}
+
+.mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.mobile-menu-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    text-align: left;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.mobile-menu-btn:hover {
+    background: #f3f4f6;
+}
+
+
+@media (max-width: 468px) {
+    .header-right {
+        display: none;
+    }
+
+    .burger-btn {
+        display: flex;
+    }
+
+    .header {
+        padding: 12px 16px;
     }
 }

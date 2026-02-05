@@ -32,7 +32,7 @@ const ExchangesPage: React.FC = () => {
         }
     };
 
-    // ← AJOUTE cette fonction
+
     const loadMyReviews = async () => {
         if (!user) return;
         try {
