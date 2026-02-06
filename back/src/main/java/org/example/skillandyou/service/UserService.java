@@ -139,9 +139,11 @@ public class UserService {
                 user.getPhotoUrl(),
                 user.getAverageRating() != null ? user.getAverageRating().doubleValue() : null,
 
+
+                user.getBio() != null ? user.getBio().substring(0, Math.min(100, user.getBio().length())) : null,
+
                 user.getUserSkills().stream()
                         .map(us -> {
-
                             SkillDTO skillDTO = new SkillDTO();
                             skillDTO.setId(us.getSkill().getId());
                             skillDTO.setName(us.getSkill().getName());

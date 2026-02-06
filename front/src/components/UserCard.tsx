@@ -38,6 +38,11 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                     "📝 Pas de note"
                 )}
             </div>
+            {user.bio && (
+                <p className="user-bio">
+                    {user.bio.length > 80 ? `${user.bio.substring(0, 80)}...` : user.bio}
+                </p>
+            )}
             <div className="user-skills">
                 {user.userSkills?.slice(0, 3).map((us) => (
                     <span key={us.id} className={`skill-tag ${us.type === 'OFFER' ? 'offer' : 'request'}`}>

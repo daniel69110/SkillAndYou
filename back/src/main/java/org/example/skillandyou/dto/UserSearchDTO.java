@@ -18,5 +18,6 @@ public class UserSearchDTO {
     private String country;
     private String photoUrl;
     private Double averageRating;
+    private String bio;
     private List<UserSkillDTO> userSkills;
 }

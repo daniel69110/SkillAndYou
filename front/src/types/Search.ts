@@ -9,6 +9,7 @@ export interface UserSearchResult {
     country: string | null;
     photoUrl: string | null;
     averageRating: number | null;
+    bio?: string;
     userSkills?: UserSkill[];
 }
 
