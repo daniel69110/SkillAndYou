@@ -38,6 +38,14 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                     "📝 Pas de note"
                 )}
             </div>
+            <div className="user-skills">
+                {user.userSkills?.slice(0, 3).map((us) => (
+                    <span key={us.id} className={`skill-tag ${us.type === 'OFFER' ? 'offer' : 'request'}`}>
+                      {us.skill.name} ⭐ {us.level} ({us.type === 'OFFER' ? 'Offre' : 'Demande'})
+                    </span>
+                ))}
+            </div>
+
 
 
             <button onClick={handleViewProfile} className="btn-view-profile">

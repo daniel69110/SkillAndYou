@@ -1,3 +1,5 @@
+import type {UserSkill} from "./Skill.ts";
+
 export interface UserSearchResult {
     id: number;
     firstName: string;
@@ -7,6 +9,7 @@ export interface UserSearchResult {
     country: string | null;
     photoUrl: string | null;
     averageRating: number | null;
+    userSkills?: UserSkill[];
 }
 
 export interface SearchFilters {

@@ -1,8 +1,10 @@
 package org.example.skillandyou.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.skillandyou.dto.SkillDTO;
 import org.example.skillandyou.dto.UpdateUserDTO;
 import org.example.skillandyou.dto.UserSearchDTO;
+import org.example.skillandyou.dto.UserSkillDTO;
 import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.entity.User;
 import org.example.skillandyou.entity.enums.Status;
@@ -135,7 +137,23 @@ public class UserService {
                 user.getCity(),
                 user.getCountry(),
                 user.getPhotoUrl(),
-                user.getAverageRating() != null ? user.getAverageRating().doubleValue() : null
+                user.getAverageRating() != null ? user.getAverageRating().doubleValue() : null,
+
+                user.getUserSkills().stream()
+                        .map(us -> {
+
+                            SkillDTO skillDTO = new SkillDTO();
+                            skillDTO.setId(us.getSkill().getId());
+                            skillDTO.setName(us.getSkill().getName());
+                            skillDTO.setCategory(us.getSkill().getCategory());
+
+                            UserSkillDTO usDTO = new UserSkillDTO(
+                                    us.getId(), us.getUser().getId(), us.getSkill().getId(),
+                                    skillDTO, us.getType().name(), us.getLevel(), us.getAcquisitionDate()
+                            );
+                            return usDTO;
+                        })
+                        .toList()
         );
     }
 }

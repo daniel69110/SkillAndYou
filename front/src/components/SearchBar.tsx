@@ -90,6 +90,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ showResults = true }) => {
                     onChange={(e) => setFilters({...filters, city: e.target.value})}
                 />
 
+                <select value={filters.type || ''} onChange={(e) =>
+                    setFilters({...filters, type: e.target.value as 'OFFER' | 'REQUEST' | undefined})}>
+                    <option value="">Tous types</option>
+                    <option value="OFFER">Offre compétence</option>
+                    <option value="REQUEST">Recherche compétence</option>
+                </select>
+
                 <button onClick={handleSearch} disabled={loading} className={"btn btn-search"}>
                     {loading ? '🔍' : 'Rechercher'}
                 </button>
