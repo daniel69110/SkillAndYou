@@ -5,10 +5,10 @@ import org.example.skillandyou.dto.LoginRequestDTO;
 import org.example.skillandyou.dto.LoginResponseDTO;
 import org.example.skillandyou.dto.UserDTO;
 import org.example.skillandyou.entity.User;
-import org.example.skillandyou.entity.enums.Status;  // ✅ AJOUTE
+import org.example.skillandyou.entity.enums.Status;
 import org.example.skillandyou.security.JwtUtil;
 import org.example.skillandyou.service.UserService;
-import org.springframework.http.HttpStatus;  // ✅ AJOUTE
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;  // ✅ AJOUTE
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
