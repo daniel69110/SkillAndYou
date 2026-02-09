@@ -11,6 +11,7 @@ import type { UserProfile, UserSkill } from '../types';
 import CreateExchangeModal from "../components/CreateExchangeModal.tsx";
 import ReportUserModal from "../components/ReportUserModal.tsx";
 import {ProfilePictureUpload} from "../components/ProfilePictureUpload.tsx";
+import './ProfilePage.css'; // Import du fichier CSS
 
 export function ProfilePage() {
     const { id } = useParams<{ id: string }>();
@@ -74,17 +75,20 @@ export function ProfilePage() {
 
     const isOwnProfile = currentUser?.id === Number(id);
 
-    if (loading) return <div style={{ padding: '20px' }}>Chargement...</div>;
-    if (error) return <div style={{ padding: '20px', color: 'red' }}>{error}</div>;
-    if (!profile) return <div style={{ padding: '20px' }}>Profil introuvable</div>;
+    if (loading) return <div className="loading">Chargement...</div>;
+    if (error) return <div className="error">{error}</div>;
+    if (!profile) return <div className="not-found">Profil introuvable</div>;
 
     return (
-        <div style={{ maxWidth: '800px', margin: '20px auto', padding: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div className="profile-container">
+            <div className="profile-header">
                 <h1>Profil de {profile.firstName} {profile.lastName}</h1>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div className="header-actions">
                     {isOwnProfile && (
-                        <button onClick={() => navigate('/profile/edit')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
+                        <button
+                            onClick={() => navigate('/profile/edit')}
+                            className="btn btn-edit-profil"
+                        >
                             Informations personnelles
                         </button>
                     )}
@@ -92,40 +96,26 @@ export function ProfilePage() {
                         <>
                             <button
                                 onClick={() => setShowExchangeModal(true)}
-                                style={{
-                                    padding: '8px 16px',
-                                    cursor: 'pointer',
-                                    background: '#28a745',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px'
-                                }}
+                                className="btn btn-exchange"
                             >
                                 Proposer un échange
                             </button>
 
                             <button
                                 onClick={() => setShowReportModal(true)}
-                                style={{
-                                    padding: '8px 16px',
-                                    cursor: 'pointer',
-                                    background: '#ff6b6b',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px'
-                                }}
+                                className="btn btn-report"
                             >
                                 Signaler
                             </button>
                         </>
                     )}
-                    <button onClick={() => navigate('/dashboard')} style={{ padding: '8px 16px', cursor: 'pointer' }}>
+                    <button onClick={() => navigate('/dashboard')} className="btn btn-account">
                         Mon compte
                     </button>
                 </div>
             </div>
 
-            <div style={{ background: '#f8f9fa', padding: '20px', borderRadius: '8px' }}>
+            <div className="profile-info-card">
                 {isOwnProfile ? (
                     <ProfilePictureUpload
                         userId={profile.id}
@@ -149,66 +139,52 @@ export function ProfilePage() {
                         <img
                             src={`http://localhost:8080${profile.photoUrl}?t=${imageTimestamp}`}
                             alt="Profile"
-                            style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }}
+                            className="profile-photo"
                         />
                     ) : (
-                        <div style={{
-                            width: '150px',
-                            height: '150px',
-                            borderRadius: '50%',
-                            background: '#e5e7eb',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginBottom: '20px'
-                        }}>
+                        <div className="profile-photo-placeholder">
                             Pas de photo
                         </div>
                     )
                 )}
 
-                <div style={{ display: 'grid', gap: '15px' }}>
-                    <div>
+                <div className="profile-details">
+                    <div className="detail-row">
                         <strong>Nom d'utilisateur:</strong> @{profile.userName}
                     </div>
 
-                    <div>
+                    <div className="detail-row">
                         <strong>Email:</strong> {profile.email}
                     </div>
 
                     {profile.bio && (
-                        <div>
+                        <div className="detail-row">
                             <strong>Bio:</strong>
-                            <p style={{ marginTop: '5px' }}>{profile.bio}</p>
+                            <p>{profile.bio}</p>
                         </div>
                     )}
 
                     {(profile.city || profile.country) && (
-                        <div>
+                        <div className="detail-row">
                             <strong>Localisation:</strong> {profile.city}{profile.city && profile.country && ', '}{profile.country}
                             {profile.postalCode && ` (${profile.postalCode})`}
                         </div>
                     )}
 
-                    <div>
+                    <div className="detail-row">
                         <strong>Réputation:</strong>
-                        <div style={{ marginTop: '8px' }}>
+                        <div className="rating-container">
                             <UserRatingBadge userId={profile.id} />
                         </div>
                     </div>
 
-                    <div>
+                    <div className="detail-row">
                         <strong>Membre depuis:</strong> {new Date(profile.registrationDate).toLocaleDateString('fr-FR')}
                     </div>
 
-                    <div>
-                        <strong>Statut:</strong> <span style={{
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        background: profile.status === 'ACTIVE' ? '#28a745' : '#dc3545',
-                        color: 'white',
-                        fontSize: '0.9em'
-                    }}>
+                    <div className="detail-row">
+                        <strong>Statut:</strong>
+                        <span className={`status-badge status-${profile.status.toLowerCase()}`}>
                             {profile.status}
                         </span>
                     </div>
@@ -216,13 +192,13 @@ export function ProfilePage() {
             </div>
 
             {/* SECTION COMPÉTENCES */}
-            <div style={{ marginTop: '30px', background: '#f8f9fa', padding: '20px', borderRadius: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+            <div className="skills-section">
+                <div className="section-header">
                     <h2>Compétences</h2>
                     {isOwnProfile && (
                         <button
                             onClick={() => setShowAddModal(true)}
-                            style={{ padding: '8px 16px', cursor: 'pointer', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}
+                            className="btn btn-add"
                         >
                             + Ajouter
                         </button>
@@ -230,9 +206,9 @@ export function ProfilePage() {
                 </div>
 
                 {userSkills.length === 0 ? (
-                    <p style={{ color: '#6c757d' }}>Aucune compétence ajoutée</p>
+                    <p className="no-skills">Aucune compétence ajoutée</p>
                 ) : (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    <div className="skills-grid">
                         {userSkills.map(userSkill => (
                             <SkillBadge
                                 key={userSkill.id}
@@ -248,7 +224,7 @@ export function ProfilePage() {
             {/* SECTION REVIEWS */}
             <ReviewList userId={profile.id} />
 
-            {/* MODAL AJOUT COMPÉTENCE */}
+            {/* MODALS */}
             {showAddModal && (
                 <AddSkillModal
                     userId={Number(id)}
@@ -257,7 +233,6 @@ export function ProfilePage() {
                 />
             )}
 
-            {/* MODAL PROPOSER ÉCHANGE */}
             {showExchangeModal && (
                 <CreateExchangeModal
                     receiverId={profile.id}
@@ -271,7 +246,6 @@ export function ProfilePage() {
                 />
             )}
 
-            {/* MODAL SIGNALER */}
             {showReportModal && (
                 <ReportUserModal
                     userId={profile.id}

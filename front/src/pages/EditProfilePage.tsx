@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { userApi } from '../api/userApi';
 import { useAuth } from '../auth/AuthContext';
 import type { UpdateProfileRequest } from '../types';
+import './EditProfilePage.css';
 
 export function EditProfilePage() {
     const navigate = useNavigate();
@@ -69,113 +70,125 @@ export function EditProfilePage() {
         }
     };
 
-    if (!user) return <div style={{ padding: '20px' }}>Non connecté</div>;
+    if (!user) return <div>Non connecté</div>;
 
     return (
-        <div style={{ maxWidth: '600px', margin: '50px auto', padding: '20px' }}>
-            <h1>Éditer mon profil</h1>
+        <div className="edit-profile-container">
+            <header className="edit-profile-header">
+                <h1>Éditer mon profil</h1>
+            </header>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
-                <div>
-                    <label>Prénom *</label>
+            <form onSubmit={handleSubmit} className="edit-profile-form">
+                <div className="form-group">
+                    <label className="form-label required">
+                        Prénom <span className="required">*</span>
+                    </label>
                     <input
                         type="text"
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
                         required
-                        style={{ width: '100%', padding: '8px' }}
+                        className="form-input"
                     />
                 </div>
 
-                <div>
-                    <label>Nom *</label>
+                <div className="form-group">
+                    <label className="form-label required">
+                        Nom <span className="required">*</span>
+                    </label>
                     <input
                         type="text"
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
                         required
-                        style={{ width: '100%', padding: '8px' }}
+                        className="form-input"
                     />
                 </div>
 
-                <div>
-                    <label>Nom d'utilisateur *</label>
+                <div className="form-group">
+                    <label className="form-label required">
+                        Nom d'utilisateur <span className="required">*</span>
+                    </label>
                     <input
                         type="text"
                         name="userName"
                         value={formData.userName}
                         onChange={handleChange}
                         required
-                        style={{ width: '100%', padding: '8px' }}
+                        className="form-input"
                     />
                 </div>
 
-                <div>
-                    <label>Bio</label>
+                <div className="form-group">
+                    <label className="form-label">Bio</label>
                     <textarea
                         name="bio"
                         value={formData.bio}
                         onChange={handleChange}
                         rows={4}
-                        style={{ width: '100%', padding: '8px', fontFamily: 'inherit' }}
+                        className="form-input"
                         placeholder="Parlez de vous..."
                     />
                 </div>
 
-                <div>
-                    <label>Ville</label>
+                <div className="form-group">
+                    <label className="form-label">Ville</label>
                     <input
                         type="text"
                         name="city"
                         value={formData.city}
                         onChange={handleChange}
-                        style={{ width: '100%', padding: '8px' }}
+                        className="form-input"
                     />
                 </div>
 
-                <div>
-                    <label>Pays</label>
+                <div className="form-group">
+                    <label className="form-label">Pays</label>
                     <input
                         type="text"
                         name="country"
                         value={formData.country}
                         onChange={handleChange}
-                        style={{ width: '100%', padding: '8px' }}
+                        className="form-input"
                     />
                 </div>
 
-                <div>
-                    <label>Code postal</label>
+                <div className="form-group">
+                    <label className="form-label">Code postal</label>
                     <input
                         type="text"
                         name="postalCode"
                         value={formData.postalCode}
                         onChange={handleChange}
-                        style={{ width: '100%', padding: '8px' }}
+                        className="form-input"
                     />
                 </div>
 
-                <div>
-                    <label>Photo URL</label>
+                <div className="form-group">
+                    <label className="form-label">Photo URL</label>
                     <input
                         type="url"
                         name="photoUrl"
                         value={formData.photoUrl}
                         onChange={handleChange}
-                        style={{ width: '100%', padding: '8px' }}
+                        className="form-input"
                         placeholder="https://example.com/photo.jpg"
                     />
                 </div>
 
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && (
+                    <div className="error-alert">
+                        {error}
+                    </div>
+                )}
 
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div className="form-actions">
                     <button
                         type="submit"
                         disabled={loading}
-                        style={{ padding: '10px 20px', cursor: 'pointer', flex: 1 }}
+                        className="edit-profile-btn-primary"
                     >
                         {loading ? 'Enregistrement...' : 'Enregistrer'}
                     </button>
@@ -183,7 +196,7 @@ export function EditProfilePage() {
                     <button
                         type="button"
                         onClick={() => navigate(`/profile/${user.id}`)}
-                        style={{ padding: '10px 20px', cursor: 'pointer', background: '#6c757d', color: 'white', border: 'none' }}
+                        className="edit-profile-btn-secondary"
                     >
                         Annuler
                     </button>
