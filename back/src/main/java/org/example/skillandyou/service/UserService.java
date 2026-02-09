@@ -37,8 +37,19 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("EMAIL_EXISTS");
+        }
+
+        if (userRepository.existsByUserName(user.getUserName())) {
+            throw new IllegalArgumentException("USERNAME_EXISTS");
+        }
+
         if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        if (user.getPhotoUrl() == null || user.getPhotoUrl().trim().isEmpty()) {
+            user.setPhotoUrl("/images/default-avatar.jpg");
         }
         return userRepository.save(user);
     }

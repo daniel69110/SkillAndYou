@@ -14,6 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByStatus(Status status);
 
     List<User> findByCityContainingIgnoreCase(String city);
+    boolean existsByEmail(String email);
+    boolean existsByUserName(String userName);
+
 
     @Query("SELECT DISTINCT u FROM User u " +
             "JOIN u.userSkills us " +

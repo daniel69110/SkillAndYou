@@ -42,7 +42,7 @@ public class AuthController {
             throw new RuntimeException("Invalid password");
         }
 
-        // ✅ 3. VÉRIFIE SI SUSPENDU
+        // 3. VÉRIFIE SI SUSPENDU
         if (user.getStatus() == Status.SUSPENDED) {
             System.out.println("⚠️ Tentative de connexion d'un compte suspendu: " + user.getEmail());
             return ResponseEntity

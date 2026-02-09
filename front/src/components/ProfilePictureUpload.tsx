@@ -126,7 +126,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
 
     return (
         <div className="profile-picture-upload">
-            <img src={displayUrl} alt="Profile" className="profile-picture-preview" />
+            <img src={displayUrl} className="profile-picture-preview" />
 
             <div className="upload-actions">
                 <label className="upload-btn">

@@ -207,3 +207,22 @@
     font-size: 14px;
     margin-top: 8px;
 }
+
+.input-error {
+    border: 2px solid #ff6b6b !important;
+    box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.85em;
+    margin-top: 4px;
+}
+
+.general-error {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 12px 0;
+}

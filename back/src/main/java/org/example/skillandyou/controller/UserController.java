@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -32,17 +33,29 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@Valid @RequestBody RegisterRequestDTO req) {
-        User user = User.builder()
-                .email(req.getEmail())
-                .userName(req.getUserName())
-                .firstName(req.getFirstName())
-                .lastName(req.getLastName())
-                .password(req.getPassword())
-                .build();
-        User created = userService.createUser(user);
-        return ResponseEntity.status(201).body(created);
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO req) {  // ← ?
+        try {
+            User user = User.builder()
+                    .email(req.getEmail())
+                    .userName(req.getUserName())
+                    .firstName(req.getFirstName())
+                    .lastName(req.getLastName())
+                    .password(req.getPassword())
+                    .build();
+            User created = userService.createUser(user);
+            return ResponseEntity.status(201).body(created);
+        }
+
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "REGISTER_FAILED"));
+        }
     }
+
 
     @PostMapping
     public User create(@RequestBody User user) {

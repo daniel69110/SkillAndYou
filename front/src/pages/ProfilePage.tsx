@@ -24,7 +24,7 @@ export function ProfilePage() {
     const [showReportModal, setShowReportModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [imageTimestamp, setImageTimestamp] = useState(Date.now());  // ← AJOUTÉ
+    const [imageTimestamp, setImageTimestamp] = useState(Date.now());
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -129,7 +129,7 @@ export function ProfilePage() {
                 {isOwnProfile ? (
                     <ProfilePictureUpload
                         userId={profile.id}
-                        currentPhotoUrl={profile.photoUrl ? `${profile.photoUrl}?t=${imageTimestamp}` : undefined}
+                        currentPhotoUrl={profile.photoUrl ? `http://localhost:8080${profile.photoUrl}` : undefined}
                         onUploadSuccess={async (newPhotoUrl: string) => {
                             setProfile(prev =>
                                 prev ? { ...prev, photoUrl: newPhotoUrl } : null
@@ -143,22 +143,27 @@ export function ProfilePage() {
                                 // on garde la version locale si le refetch échoue
                             }
                         }}
-
                     />
-
                 ) : (
                     profile.photoUrl ? (
                         <img
-                            src={`${profile.photoUrl}?t=${imageTimestamp}`}
+                            src={`http://localhost:8080${profile.photoUrl}?t=${imageTimestamp}`}
                             alt="Profile"
                             style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }}
                         />
                     ) : (
-                        <img
-                            src="https://via.placeholder.com/150"
-                            alt="Profile"
-                            style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' }}
-                        />
+                        <div style={{
+                            width: '150px',
+                            height: '150px',
+                            borderRadius: '50%',
+                            background: '#e5e7eb',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginBottom: '20px'
+                        }}>
+                            Pas de photo
+                        </div>
                     )
                 )}
 

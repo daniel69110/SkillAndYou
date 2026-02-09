@@ -4,6 +4,7 @@ import { authApi } from '../api/authApi';
 import { useAuth } from '../auth/AuthContext';
 import type { RegisterRequest } from '../types';
 import './RegisterPage.css';
+import toast from "react-hot-toast";
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -17,7 +18,13 @@ export function RegisterPage() {
         userName: ''
     });
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
+
+    // ✅ NOUVEAU : Erreurs précises
+    const [formErrors, setFormErrors] = useState({
+        email: '',
+        userName: '',
+        general: ''
+    });
     const [passwordMatchError, setPasswordMatchError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -26,7 +33,6 @@ export function RegisterPage() {
 
         if (name === 'confirmPassword') {
             setConfirmPassword(value);
-            // ✅ Validation temps réel
             if (formData.password && value !== formData.password) {
                 setPasswordMatchError('Les mots de passe ne correspondent pas');
             } else {
@@ -34,7 +40,11 @@ export function RegisterPage() {
             }
         } else {
             setFormData({ ...formData, [name]: value });
-            // ✅ Check match si password change
+            // Clear erreur spécifique si champ corrigé
+            if (name === 'email') setFormErrors(prev => ({ ...prev, email: '' }));
+            if (name === 'userName') setFormErrors(prev => ({ ...prev, userName: '' }));
+
+            // Check password match
             if (confirmPassword && value !== confirmPassword && name === 'password') {
                 setPasswordMatchError('Les mots de passe ne correspondent pas');
             } else if (name === 'password') {
@@ -46,22 +56,46 @@ export function RegisterPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // ✅ Validation finale
         if (formData.password !== confirmPassword) {
             setPasswordMatchError('Les mots de passe ne correspondent pas');
             return;
         }
 
-        setError('');
+
+        setFormErrors({ email: '', userName: '', general: '' });
         setPasswordMatchError('');
         setLoading(true);
 
         try {
             const response = await authApi.register(formData);
+            toast.success('Compte créé ! Redirection...', {
+                duration: 2500
+            });
             setAuth(response.token, response.user);
-            navigate('/dashboard');
+            setTimeout(() => navigate('/dashboard'), 1500);
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Échec de l\'inscription');
+
+            const errorMsg = err.response?.data?.error;
+
+            if (errorMsg === 'EMAIL_EXISTS') {
+                setFormErrors({
+                    email: 'Cet email est déjà utilisé',
+                    userName: '',
+                    general: ''
+                });
+            } else if (errorMsg === 'USERNAME_EXISTS') {
+                setFormErrors({
+                    email: '',
+                    userName: 'Ce nom d\'utilisateur est pris',
+                    general: ''
+                });
+            } else {
+                setFormErrors({
+                    email: '',
+                    userName: '',
+                    general: 'Erreur inscription. Réessayez.'
+                });
+            }
         } finally {
             setLoading(false);
         }
@@ -108,12 +142,15 @@ export function RegisterPage() {
                         <input
                             type="text"
                             name="userName"
-                            className="form-input"
+                            className={`form-input ${formErrors.userName ? 'input-error' : ''}`}
                             placeholder="Nom d'utilisateur"
                             value={formData.userName}
                             onChange={handleChange}
                             required
                         />
+                        {formErrors.userName && (
+                            <p className="error-message">{formErrors.userName}</p>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -121,12 +158,15 @@ export function RegisterPage() {
                         <input
                             type="email"
                             name="email"
-                            className="form-input"
+                            className={`form-input ${formErrors.email ? 'input-error' : ''}`}
                             placeholder="adresse@email.com"
                             value={formData.email}
                             onChange={handleChange}
                             required
                         />
+                        {formErrors.email && (
+                            <p className="error-message">{formErrors.email}</p>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -159,7 +199,9 @@ export function RegisterPage() {
                         )}
                     </div>
 
-                    {error && <p className="error-message">{error}</p>}
+                    {formErrors.general && (
+                        <div className="general-error">{formErrors.general}</div>
+                    )}
 
                     <button type="submit" className="register-button" disabled={loading}>
                         {loading ? 'Inscription...' : "S'inscrire"}
