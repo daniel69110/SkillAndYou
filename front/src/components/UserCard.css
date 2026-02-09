@@ -80,13 +80,13 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-/* VERT = Offre */
+
 .skill-tag.offer {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
 }
 
-/* BLEU = Demande */
+
 .skill-tag.request {
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: white;
@@ -103,8 +103,7 @@
 
 /* Bouton toujours en bas */
 .btn-view-profile {
-    margin-top: auto;              /* pousse le bouton en bas de la card */
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    margin-top: auto;
     color: #f9fafb;
     border: none;
     padding: 0.7rem 1rem;
