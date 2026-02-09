@@ -1,39 +1,41 @@
 .exchanges-page {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-.exchanges-page h1 {
+.page-title {
     text-align: center;
-    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
 }
 
 .exchanges-filters {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    justify-content: center;
     flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
 }
 
-.exchanges-filters button {
-    padding: 0.75rem 1.5rem;
-    border: 2px solid #007bff;
-    background: white;
-    color: #007bff;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s;
+
+.filter-btn:hover {
+    background: #f3f4f6;
 }
+
 
 .exchanges-filters button:hover {
     background: #e7f3ff;
 }
 
 .exchanges-filters button.active {
-    background: #007bff;
+    background: #005fc8;
     color: white;
 }
 

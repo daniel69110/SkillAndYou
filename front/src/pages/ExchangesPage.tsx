@@ -4,8 +4,10 @@ import { useAuth } from '../auth/AuthContext';
 import ExchangeCard from '../components/ExchangeCard';
 import type { Exchange } from '../types/Exchange';
 import './ExchangesPage.css';
-import {ReviewForm} from "../components/ReviewForm.tsx";
-import {reviewApi} from "../api/reviewApi.ts";
+import { ReviewForm } from "../components/ReviewForm.tsx";
+import { reviewApi } from "../api/reviewApi.ts";
+// Import tes toasts (adapte selon ton setup)
+import { toast } from 'react-hot-toast';  // ou ton système de toast
 
 const ExchangesPage: React.FC = () => {
     const { user } = useAuth();
@@ -32,12 +34,10 @@ const ExchangesPage: React.FC = () => {
         }
     };
 
-
     const loadMyReviews = async () => {
         if (!user) return;
         try {
             const { data } = await reviewApi.getByReviewer(user.id);
-            // Extrait les IDs des exchanges déjà reviewés
             const reviewedExchangeIds = data.map((review: any) => review.exchangeId);
             setMyReviews(reviewedExchangeIds);
         } catch (error) {
@@ -45,49 +45,45 @@ const ExchangesPage: React.FC = () => {
         }
     };
 
+
     const handleAccept = async (exchangeId: number) => {
         if (!user) return;
-
-        if (!confirm('Accepter cet échange ?')) return;
-
         try {
             await exchangeApi.accept(exchangeId, user.id);
+            toast.success('Échange accepté !');  // Ton toast success
             loadExchanges();
         } catch (error) {
-            alert('Erreur lors de l\'acceptation');
+            toast.error('Erreur lors de l\'acceptation');  // Ton toast error
         }
     };
 
     const handleComplete = async (exchangeId: number) => {
-        if (!confirm('Marquer cet échange comme terminé ?')) return;
-
         try {
             await exchangeApi.complete(exchangeId);
+            toast.success('Échange marqué terminé !');  // Ton toast success
             loadExchanges();
         } catch (error) {
-            alert('Erreur lors de la complétion');
+            toast.error('Erreur lors de la complétion');  // Ton toast error
         }
     };
 
     const handleCancel = async (exchangeId: number) => {
-        if (!confirm('Annuler cet échange ?')) return;
-
         try {
             await exchangeApi.cancel(exchangeId);
+            toast.success('Échange annulé !');  // Ton toast success
             loadExchanges();
         } catch (error) {
-            alert('Erreur lors de l\'annulation');
+            toast.error('Erreur lors de l\'annulation');  // Ton toast error
         }
     };
 
     const handleReviewSuccess = () => {
         console.log('✅ Review créée pour exchange:', reviewingExchangeId);
-
+        toast.success('Avis publié avec succès ! ⭐');  // Bonus toast
 
         if (reviewingExchangeId) {
             setMyReviews(prev => [...prev, reviewingExchangeId]);
         }
-
         setReviewingExchangeId(null);
     };
 
@@ -105,7 +101,7 @@ const ExchangesPage: React.FC = () => {
 
     return (
         <div className="exchanges-page">
-            <h1>📋 Mes échanges</h1>
+            <h1>Mes échanges</h1>
 
             {/* Filtres */}
             <div className="exchanges-filters">
@@ -143,7 +139,7 @@ const ExchangesPage: React.FC = () => {
             ) : (
                 <div className="exchanges-grid">
                     {filteredExchanges.map(exchange => {
-                        const hasReviewed = myReviews.includes(exchange.id);  // ← AJOUTE
+                        const hasReviewed = myReviews.includes(exchange.id);
 
                         return (
                             <div key={exchange.id}>
@@ -155,7 +151,6 @@ const ExchangesPage: React.FC = () => {
                                     onCancel={handleCancel}
                                 />
 
-                                {/* ← MODIFIE : Affiche seulement si pas encore reviewé */}
                                 {exchange.status === 'COMPLETED' && !hasReviewed && (
                                     <div className="review-section">
                                         {reviewingExchangeId === exchange.id ? (
@@ -182,7 +177,6 @@ const ExchangesPage: React.FC = () => {
                                     </div>
                                 )}
 
-                                {/* ← AJOUTE Badge "Avis déjà laissé" */}
                                 {exchange.status === 'COMPLETED' && hasReviewed && (
                                     <div className="review-done">
                                         ✅ Vous avez déjà laissé un avis

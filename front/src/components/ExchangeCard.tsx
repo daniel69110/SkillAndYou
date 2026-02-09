@@ -99,7 +99,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                         onClick={() => onAccept(exchange.id)}
                         className="btn-accept"
                     >
-                        ✅ Accepter
+                        Accepter
                     </button>
                 )}
 
@@ -108,7 +108,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                         onClick={() => onComplete(exchange.id)}
                         className="btn-complete"
                     >
-                        ✔️ Marquer terminé
+                        ✔ Marquer terminé
                     </button>
                 )}
 
@@ -117,7 +117,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                         onClick={() => onCancel(exchange.id)}
                         className="btn-cancel"
                     >
-                        ❌ Annuler
+                        Annuler
                     </button>
                 )}
 

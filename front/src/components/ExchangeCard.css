@@ -1,35 +1,42 @@
 .exchange-card {
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    border-radius: 20px;
     padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+
 }
 
+
+/* Header */
 .exchange-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1.25rem;
 }
 
 .exchange-status {
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
     color: white;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    min-width: 90px;
+    text-align: center;
 }
 
 .exchange-date {
-    color: #999;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
 }
 
+/* Participants */
 .exchange-users {
-    display: flex;
-    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .exchange-user {
@@ -39,104 +46,196 @@
 }
 
 .exchange-user img {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     object-fit: cover;
+    border: 3px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .exchange-user strong {
     display: block;
     font-size: 1rem;
+    color: #1f2937;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
 }
 
 .exchange-user p {
     margin: 0;
-    color: #666;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    color: #6b7280;
 }
 
+/* Skills Exchange */
 .exchange-skills {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
+    margin-bottom: 1.5rem;
     padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .skill-exchange {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
     flex: 1;
-}
-
-.skill-label {
-    font-size: 0.85rem;
-    color: #666;
-    font-weight: 600;
-}
-
-.skill-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: 600;
     text-align: center;
 }
 
+.skill-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .skill-badge.offer {
-    background: #d4edda;
-    color: #155724;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
 }
 
 .skill-badge.request {
-    background: #d1ecf1;
-    color: #0c5460;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
 }
 
 .exchange-arrow {
     font-size: 1.5rem;
-    color: #6c757d;
+    font-weight: bold;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
 }
 
+/* Actions */
 .exchange-actions {
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
 }
 
 .exchange-actions button {
-    padding: 0.6rem 1rem;
+    flex: 1;
+    min-width: 120px;
+    padding: 0.75rem 1rem;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    border-radius: 12px;
     font-weight: 600;
-    transition: opacity 0.2s;
-}
-
-.exchange-actions button:hover {
-    opacity: 0.8;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-accept {
-    background: #28a745;
+    background: linear-gradient(135deg, #10b981, #059669);
     color: white;
+}
+
+.btn-accept:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 .btn-complete {
-    background: #17a2b8;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
     color: white;
+}
+
+.btn-complete:hover {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    transform: translateY(-2px);
 }
 
 .btn-cancel {
-    background: #dc3545;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
     color: white;
 }
 
+.btn-cancel:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+}
+
 .btn-view-profile {
-    background: #007bff;
+    background: linear-gradient(135deg, #6b7280, #4b5563);
     color: white;
-    margin-left: auto;
+}
+
+.btn-view-profile:hover {
+    background: linear-gradient(135deg, #4b5563, #374151);
+    transform: translateY(-2px);
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .exchange-card {
+        padding: 1.25rem;
+    }
+
+    .exchange-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .exchange-skills {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .exchange-arrow {
+        align-self: center;
+        order: 3;
+    }
+
+    .exchange-actions {
+        flex-direction: column;
+    }
+
+    .exchange-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .exchange-card {
+        padding: 1rem;
+    }
+
+    .exchange-user img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .skill-badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
 }
