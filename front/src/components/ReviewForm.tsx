@@ -27,7 +27,7 @@ export const ReviewForm = ({ exchangeId, onSuccess }: ReviewFormProps) => {
 
         try {
             await reviewApi.create(exchangeId, { rating, comment });
-            alert('✅ Avis envoyé !');
+            alert('Avis envoyé !');
             setRating(0);
             setComment('');
             onSuccess?.();
@@ -40,7 +40,7 @@ export const ReviewForm = ({ exchangeId, onSuccess }: ReviewFormProps) => {
 
     return (
         <form onSubmit={handleSubmit} className="review-form">
-            <h3>✍️ Laisser un avis</h3>
+            <h3>Laisser un avis</h3>
 
             <div className="form-group">
                 <label>Note *</label>

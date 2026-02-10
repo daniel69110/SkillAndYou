@@ -1,0 +1,46 @@
+.skill-badge-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    margin: 4px;
+    color: white;
+}
+
+/* Même verts/bleus que dans .skill-tag.offer / .skill-tag.request */
+.skill-badge-tag.offer {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.skill-badge-tag.request {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.skill-badge-name {
+    white-space: nowrap;
+}
+
+.skill-badge-level {
+    font-size: 0.75rem;
+    opacity: 0.95;
+}
+
+.skill-badge-type {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+/* Bouton de suppression discret */
+.skill-badge-delete {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0 2px;
+    font-size: 1rem;
+    line-height: 1;
+}

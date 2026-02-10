@@ -78,7 +78,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>🤝 Proposer un échange</h2>
+                    <h2>Proposer un échange</h2>
                     <button onClick={onClose} className="btn-close">✕</button>
                 </div>
 
@@ -90,7 +90,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
 
                         {/* Je propose d'enseigner */}
                         <div className="form-group">
-                            <label>🎓 Je propose d'enseigner :</label>
+                            <label>Je propose d'enseigner :</label>
                             <select
                                 value={offeredSkillId}
                                 onChange={(e) => setOfferedSkillId(Number(e.target.value))}
@@ -105,7 +105,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
                             </select>
                             {mySkills.length === 0 && (
                                 <p className="warning">
-                                    ⚠️ Vous devez avoir au moins une compétence en OFFRE
+                                    Vous devez avoir au moins une compétence en OFFRE
                                 </p>
                             )}
                         </div>
@@ -114,7 +114,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
 
                         {/* Je souhaite apprendre */}
                         <div className="form-group">
-                            <label>📚 Je souhaite apprendre :</label>
+                            <label>Je souhaite apprendre :</label>
                             <select
                                 value={requestedSkillId}
                                 onChange={(e) => setRequestedSkillId(Number(e.target.value))}

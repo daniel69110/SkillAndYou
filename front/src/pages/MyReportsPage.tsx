@@ -23,16 +23,20 @@ const MyReportsPage: React.FC = () => {
     };
 
     const getStatusBadge = (status: ReportStatus) => {
-        const badges: Record<ReportStatus, { label: string; color: string }> = {
-            PENDING: { label: 'En attente', color: 'orange' },
-            RESOLVED: { label: 'Traité', color: 'green' },
-            REJECTED: { label: 'Rejeté', color: 'red' }
+        const badges: Partial<Record<ReportStatus, { label: string; color: string }>> = {
+            PENDING:   { label: 'En attente', color: 'orange' },
+            RESOLVED:  { label: 'Traité',   color: 'green'  },
+            REJECTED:  { label: 'Rejeté',   color: 'red'    },
+            REVIEWED:  { label: 'En revue',  color: 'blue'   },
+            DISMISSED: { label: 'Classé',    color: 'gray'   }
         };
-        const badge = badges[status];
+
+        const badge = badges[status] || { label: status, color: 'gray' };
+
         return (
             <span className={`badge badge-${badge.color}`}>
-        {badge.label}
-      </span>
+            {badge.label}
+        </span>
         );
     };
 
@@ -40,7 +44,7 @@ const MyReportsPage: React.FC = () => {
 
     return (
         <div className="my-reports-page">
-            <h1>📋 Mes signalements</h1>
+            <h1>Mes signalements</h1>
 
             {reports.length === 0 ? (
                 <p className="no-data">Vous n'avez effectué aucun signalement.</p>

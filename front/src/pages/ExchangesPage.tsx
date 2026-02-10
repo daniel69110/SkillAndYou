@@ -6,8 +6,7 @@ import type { Exchange } from '../types/Exchange';
 import './ExchangesPage.css';
 import { ReviewForm } from "../components/ReviewForm.tsx";
 import { reviewApi } from "../api/reviewApi.ts";
-// Import tes toasts (adapte selon ton setup)
-import { toast } from 'react-hot-toast';  // ou ton système de toast
+import { toast } from 'react-hot-toast';
 
 const ExchangesPage: React.FC = () => {
     const { user } = useAuth();
@@ -16,6 +15,13 @@ const ExchangesPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [reviewingExchangeId, setReviewingExchangeId] = useState<number | null>(null);
     const [myReviews, setMyReviews] = useState<number[]>([]);
+
+    // 🆕 MODAL CONFIRMATION
+    const [confirmModal, setConfirmModal] = useState<{
+        exchangeId: number;
+        action: 'accept' | 'complete' | 'cancel';
+        exchangeName: string;
+    } | null>(null);
 
     useEffect(() => {
         loadExchanges();
@@ -45,42 +51,43 @@ const ExchangesPage: React.FC = () => {
         }
     };
 
-
-    const handleAccept = async (exchangeId: number) => {
-        if (!user) return;
-        try {
-            await exchangeApi.accept(exchangeId, user.id);
-            toast.success('Échange accepté !');  // Ton toast success
-            loadExchanges();
-        } catch (error) {
-            toast.error('Erreur lors de l\'acceptation');  // Ton toast error
-        }
+    // 🆕 OUVRIR MODAL
+    const openConfirmModal = (exchangeId: number, action: 'accept' | 'complete' | 'cancel', exchangeName: string) => {
+        setConfirmModal({ exchangeId, action, exchangeName });
     };
 
-    const handleComplete = async (exchangeId: number) => {
-        try {
-            await exchangeApi.complete(exchangeId);
-            toast.success('Échange marqué terminé !');  // Ton toast success
-            loadExchanges();
-        } catch (error) {
-            toast.error('Erreur lors de la complétion');  // Ton toast error
+    // 🆕 CONFIRMER ACTION
+    const confirmAction = async () => {
+        if (!confirmModal || !user) {
+            setConfirmModal(null);
+            return;
         }
-    };
 
-    const handleCancel = async (exchangeId: number) => {
         try {
-            await exchangeApi.cancel(exchangeId);
-            toast.success('Échange annulé !');  // Ton toast success
+            switch (confirmModal.action) {
+                case 'accept':
+                    await exchangeApi.accept(confirmModal.exchangeId, user.id);
+                    toast.success('Échange accepté !');
+                    break;
+                case 'complete':
+                    await exchangeApi.complete(confirmModal.exchangeId);
+                    toast.success('Échange terminé !');
+                    break;
+                case 'cancel':
+                    await exchangeApi.cancel(confirmModal.exchangeId);
+                    toast.success('Échange annulé !');
+                    break;
+            }
             loadExchanges();
         } catch (error) {
-            toast.error('Erreur lors de l\'annulation');  // Ton toast error
+            toast.error(`Erreur lors de l'action`);
+        } finally {
+            setConfirmModal(null);
         }
     };
 
     const handleReviewSuccess = () => {
-        console.log('✅ Review créée pour exchange:', reviewingExchangeId);
-        toast.success('Avis publié avec succès ! ⭐');  // Bonus toast
-
+        toast.success('Avis publié avec succès ! ⭐');
         if (reviewingExchangeId) {
             setMyReviews(prev => [...prev, reviewingExchangeId]);
         }
@@ -140,15 +147,19 @@ const ExchangesPage: React.FC = () => {
                 <div className="exchanges-grid">
                     {filteredExchanges.map(exchange => {
                         const hasReviewed = myReviews.includes(exchange.id);
+                        // 🆕 Nom pour la modal
+                        const otherUserName = exchange.requester.id === user?.id
+                            ? exchange.receiver.firstName
+                            : exchange.requester.firstName;
 
                         return (
                             <div key={exchange.id}>
                                 <ExchangeCard
                                     exchange={exchange}
                                     currentUserId={user?.id || 0}
-                                    onAccept={handleAccept}
-                                    onComplete={handleComplete}
-                                    onCancel={handleCancel}
+                                    onAccept={() => openConfirmModal(exchange.id, 'accept', otherUserName)}
+                                    onComplete={() => openConfirmModal(exchange.id, 'complete', otherUserName)}
+                                    onCancel={() => openConfirmModal(exchange.id, 'cancel', otherUserName)}
                                 />
 
                                 {exchange.status === 'COMPLETED' && !hasReviewed && (
@@ -179,12 +190,40 @@ const ExchangesPage: React.FC = () => {
 
                                 {exchange.status === 'COMPLETED' && hasReviewed && (
                                     <div className="review-done">
-                                        ✅ Vous avez déjà laissé un avis
+                                        Vous avez déjà laissé un avis
                                     </div>
                                 )}
                             </div>
                         );
                     })}
+                </div>
+            )}
+
+            {/* 🆕 MODAL CONFIRMATION */}
+            {confirmModal && (
+                <div className="confirm-overlay">
+                    <div className="confirm-modal">
+                        <h3>Confirmer l'action ?</h3>
+                        <p>
+                            {confirmModal.action === 'accept' && `Accepter l'échange avec ${confirmModal.exchangeName} ?`}
+                            {confirmModal.action === 'complete' && 'Marquer cet échange comme terminé ?'}
+                            {confirmModal.action === 'cancel' && 'Annuler définitivement cet échange ?'}
+                        </p>
+                        <div className="confirm-actions">
+                            <button
+                                onClick={confirmAction}
+                                className="btn-confirm"
+                            >
+                                Confirmer
+                            </button>
+                            <button
+                                onClick={() => setConfirmModal(null)}
+                                className="btn-cancel-modal"
+                            >
+                                Annuler
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

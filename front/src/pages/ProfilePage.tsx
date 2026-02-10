@@ -103,7 +103,7 @@ export function ProfilePage() {
 
                             <button
                                 onClick={() => setShowReportModal(true)}
-                                className="btn btn-report"
+                                className="btn btn-report-profil"
                             >
                                 Signaler
                             </button>
@@ -130,7 +130,6 @@ export function ProfilePage() {
                                 const freshProfile = await userApi.getProfile(Number(id));
                                 setProfile(freshProfile);
                             } catch {
-                                // on garde la version locale si le refetch échoue
                             }
                         }}
                     />

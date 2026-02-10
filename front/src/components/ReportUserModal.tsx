@@ -36,7 +36,7 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
         setError('');
 
         try {
-            await reportApi.createReport(formData);  // ✅ reportApi au lieu de reportService
+            await reportApi.createReport(formData);
             alert('Signalement envoyé avec succès');
             onSuccess?.();
             onClose();
@@ -51,7 +51,7 @@ const ReportUserModal: React.FC<ReportUserModalProps> = ({
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>🚨 Signaler {userName}</h2>
+                    <h2>Signaler {userName}</h2>
                     <button onClick={onClose} className="close-btn">&times;</button>
                 </div>
 

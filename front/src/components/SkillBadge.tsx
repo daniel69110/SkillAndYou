@@ -1,4 +1,5 @@
 import type { UserSkill } from '../types';
+import './SkillBadge.css'; // nouveau fichier
 
 interface SkillBadgeProps {
     userSkill: UserSkill;
@@ -10,39 +11,26 @@ export function SkillBadge({ userSkill, onDelete, showDelete = false }: SkillBad
     const isOffer = userSkill.type === 'OFFER';
 
     return (
-        <span style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 12px',
-            borderRadius: '20px',
-            background: isOffer ? '#28a745' : '#007bff',
-            color: 'white',
-            fontSize: '0.9em',
-            margin: '4px'
-        }}>
-      <span>{userSkill.skill.name}</span>
-            {userSkill.level && <span>⭐ {userSkill.level}</span>}
-            <span style={{ fontSize: '0.8em', opacity: 0.8 }}>
-        ({isOffer ? 'Offre' : 'Demande'})
-      </span>
+        <span className={`skill-badge-tag ${isOffer ? 'offer' : 'request'}`}>
+            <span className="skill-badge-name">{userSkill.skill.name}</span>
+
+            {userSkill.level && (
+                <span className="skill-badge-level">⭐ {userSkill.level}</span>
+            )}
+
+            <span className="skill-badge-type">
+                ({isOffer ? 'Offre' : 'Demande'})
+            </span>
 
             {showDelete && onDelete && (
                 <button
                     onClick={() => onDelete(userSkill.id)}
-                    style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: 'white',
-                        cursor: 'pointer',
-                        padding: '0 4px',
-                        fontSize: '1.2em'
-                    }}
+                    className="skill-badge-delete"
                     title="Supprimer"
                 >
                     ×
                 </button>
             )}
-    </span>
+        </span>
     );
 }
