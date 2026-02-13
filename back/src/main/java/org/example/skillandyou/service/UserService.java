@@ -5,9 +5,11 @@ import org.example.skillandyou.dto.SkillDTO;
 import org.example.skillandyou.dto.UpdateUserDTO;
 import org.example.skillandyou.dto.UserSearchDTO;
 import org.example.skillandyou.dto.UserSkillDTO;
+import org.example.skillandyou.entity.PasswordResetToken;
 import org.example.skillandyou.entity.Review;
 import org.example.skillandyou.entity.User;
 import org.example.skillandyou.entity.enums.Status;
+import org.example.skillandyou.repository.PasswordResetTokenRepository;
 import org.example.skillandyou.repository.ReviewRepository;
 import org.example.skillandyou.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,9 +17,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -186,6 +191,37 @@ public class UserService {
 
         reviewRepository.deleteByReviewerId(userId);
         reviewRepository.deleteByReviewedUserId(userId);
+    }
+
+    public String createPasswordResetToken(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("NO_USER_FOR_EMAIL"));
+
+        PasswordResetToken token = new PasswordResetToken();
+        token.setToken(UUID.randomUUID().toString());
+        token.setUser(user);
+        token.setExpirationDate(LocalDateTime.now().plusHours(1));
+        token.setUsed(false);
+
+        passwordResetTokenRepository.save(token);
+
+        return token.getToken();
+    }
+
+    public void resetPassword(String tokenValue, String newPassword) {
+        PasswordResetToken token = passwordResetTokenRepository.findByToken(tokenValue)
+                .orElseThrow(() -> new IllegalArgumentException("INVALID_TOKEN"));
+
+        if (token.isUsed() || token.getExpirationDate().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("TOKEN_EXPIRED_OR_USED");
+        }
+
+        User user = token.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        token.setUsed(true);
+        passwordResetTokenRepository.save(token);
     }
 
 

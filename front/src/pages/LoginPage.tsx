@@ -128,6 +128,10 @@ export const LoginPage = () => {
                 <div className="link-section">
                     <p>Pas encore de compte ? <Link to="/register">S'inscrire</Link></p>
                 </div>
+
+                <div className="link-section">
+                    <p><Link to="/forgot-password">Mot de passe oublié ? </Link></p>
+                </div>
             </div>
         </div>
     );

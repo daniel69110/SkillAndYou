@@ -43,6 +43,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/*/profile-picture").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/skills").permitAll()
                         .requestMatchers("/api/users/search").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
 
                         // ========== ADMIN ONLY (en premier pour éviter les conflits) ==========
                         // Reports - ADMIN voit et gère TOUS les reports
