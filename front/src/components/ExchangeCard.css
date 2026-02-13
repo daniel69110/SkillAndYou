@@ -189,7 +189,6 @@
 
 .btn-view-profile:hover {
     background: linear-gradient(135deg, #4b5563, #374151);
-    transform: translateY(-2px);
 }
 
 

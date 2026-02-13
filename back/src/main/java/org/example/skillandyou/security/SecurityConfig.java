@@ -79,6 +79,7 @@ public class SecurityConfig {
                         // Profils (APRÈS les photos)
                         .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/*").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/*").hasAnyRole("USER", "ADMIN")
 
                         // Exchanges
                         .requestMatchers("/api/exchanges/**").hasAnyRole("USER", "ADMIN")

@@ -11,21 +11,25 @@ import type { UserProfile, UserSkill } from '../types';
 import CreateExchangeModal from "../components/CreateExchangeModal.tsx";
 import ReportUserModal from "../components/ReportUserModal.tsx";
 import {ProfilePictureUpload} from "../components/ProfilePictureUpload.tsx";
-import './ProfilePage.css'; // Import du fichier CSS
+import './ProfilePage.css';
 
 export function ProfilePage() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { user: currentUser} = useAuth();
+    const { logout } = useAuth();
 
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [imageTimestamp, setImageTimestamp] = useState(Date.now());
+    const [deletePassword, setDeletePassword] = useState('');
+    const [deleteError, setDeleteError] = useState('');
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -73,6 +77,27 @@ export function ProfilePage() {
         setUserSkills(skills);
     };
 
+    const handleDeleteAccount = async () => {
+        if (!deletePassword) {
+            setDeleteError('Le mot de passe est requis');
+            return;
+        }
+
+        try {
+            await userApi.deleteAccount(Number(id), deletePassword);
+
+
+            logout();
+            navigate('/', { replace: true });
+
+            alert('Compte supprimé avec succès !');
+
+        } catch (err: any) {
+            setDeleteError(err.response?.data?.message || 'Erreur lors de la suppression');
+        }
+    };
+
+
     const isOwnProfile = currentUser?.id === Number(id);
 
     if (loading) return <div className="loading">Chargement...</div>;
@@ -85,12 +110,20 @@ export function ProfilePage() {
                 <h1>Profil de {profile.firstName} {profile.lastName}</h1>
                 <div className="header-actions">
                     {isOwnProfile && (
-                        <button
-                            onClick={() => navigate('/profile/edit')}
-                            className="btn btn-edit-profil"
-                        >
-                            Informations personnelles
-                        </button>
+                        <>
+                            <button
+                                onClick={() => navigate('/profile/edit')}
+                                className="btn btn-edit-profil"
+                            >
+                                Informations personnelles
+                            </button>
+                            <button
+                                onClick={() => setShowDeleteModal(true)}
+                                className="btn btn-danger btn-delete-account"
+                            >
+                                Supprimer le compte
+                            </button>
+                        </>
                     )}
                     {!isOwnProfile && (
                         <>
@@ -255,6 +288,56 @@ export function ProfilePage() {
                         setShowReportModal(false);
                     }}
                 />
+            )}
+
+            {/* MODAL SUPPRESSION COMPTE */}
+            {showDeleteModal && (
+                <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <h3>Supprimer définitivement le compte</h3>
+                        <p className="warning-text">
+                            Cette action est <strong>irréversible</strong>. Toutes vos données,
+                            compétences, échanges et avis seront supprimés.
+                        </p>
+
+                        <div className="form-group">
+                            <label>Mot de passe *</label>
+                            <input
+                                type="password"
+                                value={deletePassword}
+                                onChange={(e) => {
+                                    setDeletePassword(e.target.value);
+                                    setDeleteError('');
+                                }}
+                                placeholder="Tapez votre mot de passe"
+                                className="form-input"
+                            />
+                            {deleteError && (
+                                <p className="error-text">{deleteError}</p>
+                            )}
+                        </div>
+
+                        <div className="modal-actions">
+                            <button
+                                onClick={() => {
+                                    setShowDeleteModal(false);
+                                    setDeletePassword('');
+                                    setDeleteError('');
+                                }}
+                                className="btn btn-secondary"
+                            >
+                                Annuler
+                            </button>
+                            <button
+                                onClick={handleDeleteAccount}
+                                disabled={!deletePassword}
+                                className="btn btn-danger"
+                            >
+                                Supprimer définitivement
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );

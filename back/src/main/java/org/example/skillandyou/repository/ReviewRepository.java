@@ -12,6 +12,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByReviewedUserId(Long userId);
     List<Review> findByReviewerId(Long reviewerId);
     Long countByReviewedUserId(Long userId);
+    // ReviewRepository.java → AJOUTEZ UNIQUEMENT ÇA
+    void deleteByReviewerId(Long userId);
+    void deleteByReviewedUserId(Long userId);
+
+
 }
 
 

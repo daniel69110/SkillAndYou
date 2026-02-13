@@ -80,4 +80,17 @@ public class UserController {
         return userService.searchUsers(skill, city, type);
     }
 
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> deleteAccount(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> request
+    ) {
+        try {
+            userService.deleteAccount(id, request.get("password"));
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(null);
+        }
+    }
 }

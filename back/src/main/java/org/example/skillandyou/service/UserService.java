@@ -169,6 +169,27 @@ public class UserService {
                         .toList()
         );
     }
+
+
+    public void deleteAccount(Long id, String plainPassword) {
+        User user = getUserById(id);
+
+        if (!passwordEncoder.matches(plainPassword, user.getPassword())) {
+            throw new IllegalArgumentException("INVALID_PASSWORD");
+        }
+
+        deleteUserRelatedData(id);
+        userRepository.deleteById(id);
+    }
+
+    private void deleteUserRelatedData(Long userId) {
+
+        reviewRepository.deleteByReviewerId(userId);
+        reviewRepository.deleteByReviewedUserId(userId);
+    }
+
+
+
 }
 
 

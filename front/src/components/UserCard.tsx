@@ -26,7 +26,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                     <h3>{user.firstName} {user.lastName}</h3>
                     <p className="username">@{user.userName}</p>
                     {user.city && (
-                        <p className="location">📍 {user.city}{user.country && `, ${user.country}`}</p>
+                        <p className="location">{user.city}{user.country && `, ${user.country}`}</p>
                     )}
                 </div>
             </div>
@@ -35,7 +35,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                 {user.averageRating !== null ? (
                     `⭐ ${user.averageRating.toFixed(1)} / 5`
                 ) : (
-                    "📝 Pas de note"
+                    "Pas de note"
                 )}
             </div>
             {user.bio && (

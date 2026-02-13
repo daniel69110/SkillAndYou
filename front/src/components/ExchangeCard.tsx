@@ -108,7 +108,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                         onClick={() => onComplete(exchange.id)}
                         className="btn-complete"
                     >
-                        ✔ Marquer terminé
+                        Marquer terminé
                     </button>
                 )}
 

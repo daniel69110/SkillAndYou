@@ -68,4 +68,10 @@ export const userApi = {
         const response = await axios.get(`${API_URL}/users/search?${params.toString()}`);
         return response.data;
     },
+
+
+    deleteAccount: async (userId: number, password: string): Promise<void> => {
+        return api.delete(`/users/${userId}`, { data: { password } });
+    }
+
 };
