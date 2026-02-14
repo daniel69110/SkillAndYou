@@ -30,6 +30,8 @@ export function ProfilePage() {
     const [imageTimestamp, setImageTimestamp] = useState(Date.now());
     const [deletePassword, setDeletePassword] = useState('');
     const [deleteError, setDeleteError] = useState('');
+    const [updatingVisibility, setUpdatingVisibility] = useState(false);
+
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -96,6 +98,30 @@ export function ProfilePage() {
             setDeleteError(err.response?.data?.message || 'Erreur lors de la suppression');
         }
     };
+
+    const handleToggleVisibility = async () => {
+        if (!profile) return;
+
+        try {
+            setUpdatingVisibility(true);
+
+            const updateData = {
+                visibleInSearch: !profile.visibleInSearch
+            };
+
+            await userApi.update(profile.id, updateData);
+
+            setProfile(prev =>
+                prev ? { ...prev, visibleInSearch: !prev.visibleInSearch } : null
+            );
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setUpdatingVisibility(false);
+        }
+    };
+
 
 
     const isOwnProfile = currentUser?.id === Number(id);
@@ -220,6 +246,26 @@ export function ProfilePage() {
                             {profile.status}
                         </span>
                     </div>
+                    {isOwnProfile && (
+                        <div className="detail-row">
+                            <strong>Apparaitre dans les recherches :</strong>
+
+                            <label className="checkbox-toggle">
+                                <input
+                                    type="checkbox"
+                                    checked={profile.visibleInSearch ?? false}
+                                    onChange={handleToggleVisibility}
+                                    disabled={updatingVisibility}
+                                />
+                                <span>{profile.visibleInSearch ? "Oui" : "Non"}
+                                </span>
+                            </label>
+                        </div>
+                    )}
+
+
+
+
                 </div>
             </div>
 

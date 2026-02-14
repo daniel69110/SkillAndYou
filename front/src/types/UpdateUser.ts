@@ -7,4 +7,5 @@ export interface UpdateUserRequest {
     country?: string | null;
     postalCode?: string | null;
     photoUrl?: string | null;
+    visibleInSearch?: boolean;
 }

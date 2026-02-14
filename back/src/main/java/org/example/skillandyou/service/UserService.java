@@ -62,20 +62,24 @@ public class UserService {
     public User updateUser(Long id, UpdateUserDTO dto) {
         User existing = getUserById(id);
 
-
         if (dto.getFirstName() != null) existing.setFirstName(dto.getFirstName());
         if (dto.getLastName() != null) existing.setLastName(dto.getLastName());
         if (dto.getUserName() != null) existing.setUserName(dto.getUserName());
 
-        // Champs optionnels (peuvent être null pour vider)
         existing.setBio(dto.getBio());
         existing.setCity(dto.getCity());
         existing.setCountry(dto.getCountry());
         existing.setPostalCode(dto.getPostalCode());
         existing.setPhotoUrl(dto.getPhotoUrl());
 
+
+        if (dto.getVisibleInSearch() != null) {
+            existing.setVisibleInSearch(dto.getVisibleInSearch());
+        }
+
         return userRepository.save(existing);
     }
+
 
 
     public void deleteUser(Long id) {
@@ -108,35 +112,27 @@ public class UserService {
     }
 
     public List<UserSearchDTO> searchUsers(String skillName, String city, String type) {
-        List<User> users;
 
-        if (skillName != null && !skillName.isEmpty()) {
+        List<User> users = userRepository.findByStatus(Status.ACTIVE);
 
-            users = userRepository.findUsersBySkillContainingIgnoreCase(skillName);
 
-            if (city != null && !city.isEmpty()) {
-                users = users.stream()
-                        .filter(u -> u.getCity() != null &&
-                                u.getCity().toLowerCase().contains(city.toLowerCase()))
-                        .collect(Collectors.toList());
-            }
-
-            // Filtre type si fourni
-            if (type != null && !type.isEmpty()) {
-                users = users.stream()
-                        .filter(u -> hasSkillWithType(u, skillName, type))
-                        .collect(Collectors.toList());
-            }
-        } else if (city != null && !city.isEmpty()) {
-            users = userRepository.findByCityContainingIgnoreCase(city);
-        } else {
-            users = userRepository.findByStatus(Status.ACTIVE);
-        }
-
-        return users.stream()
-                .map(this::toSearchDTO)
+        users = users.stream()
+                .filter(u -> u.isVisibleInSearch())
+                .filter(u -> {
+                    if (skillName != null && !skillName.isEmpty()) {
+                        return u.getUserSkills().stream()
+                                .anyMatch(us -> us.getSkill().getName().toLowerCase().contains(skillName.toLowerCase()));
+                    }
+                    if (city != null && !city.isEmpty()) {
+                        return u.getCity() != null && u.getCity().toLowerCase().contains(city.toLowerCase());
+                    }
+                    return true;
+                })
                 .collect(Collectors.toList());
+
+        return users.stream().map(this::toSearchDTO).collect(Collectors.toList());
     }
+
 
     private boolean hasSkillWithType(User user, String skillName, String type) {
         return user.getUserSkills().stream()

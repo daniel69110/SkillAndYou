@@ -12,4 +12,5 @@ public class UpdateUserDTO {
     private String country;
     private String postalCode;
     private String photoUrl;
+    private Boolean visibleInSearch;
 }

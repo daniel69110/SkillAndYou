@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class AddUserSkillRequestDTO {
     private Long skillId;
-    private String type;  // "OFFER" ou "REQUEST"
+    private String type;
     private Integer level;
 }

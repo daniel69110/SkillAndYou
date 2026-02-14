@@ -13,6 +13,7 @@ export interface UserProfile {
     registrationDate: string;
     status: string;
     role: string;
+    visibleInSearch?: boolean;
 }
 
 export interface UpdateProfileRequest {
@@ -24,4 +25,5 @@ export interface UpdateProfileRequest {
     country?: string;
     postalCode?: string;
     photoUrl?: string;
+
 }

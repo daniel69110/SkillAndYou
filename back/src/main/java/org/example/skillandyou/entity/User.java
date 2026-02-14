@@ -76,6 +76,9 @@ public class User {
     @Column(precision = 3, scale = 2)
     private BigDecimal averageRating;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean visibleInSearch = false;
+
     @PrePersist
     protected void onCreate() {
         registrationDate = LocalDateTime.now();
