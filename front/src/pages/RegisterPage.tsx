@@ -19,10 +19,11 @@ export function RegisterPage() {
     });
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    // ✅ NOUVEAU : Erreurs précises
+    // ✅ AJOUTÉ legal
     const [formErrors, setFormErrors] = useState({
         email: '',
         userName: '',
+        legal: '',
         general: ''
     });
     const [passwordMatchError, setPasswordMatchError] = useState('');
@@ -40,11 +41,10 @@ export function RegisterPage() {
             }
         } else {
             setFormData({ ...formData, [name]: value });
-            // Clear erreur spécifique si champ corrigé
+
             if (name === 'email') setFormErrors(prev => ({ ...prev, email: '' }));
             if (name === 'userName') setFormErrors(prev => ({ ...prev, userName: '' }));
 
-            // Check password match
             if (confirmPassword && value !== confirmPassword && name === 'password') {
                 setPasswordMatchError('Les mots de passe ne correspondent pas');
             } else if (name === 'password') {
@@ -56,13 +56,19 @@ export function RegisterPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+
+        const legalCheckbox = document.getElementById('legal') as HTMLInputElement;
+        if (!legalCheckbox?.checked) {
+            setFormErrors(prev => ({ ...prev, legal: 'Obligatoire' }));
+            return;
+        }
+
         if (formData.password !== confirmPassword) {
             setPasswordMatchError('Les mots de passe ne correspondent pas');
             return;
         }
 
-
-        setFormErrors({ email: '', userName: '', general: '' });
+        setFormErrors({ email: '', userName: '', legal: '', general: '' });
         setPasswordMatchError('');
         setLoading(true);
 
@@ -74,25 +80,27 @@ export function RegisterPage() {
             setAuth(response.token, response.user);
             setTimeout(() => navigate('/dashboard'), 1500);
         } catch (err: any) {
-
             const errorMsg = err.response?.data?.error;
 
             if (errorMsg === 'EMAIL_EXISTS') {
                 setFormErrors({
                     email: 'Cet email est déjà utilisé',
                     userName: '',
+                    legal: '',
                     general: ''
                 });
             } else if (errorMsg === 'USERNAME_EXISTS') {
                 setFormErrors({
                     email: '',
                     userName: 'Ce nom d\'utilisateur est pris',
+                    legal: '',
                     general: ''
                 });
             } else {
                 setFormErrors({
                     email: '',
                     userName: '',
+                    legal: '',
                     general: 'Erreur inscription. Réessayez.'
                 });
             }
@@ -202,6 +210,21 @@ export function RegisterPage() {
                     {formErrors.general && (
                         <div className="general-error">{formErrors.general}</div>
                     )}
+
+                    <div className="form-group checkbox-group">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                required
+                                id="legal"
+                            />
+                            <span className="checkmark"></span>
+                            J'accepte les <Link to="/terms" target="_blank">conditions d'utilisation </Link>
+                             et la <Link to="/privacy" target="_blank">politique de confidentialité</Link>
+                        </label>
+                        {formErrors.legal && <p className="error-text">{formErrors.legal}</p>}
+                    </div>
+
 
                     <button type="submit" className="register-button" disabled={loading}>
                         {loading ? 'Inscription...' : "S'inscrire"}

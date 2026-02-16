@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./HomePage.css";
 import SearchBar from "../components/SearchBar.tsx";
+import Footer from "../components/Footer.tsx";
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
@@ -82,6 +83,8 @@ const HomePage: React.FC = () => {
                     Créer un compte
                 </button>
             </section>
+
+            <Footer />
 
         </main>
     );
