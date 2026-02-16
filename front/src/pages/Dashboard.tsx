@@ -8,7 +8,7 @@ import './Dashboard.css';
 export function Dashboard() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const { notifications, unreadCount, markAsRead } = useNotifications();
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
 
     useEffect(() => {
@@ -39,12 +39,38 @@ export function Dashboard() {
         checkSuspension();
     }, [user, logout, navigate]);
 
-    const recentNotifications = notifications.slice(0, 3);
-
     const handleNotifClick = (notif: any) => {
         markAsRead(notif.id);
-        navigate(`/exchanges/${notif.exchangeId}`);
+
+        switch(notif.type) {
+            case 'EXCHANGE_CREATED':
+            case 'EXCHANGE_ACCEPTED':
+            case 'EXCHANGE_COMPLETED':
+            case 'EXCHANGE_CANCELLED':
+                navigate('/exchanges');
+                break;
+
+            case 'REPORT_CREATED':
+            case 'REPORT_REVIEWED':
+            case 'REPORT_RESOLVED':
+            case 'REPORT_REJECTED':
+                navigate('/my-reports');
+                break;
+
+            case 'USER_SUSPENDED':
+                alert('⚠️ Votre compte a été suspendu. Consultez vos signalements.');
+                navigate('/my-reports');
+                break;
+
+            case 'REVIEW_RECEIVED':
+                navigate(`/profile/${user?.id}`);
+                break;
+
+            default:
+                navigate('/dashboard');
+        }
     };
+
 
     return (
         <div className="dashboard">
@@ -117,19 +143,19 @@ export function Dashboard() {
                     {notifications.length > 0 && (
                         <div className="notifications-section">
                             <div className="section-header">
-                                <h2>🔔 Notifications récentes</h2>
-                                {notifications.length > 3 && (
+                                <h2>🔔 Mes notifications ({notifications.length})</h2>
+                                {notifications.filter(n => !n.read).length > 0 && (
                                     <button
-                                        className="see-all-btn"
-                                        onClick={() => navigate('/notifications')}
+                                        className="mark-all-btn"
+                                        onClick={markAllAsRead}
                                     >
-                                        Voir tout ({notifications.length})
+                                        Tout marquer lu
                                     </button>
                                 )}
                             </div>
 
-                            <div className="notifications-list">
-                                {recentNotifications.map((notif) => (
+                            <div className="notifications-list scrollable">
+                                {notifications.map((notif) => (
                                     <div
                                         key={notif.id}
                                         className={`notification-card ${!notif.read ? 'unread' : ''}`}

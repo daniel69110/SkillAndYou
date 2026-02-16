@@ -245,3 +245,41 @@ h1{
     font-family: 'Inter',sans-serif;
 }
 
+/* Scroll pour les notifications */
+.notifications-list.scrollable {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.notifications-list.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notifications-list.scrollable::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.notifications-list.scrollable::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.notifications-list.scrollable::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.mark-all-btn {
+    padding: 0.5rem 1rem;
+    background-color: #8f8f8f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.mark-all-btn:hover {
+    background-color: #b3b3b3;
+}
