@@ -5,20 +5,17 @@ import './ProfilePictureUpload.css';
 
 interface ProfilePictureUploadProps {
     userId: number;
-    currentPhotoUrl?: string;
-    onUploadSuccess: (newPhotoUrl: string) => void;
+    onUploadSuccess: () => void;
 }
 
-// 👈 TES ÉTATS EXISTANTS + NOUVEAUX
 export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                                                                               userId,
-                                                                              currentPhotoUrl,
                                                                               onUploadSuccess
                                                                           }) => {
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState('');
     const [preview, setPreview] = useState<string | null>(null);
-
+    const [timestamp, setTimestamp] = useState(Date.now());
 
     const [showCropper, setShowCropper] = useState(false);
     const [cropSrc, setCropSrc] = useState<string | null>(null);
@@ -27,11 +24,9 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
     const imgRef = useRef<HTMLImageElement>(null);
     const fileRef = useRef<File | null>(null);
 
-
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
 
         if (!file.type.startsWith('image/')) {
             setError('Le fichier doit être une image');
@@ -45,7 +40,6 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
         setError('');
         fileRef.current = file;
 
-
         const reader = new FileReader();
         reader.onloadend = () => {
             setCropSrc(reader.result as string);
@@ -55,10 +49,8 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
         reader.readAsDataURL(file);
     };
 
-
     const onCropChange = useCallback((c: Crop) => setCrop(c), []);
     const onCropComplete = useCallback((c: Crop) => setCompletedCrop(c), []);
-
 
     const getCroppedBlob = async (): Promise<Blob> => {
         if (!imgRef.current || !completedCrop.width || !completedCrop.height) return fileRef.current!;
@@ -82,7 +74,6 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
         return new Promise(resolve => canvas.toBlob(b => b && resolve(b), 'image/jpeg', 0.9));
     };
 
-
     const handleUploadCropped = async () => {
         if (!fileRef.current) return;
 
@@ -93,8 +84,9 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                 type: croppedBlob.type || 'image/jpeg',
                 lastModified: Date.now()
             });
-            const photoUrl = await userApi.uploadProfilePicture(userId, croppedFile);
-            onUploadSuccess(photoUrl);
+            await userApi.uploadProfilePicture(userId, croppedFile);
+            setTimestamp(Date.now());  // ✅ Force refresh
+            onUploadSuccess();
             closeCropper();
         } catch (err: any) {
             setError(err.response?.data || "Erreur lors de l'upload");
@@ -110,23 +102,33 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
         fileRef.current = null;
     };
 
-
     const handleDelete = async () => {
         if (!confirm('Supprimer votre photo de profil ?')) return;
 
         try {
             await userApi.deleteProfilePicture(userId);
-            onUploadSuccess(''); // Reset URL
+            setTimestamp(Date.now());
+            onUploadSuccess();
         } catch (err: any) {
             setError('Erreur lors de la suppression');
         }
     };
 
-    const displayUrl = preview || currentPhotoUrl || 'https://via.placeholder.com/150';
+
+    const displayUrl = preview ||
+        `http://localhost:8080/api/users/${userId}/profile-picture?t=${timestamp}` ||
+        'data:image/svg+xml;base64,PHN2Zy...';
+
 
     return (
         <div className="profile-picture-upload">
-            <img src={displayUrl} className="profile-picture-preview" />
+            <img
+                src={displayUrl}
+                className="profile-picture-preview"
+                onError={() => {
+
+                }}
+            />
 
             <div className="upload-actions">
                 <label className="upload-btn">
@@ -140,13 +142,10 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                     />
                 </label>
 
-                {currentPhotoUrl && (
-                    <button onClick={handleDelete} className="delete-btn">
-                        Supprimer
-                    </button>
-                )}
+                <button onClick={handleDelete} className="delete-btn">
+                    Supprimer
+                </button>
             </div>
-
 
             {showCropper && cropSrc && (
                 <div className="cropper-modal">
@@ -168,7 +167,8 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                                 onClick={handleUploadCropped}
                                 disabled={!completedCrop.width}
                                 className="confirm-btn"
-                            >Accepter
+                            >
+                                Accepter
                             </button>
                         </div>
                     </div>

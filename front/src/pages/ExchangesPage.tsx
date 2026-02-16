@@ -51,12 +51,12 @@ const ExchangesPage: React.FC = () => {
         }
     };
 
-    // 🆕 OUVRIR MODAL
+
     const openConfirmModal = (exchangeId: number, action: 'accept' | 'complete' | 'cancel', exchangeName: string) => {
         setConfirmModal({ exchangeId, action, exchangeName });
     };
 
-    // 🆕 CONFIRMER ACTION
+
     const confirmAction = async () => {
         if (!confirmModal || !user) {
             setConfirmModal(null);

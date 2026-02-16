@@ -26,7 +26,6 @@ public class ProfilePictureController {
             @AuthenticationPrincipal String principal
     ) throws IOException {
 
-
         String contentType = file.getContentType();
         if (!isValidImageType(contentType)) {
             return ResponseEntity.badRequest()
@@ -38,9 +37,10 @@ public class ProfilePictureController {
             return ResponseEntity.status(403).body("Non autorisé");
         }
 
-        String photoUrl = profilePictureService.saveProfilePicture(userId, file);
-        return ResponseEntity.ok(photoUrl);
+        profilePictureService.saveProfilePicture(userId, file);
+        return ResponseEntity.ok("/api/users/" + userId + "/profile-picture");
     }
+
 
 
     private boolean isValidImageType(String contentType) {

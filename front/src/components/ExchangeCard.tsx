@@ -40,6 +40,11 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
         REJECTED: 'Refusé',
     };
 
+    // ✅ FIX : Même logique que UserCard
+    const getPhotoUrl = () => {
+        return `http://localhost:8080/api/users/${otherUser.id}/profile-picture?t=${Date.now()}`;
+    };
+
     return (
         <div className="exchange-card">
             {/* Header */}
@@ -51,16 +56,20 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                     {statusLabels[exchange.status]}
                 </div>
                 <span className="exchange-date">
-          {new Date(exchange.creationDate).toLocaleDateString('fr-FR')}
-        </span>
+                    {new Date(exchange.creationDate).toLocaleDateString('fr-FR')}
+                </span>
             </div>
 
             {/* Participants */}
             <div className="exchange-users">
                 <div className="exchange-user">
                     <img
-                        src={otherUser.photoUrl || 'https://via.placeholder.com/50'}
+                        src={getPhotoUrl()}
                         alt={otherUser.userName}
+                        className="exchange-user-photo"
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'https://via.placeholder.com/50';
+                        }}
                     />
                     <div>
                         <strong>{otherUser.firstName} {otherUser.lastName}</strong>
@@ -72,9 +81,9 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
             {/* Skills */}
             <div className="exchange-skills">
                 <div className="skill-exchange">
-          <span className="skill-label">
-            {isRequester ? 'Je propose' : 'Il/Elle propose'}
-          </span>
+                    <span className="skill-label">
+                        {isRequester ? 'Je propose' : 'Il/Elle propose'}
+                    </span>
                     <div className="skill-badge offer">
                         {exchange.offeredSkill.name}
                     </div>
@@ -83,9 +92,9 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                 <div className="exchange-arrow">⇄</div>
 
                 <div className="skill-exchange">
-          <span className="skill-label">
-            {isRequester ? 'Je demande' : 'Il/Elle demande'}
-          </span>
+                    <span className="skill-label">
+                        {isRequester ? 'Je demande' : 'Il/Elle demande'}
+                    </span>
                     <div className="skill-badge request">
                         {exchange.requestedSkill.name}
                     </div>

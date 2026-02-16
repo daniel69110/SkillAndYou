@@ -32,7 +32,6 @@ export function ProfilePage() {
     const [deleteError, setDeleteError] = useState('');
     const [updatingVisibility, setUpdatingVisibility] = useState(false);
 
-
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -87,13 +86,9 @@ export function ProfilePage() {
 
         try {
             await userApi.deleteAccount(Number(id), deletePassword);
-
-
             logout();
             navigate('/', { replace: true });
-
             alert('Compte supprimé avec succès !');
-
         } catch (err: any) {
             setDeleteError(err.response?.data?.message || 'Erreur lors de la suppression');
         }
@@ -104,25 +99,19 @@ export function ProfilePage() {
 
         try {
             setUpdatingVisibility(true);
-
             const updateData = {
                 visibleInSearch: !profile.visibleInSearch
             };
-
             await userApi.update(profile.id, updateData);
-
             setProfile(prev =>
                 prev ? { ...prev, visibleInSearch: !prev.visibleInSearch } : null
             );
-
         } catch (err) {
             console.error(err);
         } finally {
             setUpdatingVisibility(false);
         }
     };
-
-
 
     const isOwnProfile = currentUser?.id === Number(id);
 
@@ -159,7 +148,6 @@ export function ProfilePage() {
                             >
                                 Proposer un échange
                             </button>
-
                             <button
                                 onClick={() => setShowReportModal(true)}
                                 className="btn btn-report-profil"
@@ -178,32 +166,25 @@ export function ProfilePage() {
                 {isOwnProfile ? (
                     <ProfilePictureUpload
                         userId={profile.id}
-                        currentPhotoUrl={profile.photoUrl ? `http://localhost:8080${profile.photoUrl}` : undefined}
-                        onUploadSuccess={async (newPhotoUrl: string) => {
-                            setProfile(prev =>
-                                prev ? { ...prev, photoUrl: newPhotoUrl } : null
-                            );
+                        onUploadSuccess={async () => {
                             setImageTimestamp(Date.now());
-
                             try {
                                 const freshProfile = await userApi.getProfile(Number(id));
                                 setProfile(freshProfile);
-                            } catch {
+                            } catch (err) {
+                                console.error('Profil refresh échoué:', err);
                             }
                         }}
                     />
                 ) : (
-                    profile.photoUrl ? (
-                        <img
-                            src={`http://localhost:8080${profile.photoUrl}?t=${imageTimestamp}`}
-                            alt="Profile"
-                            className="profile-photo"
-                        />
-                    ) : (
-                        <div className="profile-photo-placeholder">
-                            Pas de photo
-                        </div>
-                    )
+                    <img
+                        src={`http://localhost:8080/api/users/${profile.id}/profile-picture?t=${imageTimestamp}`}
+                        alt="Profile"
+                        className="profile-photo"
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI2MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9IjEuNWVtIj5QYXMgZGUgcGhvdG88L3RleHQ+PC9zdmc+';
+                        }}
+                    />
                 )}
 
                 <div className="profile-details">
@@ -249,7 +230,6 @@ export function ProfilePage() {
                     {isOwnProfile && (
                         <div className="detail-row">
                             <strong>Apparaitre dans les recherches :</strong>
-
                             <label className="checkbox-toggle">
                                 <input
                                     type="checkbox"
@@ -257,15 +237,10 @@ export function ProfilePage() {
                                     onChange={handleToggleVisibility}
                                     disabled={updatingVisibility}
                                 />
-                                <span>{profile.visibleInSearch ? "Oui" : "Non"}
-                                </span>
+                                <span>{profile.visibleInSearch ? "Oui" : "Non"}</span>
                             </label>
                         </div>
                     )}
-
-
-
-
                 </div>
             </div>
 

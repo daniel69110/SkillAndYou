@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.entity.User;
 import org.example.skillandyou.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,18 +65,28 @@ public class ProfilePictureService {
 
     public byte[] getProfilePicture(Long userId) throws IOException {
         System.out.println("🖼️ Service getProfilePicture appelé pour user " + userId);
-        Path uploadDir = Paths.get(uploadPath);
 
+
+        Path uploadDir = Paths.get(uploadPath);
         Path[] files = Files.list(uploadDir)
                 .filter(path -> path.getFileName().toString().startsWith(userId + "_"))
                 .toArray(Path[]::new);
 
-        if (files.length == 0) {
-            throw new RuntimeException("Photo introuvable");
+        if (files.length > 0) {
+            return Files.readAllBytes(files[0]);
         }
 
-        return Files.readAllBytes(files[0]);
+
+        System.out.println("📸 Pas d'upload → default avatar");
+        return loadDefaultAvatar();
     }
+
+    private byte[] loadDefaultAvatar() throws IOException {
+        Resource resource = new ClassPathResource("images/default-avatar.jpg");
+        return Files.readAllBytes(resource.getFile().toPath());
+    }
+
+
 
     public void deleteProfilePicture(Long userId) throws IOException {
         deleteOldPhoto(userId);

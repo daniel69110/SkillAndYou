@@ -40,14 +40,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*/rating").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/*/profile-picture").permitAll()
+                        .requestMatchers("/api/users/*/profile-picture").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/skills").permitAll()
                         .requestMatchers("/api/users/search").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
 
-                        // ========== ADMIN ONLY (en premier pour éviter les conflits) ==========
-                        // Reports - ADMIN voit et gère TOUS les reports
+                        // ========== ADMIN ONLY ==========
                         .requestMatchers(HttpMethod.GET, "/api/reports").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reports/pending").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reports/pending/count").hasRole("ADMIN")
@@ -55,44 +54,29 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/reports/*/process").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/reports/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/reports/**").hasRole("ADMIN")
-
-                        // Suspensions - ADMIN only
                         .requestMatchers("/api/suspensions/**").hasRole("ADMIN")
-
-                        // Skills - Gestion ADMIN
                         .requestMatchers("/api/admin/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
 
-                        // ========== USER + ADMIN (routes spécifiques) ==========
-                        // Reports - USER peut créer et voir ses propres reports
+                        // ========== USER + ADMIN ==========
                         .requestMatchers(HttpMethod.POST, "/api/reports").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reports/my-reports").hasAnyRole("USER", "ADMIN")
-
-                        // Reports - Détail d'un report (plus spécifique en dernier)
                         .requestMatchers(HttpMethod.GET, "/api/reports/*").hasRole("ADMIN")
 
-                        // ========== USER + ADMIN (routes générales) ==========
-                        // Photos de profil - AVANT /api/users/** (IMPORTANT!)
+                        // Photos UPLOAD/DELETE (PROPRIO seulement)
                         .requestMatchers(HttpMethod.POST, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
 
-                        // Profils (APRÈS les photos)
+                        // Profils (GET/PUT/DELETE)
                         .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/*").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/*").hasAnyRole("USER", "ADMIN")
 
-                        // Exchanges
                         .requestMatchers("/api/exchanges/**").hasAnyRole("USER", "ADMIN")
-
-                        // Reviews
                         .requestMatchers("/api/reviews/**").hasAnyRole("USER", "ADMIN")
-
-                        // Notifications
                         .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN")
-
-                        // Skills (lecture)
                         .requestMatchers(HttpMethod.GET, "/api/skills/**").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().denyAll()
@@ -102,6 +86,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -14,13 +14,21 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         navigate(`/profile/${user.id}`);
     };
 
+    // ✅ FIX : Ignore photoUrl backend, utilise toujours endpoint dynamique
+    const getPhotoUrl = () => {
+        return `http://localhost:8080/api/users/${user.id}/profile-picture?t=${Date.now()}`;
+    };
+
     return (
         <div className="user-card">
             <div className="user-card-header">
                 <img
-                    src={user.photoUrl ? `${user.photoUrl}?t=${Date.now()}` : 'https://via.placeholder.com/80'}
+                    src={getPhotoUrl()}
                     alt={user.userName}
                     className="user-card-photo"
+                    onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/80';
+                    }}
                 />
                 <div className="user-card-info">
                     <h3>{user.firstName} {user.lastName}</h3>
@@ -50,8 +58,6 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                     </span>
                 ))}
             </div>
-
-
 
             <button onClick={handleViewProfile} className="btn-view-profile">
                 Voir profil
