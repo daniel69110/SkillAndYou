@@ -1,0 +1,161 @@
+/* src/pages/MessagesPage.css */
+.messages-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.messages-page h1 {
+    margin-bottom: 1.5rem;
+}
+
+.messages-container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 1rem;
+    height: 600px;
+}
+
+
+.conversations-list {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+.loading, .empty-conversations {
+    text-align: center;
+    padding: 2rem;
+    color: #999;
+}
+
+.empty-conversations small {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.conversation-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.conversation-item:hover {
+    background: #f5f5f5;
+}
+
+.conversation-item.active {
+    background: #e3f2fd;
+    border-left: 4px solid #667eea;
+}
+
+.conversation-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #346ed1;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.conversation-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.conversation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+}
+
+.conversation-header strong {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.conversation-time {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.conversation-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conversation-preview p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.unread-badge {
+    background: #667eea;
+    color: white;
+    border-radius: 12px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Zone chat */
+.chat-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-area .chat-window {
+    width: 100%;
+    max-width: 100%;
+}
+
+.no-chat-selected {
+    text-align: center;
+    color: #999;
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .messages-container {
+        grid-template-columns: 1fr;
+    }
+
+    .conversations-list {
+        display: none;
+    }
+
+    .chat-area {
+        grid-column: 1;
+    }
+}
+
+/* Scrollbar */
+.conversations-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.conversations-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}

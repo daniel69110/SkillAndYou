@@ -16,6 +16,7 @@ import HomePage from './pages/Homepage.tsx';
 import { Toaster } from 'react-hot-toast';
 import {ForgotPasswordPage} from "./pages/ForgotPasswordPage.tsx";
 import {ResetPasswordPage} from "./pages/ResetPasswordPage.tsx";
+import {MessagesPage} from "./pages/MessagePage.tsx";
 
 function App() {
     return (
@@ -105,6 +106,14 @@ function App() {
 
                     <Route path="/admin/reports" element={<AdminReportsPage />} />
                     <Route path="/admin/skills" element={<AdminSkillsPage />} />
+                    <Route
+                        path="/messages"
+                        element={
+                            <RequireAuth>
+                                <MessagesPage />
+                            </RequireAuth>
+                        }
+                    />
 
                 </Route>
             </Routes>

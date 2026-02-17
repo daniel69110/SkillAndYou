@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import toast from 'react-hot-toast';  // ✅ AJOUTE
+import toast from 'react-hot-toast';
 import './LoginPage.css';
 
 export const LoginPage = () => {

@@ -105,6 +105,14 @@ export function Dashboard() {
                                 <span className="badge">{unreadCount}</span>
                             )}
                         </button>
+                        <button
+                            onClick={() => navigate('/messages')}
+                            className="action-btn"
+                        >
+                            Mes messages
+
+                        </button>
+
 
                         <button
                             onClick={() => navigate('/my-reports')}

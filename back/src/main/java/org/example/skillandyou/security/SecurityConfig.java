@@ -77,6 +77,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/exchanges/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/reviews/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/notifications/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/messages/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/skills/**").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().denyAll()

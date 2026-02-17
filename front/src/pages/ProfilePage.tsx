@@ -7,6 +7,7 @@ import { SkillBadge } from '../components/SkillBadge';
 import { AddSkillModal } from '../components/AddSkillModal';
 import { UserRatingBadge } from '../components/UserRatingBadge';
 import { ReviewList } from '../components/ReviewList';
+import { ChatWindow } from '../components/ChatWindow';
 import type { UserProfile, UserSkill } from '../types';
 import CreateExchangeModal from "../components/CreateExchangeModal.tsx";
 import ReportUserModal from "../components/ReportUserModal.tsx";
@@ -25,6 +26,7 @@ export function ProfilePage() {
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showChatModal, setShowChatModal] = useState(false); // 🆕 État pour la modal chat
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [imageTimestamp, setImageTimestamp] = useState(Date.now());
@@ -142,6 +144,13 @@ export function ProfilePage() {
                     )}
                     {!isOwnProfile && (
                         <>
+                            {/* 🆕 Bouton message */}
+                            <button
+                                onClick={() => setShowChatModal(true)}
+                                className="btn btn-message"
+                            >
+                                💬 Envoyer un message
+                            </button>
                             <button
                                 onClick={() => setShowExchangeModal(true)}
                                 className="btn btn-exchange"
@@ -309,6 +318,19 @@ export function ProfilePage() {
                         setShowReportModal(false);
                     }}
                 />
+            )}
+
+            {/* 🆕 MODAL CHAT */}
+            {showChatModal && (
+                <div className="chat-modal-overlay" onClick={() => setShowChatModal(false)}>
+                    <div className="chat-modal" onClick={(e) => e.stopPropagation()}>
+                        <ChatWindow
+                            otherUserId={profile.id}
+                            otherUserName={`${profile.firstName} ${profile.lastName}`}
+                            onClose={() => setShowChatModal(false)}
+                        />
+                    </div>
+                </div>
             )}
 
             {/* MODAL SUPPRESSION COMPTE */}
