@@ -33,7 +33,7 @@ public class EmailService {
             <p><small><em>Si vous n'avez pas demandé ce changement, ignorez cet email.</em></small></p>
             """.formatted(resetUrl);
 
-            helper.setText(htmlContent, true);  // true = HTML
+            helper.setText(htmlContent, true);
             mailSender.send(mimeMessage);
 
         } catch (Exception e) {

@@ -40,7 +40,11 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
         REJECTED: 'Refusé',
     };
 
-    // ✅ FIX : Même logique que UserCard
+    // Génère un avatar avec UI Avatars en fallback
+    const getAvatarUrl = () => {
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser.firstName)}+${encodeURIComponent(otherUser.lastName)}&background=667eea&color=fff&size=200&bold=true`;
+    };
+
     const getPhotoUrl = () => {
         return `http://localhost:8080/api/users/${otherUser.id}/profile-picture?t=${Date.now()}`;
     };
@@ -68,7 +72,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                         alt={otherUser.userName}
                         className="exchange-user-photo"
                         onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'https://via.placeholder.com/50';
+                            (e.target as HTMLImageElement).src = getAvatarUrl();
                         }}
                     />
                     <div>

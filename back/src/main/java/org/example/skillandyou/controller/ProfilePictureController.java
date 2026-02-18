@@ -2,6 +2,7 @@ package org.example.skillandyou.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.service.ProfilePictureService;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,14 +56,22 @@ public class ProfilePictureController {
 
     @GetMapping("/{userId}/profile-picture")
     public ResponseEntity<byte[]> getProfilePicture(@PathVariable Long userId) throws IOException {
-        System.out.println("🖼️ GET profile-picture pour user " + userId);
+
         byte[] image = profilePictureService.getProfilePicture(userId);
-        System.out.println("📏 Taille image renvoyée: " + (image != null ? image.length : 0));
+
+
+        if (image == null || image.length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .cacheControl(CacheControl.noCache().mustRevalidate())
                 .body(image);
     }
+
+
+
 
     @DeleteMapping("/{userId}/profile-picture")
     public ResponseEntity<Void> deleteProfilePicture(

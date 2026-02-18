@@ -31,22 +31,29 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // ========== PUBLIC ==========
+
+                        // ================= PUBLIC =================
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+
+
+                        .requestMatchers("/api/users/*/profile-picture").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*/rating").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/reviews/user/*").permitAll()
-                        .requestMatchers("/api/users/*/profile-picture").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/skills").permitAll()
                         .requestMatchers("/api/users/search").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
 
-                        // ========== ADMIN ONLY ==========
+                        // ================= ADMIN =================
                         .requestMatchers(HttpMethod.GET, "/api/reports").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reports/pending").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reports/pending/count").hasRole("ADMIN")
@@ -54,22 +61,23 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/reports/*/process").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/reports/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/reports/**").hasRole("ADMIN")
+
                         .requestMatchers("/api/suspensions/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/skills").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
 
-                        // ========== USER + ADMIN ==========
+                        // ================= USER + ADMIN =================
                         .requestMatchers(HttpMethod.POST, "/api/reports").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reports/my-reports").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reports/*").hasRole("ADMIN")
 
-                        // Photos UPLOAD/DELETE (PROPRIO seulement)
+                        // Upload / Delete avatar (auth requis)
                         .requestMatchers(HttpMethod.POST, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
 
-                        // Profils (GET/PUT/DELETE)
+                        // Profils (protégés)
                         .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/*").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/*").hasAnyRole("USER", "ADMIN")
@@ -87,6 +95,8 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
 
 
     @Bean

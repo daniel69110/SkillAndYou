@@ -16,8 +16,7 @@ export function EditProfilePage() {
         bio: '',
         city: '',
         country: '',
-        postalCode: '',
-        photoUrl: ''
+        postalCode: ''
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -35,8 +34,7 @@ export function EditProfilePage() {
                     bio: profile.bio || '',
                     city: profile.city || '',
                     country: profile.country || '',
-                    postalCode: profile.postalCode || '',
-                    photoUrl: profile.photoUrl || ''
+                    postalCode: profile.postalCode || ''
                 });
             } catch (err: any) {
                 setError('Failed to load profile');
@@ -163,18 +161,6 @@ export function EditProfilePage() {
                         value={formData.postalCode}
                         onChange={handleChange}
                         className="form-input"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label className="form-label">Photo URL</label>
-                    <input
-                        type="url"
-                        name="photoUrl"
-                        value={formData.photoUrl}
-                        onChange={handleChange}
-                        className="form-input"
-                        placeholder="https://example.com/photo.jpg"
                     />
                 </div>
 

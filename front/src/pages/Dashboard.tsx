@@ -1,6 +1,7 @@
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from '../hooks/useNotifications';
+import { useGlobalMessages } from '../hooks/useGlobalMessages';  // 🆕
 import { useEffect } from 'react';
 import axios from 'axios';
 import './Dashboard.css';
@@ -9,6 +10,7 @@ export function Dashboard() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+    const { unreadCount: messagesUnreadCount } = useGlobalMessages();  // 🆕
 
 
     useEffect(() => {
@@ -105,12 +107,16 @@ export function Dashboard() {
                                 <span className="badge">{unreadCount}</span>
                             )}
                         </button>
+
+                        {/* 🆕 BOUTON MESSAGES AVEC BADGE */}
                         <button
                             onClick={() => navigate('/messages')}
-                            className="action-btn"
+                            className="action-btn messages-btn"
                         >
                             Mes messages
-
+                            {messagesUnreadCount > 0 && (
+                                <span className="badge badge-messages">{messagesUnreadCount}</span>
+                            )}
                         </button>
 
 
@@ -196,7 +202,7 @@ export function Dashboard() {
 
                     {notifications.length === 0 && (
                         <div className="empty-notifications">
-                            <p>📭 Aucune notification pour le moment</p>
+                            <p>Aucune notification pour le moment</p>
                         </div>
                     )}
                 </>

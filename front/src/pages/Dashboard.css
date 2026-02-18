@@ -283,3 +283,22 @@ h1{
 .mark-all-btn:hover {
     background-color: #b3b3b3;
 }
+
+
+.messages-btn {
+    position: relative;
+}
+
+.badge-messages {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}

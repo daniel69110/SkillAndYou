@@ -22,8 +22,18 @@ const HomePage: React.FC = () => {
                     </p>
 
                     <div className="hero-actions">
-                        <button className="btn btn-primary">Commencer</button>
-                        <button className="btn btn-secondary">Explorer les compétences</button>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => navigate('/login')}
+                        >
+                            S'inscrire
+                        </button>
+                        <button
+                            className="btn btn-secondary"
+                            onClick={() => navigate('/search')}
+                        >
+                            Explorer les compétences
+                        </button>
                     </div>
                 </div>
 
@@ -46,7 +56,7 @@ const HomePage: React.FC = () => {
                 <div className="steps">
                     <div className="step-card">
                         <h3>Créer un profil</h3>
-                        <p>Présente tes compétences et ce que tu souhaites apprendre.</p>
+                        <p>Complète ton profil et découvre des personnes qui partagent tes intérêts.</p>
                     </div>
 
                     <div className="step-card">

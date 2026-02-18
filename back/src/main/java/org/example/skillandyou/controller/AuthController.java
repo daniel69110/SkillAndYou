@@ -30,23 +30,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
-        System.out.println("🔍 Login: " + request.getEmail());
 
-        // 1. Trouve user
         User user = userService.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        System.out.println("🔍 User ID: " + user.getId());
-        System.out.println("🔍 User Status: " + user.getStatus());
-
-        // 2. BCrypt check
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
-        // 3. VÉRIFIE SI SUSPENDU
         if (user.getStatus() == Status.SUSPENDED) {
-            System.out.println("⚠️ Tentative de connexion d'un compte suspendu: " + user.getEmail());
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
                     .body(Map.of(
@@ -55,10 +47,10 @@ public class AuthController {
                     ));
         }
 
-        // 4. JWT
+
         String token = jwtUtil.generateToken(user.getId(), user.getUserName(), user.getRole().name());
 
-        // 5. UserDTO
+
         UserDTO userDTO = new UserDTO(
                 user.getId(),
                 user.getEmail(),
@@ -68,11 +60,7 @@ public class AuthController {
                 user.getRole().name()
         );
 
-        // 6. Response avec token + user
         LoginResponseDTO response = new LoginResponseDTO(token, userDTO);
-
-        System.out.println("✅ JWT généré: " + token);
-        System.out.println("✅ User DTO: " + userDTO);
 
         return ResponseEntity.ok(response);
     }
@@ -89,7 +77,7 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("message", "Lien de réinitialisation envoyé"));
 
         } catch (IllegalArgumentException e) {
-            // Sécurité : même réponse si email existe ou pas
+
             return ResponseEntity.ok(Map.of("message", "Lien de réinitialisation envoyé"));
         }
     }

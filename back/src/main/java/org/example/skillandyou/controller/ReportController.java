@@ -21,7 +21,6 @@ import java.util.List;
 public class ReportController {
     private final ReportService reportService;
 
-    // USER: Signaler un utilisateur
     @PostMapping
     public ResponseEntity<Report> create(
             @Valid @RequestBody ReportRequestDTO request,
@@ -40,24 +39,20 @@ public class ReportController {
         return ResponseEntity.status(HttpStatus.CREATED).body(report);
     }
 
-    // USER: Mes signalements créés
     @GetMapping("/my-reports")
     public List<Report> getMyReports(Authentication auth) {
         Long reporterId = Long.parseLong(auth.getName().replace("user-", ""));
         return reportService.getReportsByReporter(reporterId);
     }
 
-    // ✅ NOUVEAU: ADMIN: Tous les reports (avec filtre optionnel)
     @GetMapping
     public List<Report> getAllReports(@RequestParam(required = false) String status) {
-        System.out.println("📋 getAllReports appelé avec status: " + status);
 
         if (status != null && !status.isEmpty()) {
             try {
                 ReportStatus reportStatus = ReportStatus.valueOf(status.toUpperCase());
                 return reportService.getReportsByStatus(reportStatus);
             } catch (IllegalArgumentException e) {
-                System.err.println("❌ Status invalide: " + status);
                 return reportService.getAllReports();
             }
         }
@@ -65,31 +60,29 @@ public class ReportController {
         return reportService.getAllReports();
     }
 
-    // ADMIN: Liste reports en attente
+
     @GetMapping("/pending")
     public List<Report> getPending() {
         return reportService.getPendingReports();
     }
 
-    // ADMIN: Compteur pending
+
     @GetMapping("/pending/count")
     public long countPending() {
         return reportService.countPendingReports();
     }
 
-    // ADMIN: Détail d'un report
+
     @GetMapping("/{id}")
     public Report getById(@PathVariable Long id) {
         return reportService.getById(id);
     }
 
-    // ADMIN: Reports reçus par un user
     @GetMapping("/reported/{reportedUserId}")
     public List<Report> getByReportedUser(@PathVariable Long reportedUserId) {
         return reportService.getReportsByReportedUser(reportedUserId);
     }
 
-    // ADMIN: Traiter un report
     @PostMapping("/{id}/process")
     public Report process(
             @PathVariable Long id,

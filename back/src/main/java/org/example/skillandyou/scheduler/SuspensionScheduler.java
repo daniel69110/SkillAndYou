@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class SuspensionScheduler {
     private final SuspensionService suspensionService;
 
-    // Tous les jours à 2h du matin
+
     @Scheduled(cron = "0 0 2 * * *")
     public void checkExpiredSuspensions() {
         log.info("🔍 Vérification des suspensions expirées...");

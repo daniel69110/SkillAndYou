@@ -25,7 +25,7 @@ public class UserSkillController {
     @GetMapping("/my")
     public List<UserSkillDTO> getMySkills(@AuthenticationPrincipal String principal) {
         Long userId = Long.parseLong(principal.replace("user-", ""));
-        System.out.println("DEBUG /my userId=" + userId);
+
         return userSkillService.getUserSkills(userId);
     }
 

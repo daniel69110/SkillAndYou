@@ -14,7 +14,11 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         navigate(`/profile/${user.id}`);
     };
 
-    // ✅ FIX : Ignore photoUrl backend, utilise toujours endpoint dynamique
+    // Génère un avatar avec UI Avatars en fallback
+    const getAvatarUrl = () => {
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(user.firstName)}+${encodeURIComponent(user.lastName)}&background=667eea&color=fff&size=200&bold=true`;
+    };
+
     const getPhotoUrl = () => {
         return `http://localhost:8080/api/users/${user.id}/profile-picture?t=${Date.now()}`;
     };
@@ -27,7 +31,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
                     alt={user.userName}
                     className="user-card-photo"
                     onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/80';
+                        (e.target as HTMLImageElement).src = getAvatarUrl();
                     }}
                 />
                 <div className="user-card-info">

@@ -26,7 +26,7 @@ export function ProfilePage() {
     const [showExchangeModal, setShowExchangeModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showChatModal, setShowChatModal] = useState(false); // 🆕 État pour la modal chat
+    const [showChatModal, setShowChatModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [imageTimestamp, setImageTimestamp] = useState(Date.now());
@@ -38,8 +38,6 @@ export function ProfilePage() {
         const fetchProfile = async () => {
             try {
                 const data = await userApi.getProfile(Number(id));
-                console.log('📋 Profil chargé:', data);
-                console.log('📸 photoUrl:', data.photoUrl);
                 setProfile(data);
             } catch (err: any) {
                 setError(err.response?.data?.message || 'Failed to load profile');
@@ -115,6 +113,12 @@ export function ProfilePage() {
         }
     };
 
+    // ✅ Génère l'avatar UI Avatars
+    const getAvatarUrl = () => {
+        if (!profile) return '';
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.firstName)}+${encodeURIComponent(profile.lastName)}&background=667eea&color=fff&size=200&bold=true`;
+    };
+
     const isOwnProfile = currentUser?.id === Number(id);
 
     if (loading) return <div className="loading">Chargement...</div>;
@@ -144,12 +148,11 @@ export function ProfilePage() {
                     )}
                     {!isOwnProfile && (
                         <>
-                            {/* 🆕 Bouton message */}
                             <button
                                 onClick={() => setShowChatModal(true)}
                                 className="btn btn-message"
                             >
-                                💬 Envoyer un message
+                                Envoyer un message
                             </button>
                             <button
                                 onClick={() => setShowExchangeModal(true)}
@@ -175,6 +178,8 @@ export function ProfilePage() {
                 {isOwnProfile ? (
                     <ProfilePictureUpload
                         userId={profile.id}
+                        userFirstName={profile.firstName}
+                        userLastName={profile.lastName}
                         onUploadSuccess={async () => {
                             setImageTimestamp(Date.now());
                             try {
@@ -191,7 +196,7 @@ export function ProfilePage() {
                         alt="Profile"
                         className="profile-photo"
                         onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI2MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9IjEuNWVtIj5QYXMgZGUgcGhvdG88L3RleHQ+PC9zdmc+';
+                            (e.target as HTMLImageElement).src = getAvatarUrl();
                         }}
                     />
                 )}
@@ -201,9 +206,11 @@ export function ProfilePage() {
                         <strong>Nom d'utilisateur:</strong> @{profile.userName}
                     </div>
 
-                    <div className="detail-row">
-                        <strong>Email:</strong> {profile.email}
-                    </div>
+                    {isOwnProfile && (
+                        <div className="detail-row">
+                            <strong>Email:</strong> {profile.email}
+                        </div>
+                    )}
 
                     {profile.bio && (
                         <div className="detail-row">

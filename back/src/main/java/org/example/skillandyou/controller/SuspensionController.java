@@ -19,7 +19,6 @@ import java.util.List;
 public class SuspensionController {
     private final SuspensionService suspensionService;
 
-    // ADMIN: Suspendre user depuis un Report
     @PostMapping("/from-report/{reportId}")
     public ResponseEntity<Suspension> suspendFromReport(
             @PathVariable Long reportId,
@@ -37,7 +36,6 @@ public class SuspensionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(suspension);
     }
 
-    // ADMIN: Suspendre user manuellement
     @PostMapping("/user/{userId}")
     public ResponseEntity<Suspension> suspendManually(
             @PathVariable Long userId,
@@ -56,26 +54,23 @@ public class SuspensionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(suspension);
     }
 
-    // ADMIN: Réactiver user
     @PutMapping("/user/{userId}/reactivate")
     public ResponseEntity<Void> reactivateUser(@PathVariable Long userId) {
         suspensionService.reactivateUser(userId);
         return ResponseEntity.ok().build();
     }
 
-    // ADMIN: Détail suspension
     @GetMapping("/{id}")
     public Suspension getById(@PathVariable Long id) {
         return suspensionService.getById(id);
     }
 
-    // ADMIN: Suspensions d'un user
+
     @GetMapping("/user/{userId}")
     public List<Suspension> getByUser(@PathVariable Long userId) {
         return suspensionService.getSuspensionsByUser(userId);
     }
 
-    // ADMIN: Toutes les suspensions actives
     @GetMapping("/active")
     public List<Suspension> getActive() {
         return suspensionService.getActiveSuspensions();

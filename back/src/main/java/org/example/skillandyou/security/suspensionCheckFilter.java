@@ -25,21 +25,24 @@ public class suspensionCheckFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        String uri = request.getRequestURI();
+
+        // Ignore certains endpoints publics
+        if (uri.matches("/api/users/\\d+/profile-picture")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // Si authentifié
         if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
 
             try {
                 Long userId = Long.parseLong(auth.getName().replace("user-", ""));
                 User user = userRepository.findById(userId).orElse(null);
 
-                // Si user suspendu
                 if (user != null && user.getStatus() == Status.SUSPENDED) {
-                    System.out.println("⚠️ User suspendu tente d'accéder à : " + request.getRequestURI());
-
-                    // Autorise uniquement certaines routes
-                    String uri = request.getRequestURI();
+                    // Autoriser uniquement certaines routes
                     if (!uri.startsWith("/api/auth/") && !uri.startsWith("/api/users/" + userId)) {
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                         response.setContentType("application/json");
@@ -48,10 +51,11 @@ public class suspensionCheckFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (NumberFormatException e) {
-                // Pas un userId valide, continue
+                // Pas un userId valide
             }
         }
 
         filterChain.doFilter(request, response);
     }
+
 }

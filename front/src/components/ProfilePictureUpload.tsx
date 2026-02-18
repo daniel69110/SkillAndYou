@@ -6,11 +6,15 @@ import './ProfilePictureUpload.css';
 interface ProfilePictureUploadProps {
     userId: number;
     onUploadSuccess: () => void;
+    userFirstName?: string;  // ✅ Ajouter
+    userLastName?: string;   // ✅ Ajouter
 }
 
 export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                                                                               userId,
-                                                                              onUploadSuccess
+                                                                              onUploadSuccess,
+                                                                              userFirstName = 'User',  // ✅ Ajouter
+                                                                              userLastName = 'Unknown'  // ✅ Ajouter
                                                                           }) => {
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState('');
@@ -23,6 +27,11 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
     const [completedCrop, setCompletedCrop] = useState<Crop>({ unit: '%', x: 0, y: 0, width: 50, height: 50 });
     const imgRef = useRef<HTMLImageElement>(null);
     const fileRef = useRef<File | null>(null);
+
+    // ✅ Génère l'avatar UI Avatars
+    const getAvatarUrl = () => {
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(userFirstName)}+${encodeURIComponent(userLastName)}&background=667eea&color=fff&size=200&bold=true`;
+    };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -85,7 +94,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                 lastModified: Date.now()
             });
             await userApi.uploadProfilePicture(userId, croppedFile);
-            setTimestamp(Date.now());  // ✅ Force refresh
+            setTimestamp(Date.now());
             onUploadSuccess();
             closeCropper();
         } catch (err: any) {
@@ -114,25 +123,23 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
         }
     };
 
-
-    const displayUrl = preview ||
-        `http://localhost:8080/api/users/${userId}/profile-picture?t=${timestamp}` ||
-        'data:image/svg+xml;base64,PHN2Zy...';
-
+    // ✅ URL d'affichage : preview si cropping, sinon photo backend
+    const displayUrl = preview || `http://localhost:8080/api/users/${userId}/profile-picture?t=${timestamp}`;
 
     return (
         <div className="profile-picture-upload">
             <img
                 src={displayUrl}
                 className="profile-picture-preview"
-                onError={() => {
-
+                onError={(e) => {
+                    (e.target as HTMLImageElement).src = getAvatarUrl();
                 }}
+                alt="Profile"
             />
 
             <div className="upload-actions">
                 <label className="upload-btn">
-                    {uploading ? 'Upload...' : '📷 Changer la photo'}
+                    {uploading ? 'Upload...' : 'Changer la photo'}
                     <input
                         type="file"
                         accept="image/*"
