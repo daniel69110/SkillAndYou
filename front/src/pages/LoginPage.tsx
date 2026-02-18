@@ -9,7 +9,7 @@ export const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // ✅ Erreurs PRÉCISES
+
     const [loginErrors, setLoginErrors] = useState({
         email: '',
         password: '',
@@ -25,7 +25,6 @@ export const LoginPage = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        // Clear erreurs
         setLoginErrors({ email: '', password: '', general: '' });
         setIsSuspendedError(false);
 
@@ -36,28 +35,15 @@ export const LoginPage = () => {
         } catch (err: any) {
             console.error('Erreur login:', err);
 
-
             const errorMsg = err.response?.data?.error || err.message;
 
             if (errorMsg === 'ACCOUNT_SUSPENDED') {
                 setIsSuspendedError(true);
-            } else if (errorMsg === 'EMAIL_NOT_FOUND') {
-                setLoginErrors({
-                    email: 'Email non trouvé',
-                    password: '',
-                    general: ''
-                });
-            } else if (errorMsg === 'INVALID_PASSWORD') {
-                setLoginErrors({
-                    email: '',
-                    password: 'Mot de passe incorrect',
-                    general: ''
-                });
             } else {
                 setLoginErrors({
                     email: '',
                     password: '',
-                    general: 'Erreur connexion'
+                    general: 'Email ou mot de passe incorrect'
                 });
             }
         }
