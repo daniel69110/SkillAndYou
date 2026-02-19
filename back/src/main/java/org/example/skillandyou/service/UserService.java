@@ -133,13 +133,6 @@ public class UserService {
         return users.stream().map(this::toSearchDTO).collect(Collectors.toList());
     }
 
-
-    private boolean hasSkillWithType(User user, String skillName, String type) {
-        return user.getUserSkills().stream()
-                .anyMatch(us -> us.getSkill().getName().equalsIgnoreCase(skillName) &&
-                        us.getType().name().equals(type));
-    }
-
     private UserSearchDTO toSearchDTO(User user) {
         return new UserSearchDTO(
                 user.getId(),
