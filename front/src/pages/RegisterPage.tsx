@@ -6,9 +6,26 @@ import type { RegisterRequest } from '../types';
 import './RegisterPage.css';
 import toast from "react-hot-toast";
 
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9\s]).{8,128}$/;
+
+const EyeIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+    </svg>
+);
+
+const EyeOffIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+        <line x1="1" y1="1" x2="23" y2="23"/>
+    </svg>
+);
+
+// ✅ Composant astérisque réutilisable
+const Required = () => <span className="required-star">*</span>;
 
 export function RegisterPage() {
     const navigate = useNavigate();
@@ -22,6 +39,8 @@ export function RegisterPage() {
         userName: ''
     });
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const [formErrors, setFormErrors] = useState({
         email: '',
@@ -59,7 +78,6 @@ export function RegisterPage() {
         }
     };
 
-    // ✅ Validation regex avant envoi
     const validateForm = (): boolean => {
         const errors = { email: '', password: '', userName: '', legal: '', general: '' };
         let isValid = true;
@@ -92,7 +110,6 @@ export function RegisterPage() {
             return;
         }
 
-        // ✅ Validation regex
         if (!validateForm()) return;
 
         setFormErrors({ email: '', password: '', userName: '', legal: '', general: '' });
@@ -130,7 +147,7 @@ export function RegisterPage() {
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label className="form-label">Prénom</label>
+                        <label className="form-label">Prénom <Required /></label>
                         <input
                             type="text"
                             name="firstName"
@@ -143,7 +160,7 @@ export function RegisterPage() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Nom</label>
+                        <label className="form-label">Nom <Required /></label>
                         <input
                             type="text"
                             name="lastName"
@@ -156,7 +173,7 @@ export function RegisterPage() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Nom d'utilisateur</label>
+                        <label className="form-label">Nom d'utilisateur <Required /></label>
                         <input
                             type="text"
                             name="userName"
@@ -172,7 +189,7 @@ export function RegisterPage() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Email</label>
+                        <label className="form-label">Email <Required /></label>
                         <input
                             type="email"
                             name="email"
@@ -188,32 +205,52 @@ export function RegisterPage() {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Mot de passe</label>
-                        <input
-                            type="password"
-                            name="password"
-                            className={`form-input ${formErrors.password ? 'input-error' : ''}`}
-                            placeholder="Minimum 8 caractères"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <label className="form-label">Mot de passe <Required /></label>
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                name="password"
+                                className={`form-input ${formErrors.password ? 'input-error' : ''}`}
+                                placeholder="Minimum 8 caractères"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowPassword(prev => !prev)}
+                                aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                            >
+                                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                            </button>
+                        </div>
                         {formErrors.password && (
                             <p className="error-message">{formErrors.password}</p>
                         )}
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Confirmer mot de passe</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            className={`form-input ${passwordMatchError ? 'input-error' : ''}`}
-                            placeholder="Répétez le mot de passe"
-                            value={confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
+                        <label className="form-label">Confirmer mot de passe <Required /></label>
+                        <div className="password-wrapper">
+                            <input
+                                type={showConfirmPassword ? 'text' : 'password'}
+                                name="confirmPassword"
+                                className={`form-input ${passwordMatchError ? 'input-error' : ''}`}
+                                placeholder="Répétez le mot de passe"
+                                value={confirmPassword}
+                                onChange={handleChange}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowConfirmPassword(prev => !prev)}
+                                aria-label={showConfirmPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                            >
+                                {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
+                            </button>
+                        </div>
                         {passwordMatchError && (
                             <p className="error-message">{passwordMatchError}</p>
                         )}
