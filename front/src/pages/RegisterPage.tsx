@@ -6,6 +6,10 @@ import type { RegisterRequest } from '../types';
 import './RegisterPage.css';
 import toast from "react-hot-toast";
 
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9\s]).{8,128}$/;
+
 export function RegisterPage() {
     const navigate = useNavigate();
     const { setAuth } = useAuth();
@@ -19,9 +23,9 @@ export function RegisterPage() {
     });
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    // ✅ AJOUTÉ legal
     const [formErrors, setFormErrors] = useState({
         email: '',
+        password: '',
         userName: '',
         legal: '',
         general: ''
@@ -44,18 +48,38 @@ export function RegisterPage() {
 
             if (name === 'email') setFormErrors(prev => ({ ...prev, email: '' }));
             if (name === 'userName') setFormErrors(prev => ({ ...prev, userName: '' }));
-
-            if (confirmPassword && value !== confirmPassword && name === 'password') {
-                setPasswordMatchError('Les mots de passe ne correspondent pas');
-            } else if (name === 'password') {
-                setPasswordMatchError('');
+            if (name === 'password') {
+                setFormErrors(prev => ({ ...prev, password: '' }));
+                if (confirmPassword && value !== confirmPassword) {
+                    setPasswordMatchError('Les mots de passe ne correspondent pas');
+                } else {
+                    setPasswordMatchError('');
+                }
             }
         }
     };
 
+    // ✅ Validation regex avant envoi
+    const validateForm = (): boolean => {
+        const errors = { email: '', password: '', userName: '', legal: '', general: '' };
+        let isValid = true;
+
+        if (!EMAIL_REGEX.test(formData.email)) {
+            errors.email = 'Format d\'email invalide (ex: nom@email.com)';
+            isValid = false;
+        }
+
+        if (!PASSWORD_REGEX.test(formData.password)) {
+            errors.password = 'Minimum 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial';
+            isValid = false;
+        }
+
+        setFormErrors(errors);
+        return isValid;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
 
         const legalCheckbox = document.getElementById('legal') as HTMLInputElement;
         if (!legalCheckbox?.checked) {
@@ -68,41 +92,27 @@ export function RegisterPage() {
             return;
         }
 
-        setFormErrors({ email: '', userName: '', legal: '', general: '' });
+        // ✅ Validation regex
+        if (!validateForm()) return;
+
+        setFormErrors({ email: '', password: '', userName: '', legal: '', general: '' });
         setPasswordMatchError('');
         setLoading(true);
 
         try {
             const response = await authApi.register(formData);
-            toast.success('Compte créé ! Redirection...', {
-                duration: 2500
-            });
+            toast.success('Compte créé ! Redirection...', { duration: 2500 });
             setAuth(response.token, response.user);
             setTimeout(() => navigate('/dashboard'), 1500);
         } catch (err: any) {
             const errorMsg = err.response?.data?.error;
 
             if (errorMsg === 'EMAIL_EXISTS') {
-                setFormErrors({
-                    email: 'Cet email est déjà utilisé',
-                    userName: '',
-                    legal: '',
-                    general: ''
-                });
+                setFormErrors(prev => ({ ...prev, email: 'Cet email est déjà utilisé' }));
             } else if (errorMsg === 'USERNAME_EXISTS') {
-                setFormErrors({
-                    email: '',
-                    userName: 'Ce nom d\'utilisateur est pris',
-                    legal: '',
-                    general: ''
-                });
+                setFormErrors(prev => ({ ...prev, userName: 'Ce nom d\'utilisateur est pris' }));
             } else {
-                setFormErrors({
-                    email: '',
-                    userName: '',
-                    legal: '',
-                    general: 'Erreur inscription. Réessayez.'
-                });
+                setFormErrors(prev => ({ ...prev, general: 'Erreur inscription. Réessayez.' }));
             }
         } finally {
             setLoading(false);
@@ -182,13 +192,15 @@ export function RegisterPage() {
                         <input
                             type="password"
                             name="password"
-                            className="form-input"
-                            placeholder="Minimum 6 caractères"
+                            className={`form-input ${formErrors.password ? 'input-error' : ''}`}
+                            placeholder="Minimum 8 caractères"
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            minLength={6}
                         />
+                        {formErrors.password && (
+                            <p className="error-message">{formErrors.password}</p>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -196,7 +208,7 @@ export function RegisterPage() {
                         <input
                             type="password"
                             name="confirmPassword"
-                            className="form-input"
+                            className={`form-input ${passwordMatchError ? 'input-error' : ''}`}
                             placeholder="Répétez le mot de passe"
                             value={confirmPassword}
                             onChange={handleChange}
@@ -213,18 +225,13 @@ export function RegisterPage() {
 
                     <div className="form-group checkbox-group">
                         <label className="checkbox-label">
-                            <input
-                                type="checkbox"
-                                required
-                                id="legal"
-                            />
+                            <input type="checkbox" required id="legal" />
                             <span className="checkmark"></span>
                             J'accepte les <Link to="/terms" target="_blank">conditions d'utilisation </Link>
-                             et la <Link to="/privacy" target="_blank">politique de confidentialité</Link>
+                            et la <Link to="/privacy" target="_blank">politique de confidentialité</Link>
                         </label>
                         {formErrors.legal && <p className="error-text">{formErrors.legal}</p>}
                     </div>
-
 
                     <button type="submit" className="register-button" disabled={loading}>
                         {loading ? 'Inscription...' : "S'inscrire"}
