@@ -97,7 +97,7 @@ public class ExchangeService {
         exchange.setAcceptanceDate(LocalDateTime.now());
         Exchange updated = exchangeRepository.save(exchange);
 
-        // 🔔 AJOUTE CETTE NOTIFICATION au requester
+
         notificationService.createNotification(
                 exchange.getRequester().getId(),
                 "EXCHANGE_ACCEPTED",
@@ -123,7 +123,7 @@ public class ExchangeService {
         exchange.setCompletionDate(LocalDateTime.now());
         Exchange updated = exchangeRepository.save(exchange);
 
-        // 🔔 Notification aux 2 participants
+
         notificationService.createNotification(
                 exchange.getRequester().getId(),
                 "EXCHANGE_COMPLETED",
@@ -162,7 +162,7 @@ public class ExchangeService {
     }
 
     private ExchangeDTO entityToDto(Exchange exchange) {
-        // Ton mapper existant (sans email)
+
         return new ExchangeDTO(
                 exchange.getId(),
                 new UserSummaryDTO(exchange.getRequester().getId(), exchange.getRequester().getUserName(),
