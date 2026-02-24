@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Config locale avec secrets
+src/main/resources/application-dev.properties
