@@ -60,12 +60,12 @@ const HomePage: React.FC = () => {
                     </div>
 
                     <div className="step-card">
-                        <h3>Ajouter tes compétences</h3>
+                        <h3>Ajoute tes compétences</h3>
                         <p>Déclare ce que tu sais faire et ce que tu peux transmettre.</p>
                     </div>
 
                     <div className="step-card">
-                        <h3>Échanger</h3>
+                        <h3>Échange</h3>
                         <p>Contacte d’autres membres et échangez vos savoir-faire.</p>
                     </div>
                 </div>

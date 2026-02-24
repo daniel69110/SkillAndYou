@@ -217,8 +217,6 @@ class ExchangeServiceTest {
         );
     }
 
-    // ======= completeExchange =======
-
     @Test
     void completeExchange_shouldThrow_whenStatusNotAccepted() {
         User requester = makeUser(1L, "Jean", "Dupont");
@@ -273,8 +271,6 @@ class ExchangeServiceTest {
         );
     }
 
-
-    // ======= cancelExchange =======
 
     @Test
     void cancelExchange_shouldThrow_whenStatusIsCompleted() {

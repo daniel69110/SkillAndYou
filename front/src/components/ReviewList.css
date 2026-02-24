@@ -23,10 +23,11 @@
 
 .review-card {
     background: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #b3b3b3;
     border-radius: 12px;
     padding: 20px;
     transition: box-shadow 0.2s;
+
 }
 
 .review-card:hover {

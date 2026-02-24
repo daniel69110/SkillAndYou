@@ -113,7 +113,7 @@ export function ProfilePage() {
         }
     };
 
-    // ✅ Génère l'avatar UI Avatars
+
     const getAvatarUrl = () => {
         if (!profile) return '';
         return `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.firstName)}+${encodeURIComponent(profile.lastName)}&background=667eea&color=fff&size=200&bold=true`;
