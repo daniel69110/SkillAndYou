@@ -5,7 +5,7 @@ import type { UpdateUserRequest } from '../types/UpdateUser';
 import type { UserSearchResult, SearchFilters } from '../types/Search';
 import type { UserProfile } from "../types";
 
-const API_URL = 'http://localhost:8080/api';  // ← AJOUTEZ cette constante
+const API_URL = 'http://localhost:8080/api';
 
 export const userApi = {
     getById: async (userId: number): Promise<User> => {

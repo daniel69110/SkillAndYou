@@ -51,7 +51,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
 
     return (
         <div className="exchange-card">
-            {/* Header */}
+
             <div className="exchange-header">
                 <div
                     className="exchange-status"
@@ -64,7 +64,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                 </span>
             </div>
 
-            {/* Participants */}
+
             <div className="exchange-users">
                 <div className="exchange-user">
                     <img
@@ -82,7 +82,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                 </div>
             </div>
 
-            {/* Skills */}
+
             <div className="exchange-skills">
                 <div className="skill-exchange">
                     <span className="skill-label">
@@ -105,7 +105,7 @@ const ExchangeCard: React.FC<ExchangeCardProps> = ({
                 </div>
             </div>
 
-            {/* Actions */}
+
             <div className="exchange-actions">
                 {exchange.status === 'PENDING' && isReceiver && onAccept && (
                     <button

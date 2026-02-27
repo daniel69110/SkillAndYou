@@ -160,7 +160,7 @@
 }
 
 @media (max-width: 768px) {
-    /* HERO */
+
     .hero {
         flex-direction: column;
         text-align: center;
@@ -184,7 +184,7 @@
         margin-top: 32px;
     }
 
-    /* HOW IT WORKS */
+
     .steps {
         flex-direction: column;
         align-items: center;
@@ -195,7 +195,7 @@
         max-width: 360px;
     }
 
-    /* BENEFITS */
+
     .benefits-grid {
         grid-template-columns: 1fr;
     }

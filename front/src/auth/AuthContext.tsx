@@ -37,9 +37,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 const user = JSON.parse(storedUser);
                 setToken(storedToken);
                 setUser(user);
-                console.log('✅ User rechargé depuis localStorage:', user);
             } catch (error) {
-                console.error('❌ Erreur parsing user:', error);
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
             }
@@ -51,25 +49,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         try {
             const { token: t, user: u } = await authApi.login({ email, password });
 
-            // STOCKE TOKEN + USER
             localStorage.setItem('token', t);
             localStorage.setItem('user', JSON.stringify(u));
 
             setToken(t);
             setUser(u);
 
-            console.log('✅ Login réussi, user:', u);
 
         } catch (error: any) {
-            console.error('❌ Erreur login dans AuthContext:', error);
 
-            // ✅ DÉTECTE SI COMPTE SUSPENDU
             if (error.response?.data?.error === 'ACCOUNT_SUSPENDED') {
                 console.log('⚠️ Compte suspendu détecté');
-                throw new Error('SUSPENDED');  // ✅ THROW l'erreur spéciale
+                throw new Error('SUSPENDED');
             }
 
-            // ✅ Re-throw les autres erreurs
             throw error;
         }
     };
@@ -86,7 +79,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         localStorage.removeItem('user');
         setToken(null);
         setUser(null);
-        console.log('✅ Logout, localStorage vidé');
     };
 
     if (loading) {

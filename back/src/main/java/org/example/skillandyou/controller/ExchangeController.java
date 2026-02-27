@@ -31,7 +31,6 @@ public class ExchangeController {
     @GetMapping("/my")
     public List<ExchangeDTO> getMyExchanges(@AuthenticationPrincipal String principal) {
         Long userId = Long.parseLong(principal.replace("user-", ""));
-        System.out.println("🔍 Connecté userId=" + userId);
         return exchangeService.getMyExchanges(userId);
     }
 

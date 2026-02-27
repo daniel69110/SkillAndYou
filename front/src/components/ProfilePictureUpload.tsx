@@ -6,15 +6,15 @@ import './ProfilePictureUpload.css';
 interface ProfilePictureUploadProps {
     userId: number;
     onUploadSuccess: () => void;
-    userFirstName?: string;  // ✅ Ajouter
-    userLastName?: string;   // ✅ Ajouter
+    userFirstName?: string;
+    userLastName?: string;
 }
 
 export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
                                                                               userId,
                                                                               onUploadSuccess,
-                                                                              userFirstName = 'User',  // ✅ Ajouter
-                                                                              userLastName = 'Unknown'  // ✅ Ajouter
+                                                                              userFirstName = 'User',
+                                                                              userLastName = 'Unknown'
                                                                           }) => {
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState('');
@@ -28,7 +28,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
     const imgRef = useRef<HTMLImageElement>(null);
     const fileRef = useRef<File | null>(null);
 
-    // ✅ Génère l'avatar UI Avatars
+
     const getAvatarUrl = () => {
         return `https://ui-avatars.com/api/?name=${encodeURIComponent(userFirstName)}+${encodeURIComponent(userLastName)}&background=667eea&color=fff&size=200&bold=true`;
     };
@@ -123,7 +123,7 @@ export const ProfilePictureUpload: React.FC<ProfilePictureUploadProps> = ({
         }
     };
 
-    // ✅ URL d'affichage : preview si cropping, sinon photo backend
+
     const displayUrl = preview || `http://localhost:8080/api/users/${userId}/profile-picture?t=${timestamp}`;
 
     return (

@@ -1,4 +1,3 @@
-// src/hooks/useGlobalMessages.tsx
 import { useState, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';

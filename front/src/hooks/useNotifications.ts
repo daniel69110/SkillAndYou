@@ -28,7 +28,7 @@ export const useNotifications = () => {
             debug: (str) => console.log('STOMP:', str),
 
             onConnect: () => {
-                console.log('✅ WebSocket connecté');
+
 
                 // Subscribe aux notifications user
                 stompClient.subscribe(

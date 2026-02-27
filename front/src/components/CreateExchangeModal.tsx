@@ -35,7 +35,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
         if (!user) return;
         try {
             const skills = await skillApi.getUserSkills(user.id);
-            // Filtre seulement mes OFFER (ce que je peux enseigner)
+
             setMySkills(skills.filter(s => s.type === 'OFFER'));
         } catch (error) {
             console.error('Erreur chargement skills:', error);
@@ -71,7 +71,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
         }
     };
 
-    // Filtre les OFFER du receiver (ce qu'il peut enseigner)
+
     const receiverOffers = receiverSkills.filter(s => s.type === 'OFFER');
 
     return (
@@ -88,7 +88,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
                             Proposer un échange avec <strong>{receiverName}</strong>
                         </p>
 
-                        {/* Je propose d'enseigner */}
+
                         <div className="form-group">
                             <label>Je propose d'enseigner :</label>
                             <select
@@ -112,7 +112,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
 
                         <div className="exchange-arrow">⇅</div>
 
-                        {/* Je souhaite apprendre */}
+
                         <div className="form-group">
                             <label>Je souhaite apprendre :</label>
                             <select
@@ -129,7 +129,7 @@ const CreateExchangeModal: React.FC<CreateExchangeModalProps> = ({
                             </select>
                             {receiverOffers.length === 0 && (
                                 <p className="warning">
-                                    ⚠️ {receiverName} n'a pas de compétence en OFFRE
+                                     {receiverName} n'a pas de compétence en OFFRE
                                 </p>
                             )}
                         </div>

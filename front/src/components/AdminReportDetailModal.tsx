@@ -71,14 +71,14 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content admin-modal" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>🚨 Détail du signalement</h2>
+                    <h2>Détail du signalement</h2>
                     <button className="close-btn" onClick={onClose}>✕</button>
                 </div>
 
                 <div className="modal-body">
                     {/* Utilisateur signalé */}
                     <div className="section">
-                        <h3>👤 Utilisateur signalé</h3>
+                        <h3>Utilisateur signalé</h3>
                         <div className="user-details">
                             <p><strong>{report.reportedUser.firstName} {report.reportedUser.lastName}</strong></p>
                             <p>@{report.reportedUser.userName}</p>
@@ -88,7 +88,7 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
 
                     {/* Signalement */}
                     <div className="section">
-                        <h3>📋 Détails du signalement</h3>
+                        <h3>Détails du signalement</h3>
                         <p><strong>Raison :</strong> {report.reason}</p>
                         <p><strong>Description :</strong></p>
                         <p className="description-box">{report.description}</p>
@@ -97,7 +97,7 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
 
                     {/* Auteur du signalement */}
                     <div className="section">
-                        <h3>🔍 Signalé par</h3>
+                        <h3>Signalé par</h3>
                         <p>
                             <strong>{report.reporter.firstName} {report.reporter.lastName}</strong>
                             {' '}(@{report.reporter.userName})
@@ -106,7 +106,7 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
 
                     {/* Status */}
                     <div className="section">
-                        <h3>📊 Statut actuel</h3>
+                        <h3>Statut actuel</h3>
                         <p>
                             <span className={`badge badge-${
                                 report.status === 'PENDING' ? 'orange' :
@@ -130,21 +130,21 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
                                             onClick={() => setShowSuspendForm(true)}
                                             disabled={processing}
                                         >
-                                            🔒 Suspendre l'utilisateur
+                                            Suspendre l'utilisateur
                                         </button>
                                         <button
                                             className="btn btn-success"
                                             onClick={() => handleProcess('RESOLVED')}
                                             disabled={processing}
                                         >
-                                            ✅ Accepter (sans suspension)
+                                            Accepter (sans suspension)
                                         </button>
                                         <button
                                             className="btn btn-secondary"
                                             onClick={() => handleProcess('REJECTED')}
                                             disabled={processing}
                                         >
-                                            ❌ Rejeter
+                                            Rejeter
                                         </button>
                                     </div>
                                 </div>
