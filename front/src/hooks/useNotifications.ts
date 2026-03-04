@@ -44,7 +44,7 @@ export const useNotifications = () => {
             },
 
             onStompError: (error) => {
-                console.error('❌ Erreur STOMP:', error);
+                console.error('Erreur STOMP:', error);
             },
         });
 

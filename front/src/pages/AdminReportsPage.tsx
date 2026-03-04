@@ -62,7 +62,7 @@ const AdminReportsPage: React.FC = () => {
     return (
         <div className="admin-reports-page">
             <div className="page-header">
-                <h1>🚨 Gestion des signalements</h1>
+                <h1>Gestion des signalements</h1>
                 <div className="pending-badge">
                     {pendingCount > 0 && (
                         <span className="alert-badge">{pendingCount} en attente</span>
@@ -90,7 +90,7 @@ const AdminReportsPage: React.FC = () => {
                 >
                     Rejetés
                 </button>
-                {/* ✅ NOUVEAUX boutons */}
+
                 <button
                     className={`filter-btn ${filter === 'REVIEWED' ? 'active' : ''}`}
                     onClick={() => setFilter('REVIEWED')}
@@ -114,7 +114,7 @@ const AdminReportsPage: React.FC = () => {
             {/* Liste des reports */}
             {reports.length === 0 ? (
                 <div className="no-data">
-                    <p>📭 Aucun signalement dans cette catégorie</p>
+                    <p>Aucun signalement dans cette catégorie</p>
                 </div>
             ) : (
                 <div className="reports-grid">
@@ -136,7 +136,7 @@ const AdminReportsPage: React.FC = () => {
 
                             <div className="report-card-body">
                                 <p className="report-reason">
-                                    <strong>📌 {report.reason}</strong>
+                                    <strong>{report.reason}</strong>
                                 </p>
                                 <p className="report-description">
                                     {report.description.substring(0, 80)}
@@ -155,7 +155,7 @@ const AdminReportsPage: React.FC = () => {
 
                             {report.status === 'PENDING' && (
                                 <div className="action-hint">
-                                    👉 Cliquer pour traiter
+                                    traiter
                                 </div>
                             )}
                         </div>

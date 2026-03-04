@@ -44,62 +44,36 @@ export const useMessages = (otherUserId?: number) => {
 
     useEffect(() => {
         if (!user) {
-            console.log('❌ Pas de user, WebSocket non connecté');
             return;
         }
-
-        console.log('🔌 Initialisation WebSocket pour userId:', user.id);
-        console.log('🎯 otherUserId actuel:', otherUserId);
-
         const socket = new SockJS('http://localhost:8080/ws');
         const stompClient = new Client({
             webSocketFactory: () => socket as any,
             debug: (str) => console.log('STOMP:', str),
 
             onConnect: () => {
-                console.log('✅ Messages WebSocket CONNECTÉ pour userId:', user.id);
-                console.log('📡 Subscription à: /user/' + user.id + '/queue/messages');
-
                 const subscription = stompClient.subscribe(
                     `/topic/messages/${user.id}`,
                     (message) => {
-                        console.log('═══════════════════════════════');
-                        console.log('🔔 MESSAGE REÇU VIA WEBSOCKET !');
-                        console.log('📦 Raw message:', message);
-                        console.log('📦 Message body:', message.body);
-
                         const newMessage: Message = JSON.parse(message.body);
-                        console.log('💬 Message parsé:', newMessage);
-                        console.log('👤 newMessage.senderId:', newMessage.senderId);
-                        console.log('👤 otherUserId actuel:', otherUserId);
-                        console.log('🔍 Comparaison:', otherUserId === newMessage.senderId);
-                        console.log('═══════════════════════════════');
-
-                        // Si conversation ouverte avec sender, ajouter le message
                         if (otherUserId === newMessage.senderId) {
-                            console.log('✅ CONDITIONS OK: Ajout du message à la conversation');
                             setMessages((prev) => {
                                 const updated = [...prev, newMessage];
-                                console.log('📝 Nombre de messages avant:', prev.length);
-                                console.log('📝 Nombre de messages après:', updated.length);
                                 return updated;
                             });
-                            // Marquer comme lu immédiatement
+
                             messageApi.markAsRead(newMessage.id);
                         } else {
-                            console.log('❌ CONDITIONS PAS OK: Message ignoré (autre conversation)');
-                            console.log('   otherUserId =', otherUserId, '!== senderId =', newMessage.senderId);
-                            // Sinon, incrémenter compteur
                             setUnreadCount((prev) => prev + 1);
                         }
                     }
                 );
 
-                console.log('✅ Subscription créée:', subscription);
+                console.log('Subscription créée:', subscription);
             },
 
             onStompError: (error) => {
-                console.error('❌ Erreur STOMP Messages:', error);
+                console.error('Erreur STOMP Messages:', error);
             },
 
             onDisconnect: () => {
@@ -111,24 +85,20 @@ export const useMessages = (otherUserId?: number) => {
         console.log('⚡ WebSocket activation lancée');
 
         return () => {
-            console.log('🧹 Nettoyage: Déconnexion WebSocket userId:', user.id);
             stompClient.deactivate();
         };
     }, [user, otherUserId]);
 
-    // Charger conversation au montage
     useEffect(() => {
         if (otherUserId) {
             loadConversation();
         }
     }, [otherUserId, loadConversation]);
 
-    // Charger count au montage
     useEffect(() => {
         loadUnreadCount();
     }, [loadUnreadCount]);
 
-    // Envoyer un message
     const sendMessage = async (content: string, exchangeId?: number) => {
         if (!user || !otherUserId || !content.trim()) return;
 

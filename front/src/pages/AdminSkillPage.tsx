@@ -172,10 +172,10 @@ const AdminSkillsPage: React.FC = () => {
                                 <td>{skill.description || '-'}</td>
                                 <td className="actions">
                                     <button className="btn-edit" onClick={() => handleEdit(skill)}>
-                                        ✏️
+                                        modifier
                                     </button>
                                     <button className="btn-delete" onClick={() => handleDelete(skill.id!)}>
-                                        🗑️
+                                        supprimer
                                     </button>
                                 </td>
                             </tr>

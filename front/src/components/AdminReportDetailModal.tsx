@@ -150,7 +150,7 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
                                 </div>
                             ) : (
                                 <div className="suspend-form">
-                                    <h3>🔒 Suspendre l'utilisateur</h3>
+                                    <h3>Suspendre l'utilisateur</h3>
 
                                     <div className="form-group">
                                         <label>Raison de la suspension</label>
@@ -183,7 +183,7 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
                                             onClick={handleSuspend}
                                             disabled={processing || !suspendReason.trim()}
                                         >
-                                            {processing ? 'Suspension...' : '🔒 Confirmer la suspension'}
+                                            {processing ? 'Suspension...' : 'Confirmer la suspension'}
                                         </button>
                                         <button
                                             className="btn btn-secondary"
@@ -201,7 +201,7 @@ const AdminReportDetailModal: React.FC<Props> = ({ report, onClose }) => {
                     {/* Infos traitement (si traité) */}
                     {report.status !== 'PENDING' && report.processingDate && (
                         <div className="section">
-                            <h3>✅ Traitement</h3>
+                            <h3>Traitement</h3>
                             <p>
                                 Traité le {new Date(report.processingDate).toLocaleString('fr-FR')}
                                 {report.admin && ` par @${report.admin.userName}`}

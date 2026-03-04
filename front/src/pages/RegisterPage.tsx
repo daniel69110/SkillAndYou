@@ -24,7 +24,6 @@ const EyeOffIcon = () => (
     </svg>
 );
 
-// ✅ Composant astérisque réutilisable
 const Required = () => <span className="required-star">*</span>;
 
 export function RegisterPage() {
@@ -211,7 +210,7 @@ export function RegisterPage() {
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
                                 className={`form-input ${formErrors.password ? 'input-error' : ''}`}
-                                placeholder="Minimum 8 caractères"
+                                placeholder="Min 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial"
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
