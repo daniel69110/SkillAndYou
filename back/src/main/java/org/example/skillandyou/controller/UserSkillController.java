@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.skillandyou.dto.AddUserSkillRequestDTO;
 import org.example.skillandyou.dto.UserSkillDTO;
 import org.example.skillandyou.service.UserSkillService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +35,8 @@ public class UserSkillController {
         return userSkillService.getUserSkills(userId);
     }
 
-    @DeleteMapping("/{skillId}")
-    public void removeSkill(@PathVariable Long userId, @PathVariable Long skillId) {
-        userSkillService.deleteUserSkill(userId, skillId);
+    @DeleteMapping("/{userSkillId}")
+    public void removeSkill(@PathVariable Long userId, @PathVariable Long userSkillId) {
+        userSkillService.deleteUserSkill(userId, userSkillId);
     }
 }

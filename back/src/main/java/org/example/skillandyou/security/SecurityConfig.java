@@ -38,7 +38,6 @@ public class SecurityConfig {
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
 
-
                         .requestMatchers("/api/users/*/profile-picture").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
@@ -77,6 +76,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/*/profile-picture").hasAnyRole("USER", "ADMIN")
 
+                        // sous-ressources des users (skills, etc.)
+                        .requestMatchers(HttpMethod.POST, "/api/users/*/skills").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/users/*/skills/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/*/skills/**").hasAnyRole("USER", "ADMIN")
+
                         // Profils (protégés)
                         .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/*").hasAnyRole("USER", "ADMIN")
@@ -95,9 +99,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

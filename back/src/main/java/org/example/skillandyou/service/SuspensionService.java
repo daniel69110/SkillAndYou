@@ -22,7 +22,7 @@ public class SuspensionService {
     private final ReportRepository reportRepository;
     private final NotificationService notificationService;
 
-    // ADMIN: Suspendre user (depuis un Report)
+
     @Transactional
     public Suspension suspendUserFromReport(Long reportId, Long adminId, LocalDate endDate) {
         Report report = reportRepository.findById(reportId)
@@ -33,12 +33,12 @@ public class SuspensionService {
 
         User user = report.getReportedUser();
 
-        // Vérifier si déjà suspendu
+
         if (user.getStatus() == Status.SUSPENDED) {
             throw new IllegalStateException("Utilisateur déjà suspendu");
         }
 
-        // Créer Suspension
+
         Suspension suspension = Suspension.builder()
                 .user(user)
                 .admin(admin)
@@ -50,11 +50,11 @@ public class SuspensionService {
 
         suspensionRepository.save(suspension);
 
-        // Changer status User
+
         user.setStatus(Status.SUSPENDED);
         userRepository.save(user);
 
-        // Notification
+
         notificationService.createNotification(
                 user.getId(),
                 "ACCOUNT_SUSPENDED",

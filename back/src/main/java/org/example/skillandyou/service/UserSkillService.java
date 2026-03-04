@@ -45,8 +45,8 @@ public class UserSkillService {
                 .stream().map(this::toDTO).toList();
     }
 
-    public void deleteUserSkill(Long userId, Long skillId) {
-        userSkillRepository.deleteByUserIdAndSkillId(userId, skillId);
+    public void deleteUserSkill(Long userId, Long userSkillId) {
+        userSkillRepository.deleteById(userSkillId);
     }
 
     private UserSkillDTO toDTO(UserSkill userSkill) {
