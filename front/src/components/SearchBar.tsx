@@ -7,6 +7,7 @@ import UserCard from './UserCard';
 import type { UserSearchResult } from '../types/Search';
 import "./SearchBar.css"
 import {useNavigate} from 'react-router-dom';
+import {CitySearchInput} from "./CitySearchInput.tsx";
 
 interface SearchBarProps {
     showResults?: boolean;
@@ -84,10 +85,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ showResults = true }) => {
                     ))}
                 </select>
 
-                <input
-                    placeholder="Ville"
+                <CitySearchInput
                     value={filters.city || ''}
-                    onChange={(e) => setFilters({...filters, city: e.target.value})}
+                    onChange={(city) => setFilters({...filters, city})}
                 />
 
                 <select value={filters.type || ''} onChange={(e) =>

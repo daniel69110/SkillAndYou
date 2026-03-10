@@ -5,6 +5,7 @@ import type { UserSearchResult, SearchFilters } from '../types/Search';
 import type { Skill } from '../types';  // ← AJOUTEZ cet import
 import UserCard from '../components/UserCard';
 import './SearchPage.css';
+import {CitySearchInput} from "../components/CitySearchInput.tsx";
 
 const SearchPage: React.FC = () => {
     const [filters, setFilters] = useState<SearchFilters>({});
@@ -91,11 +92,9 @@ const SearchPage: React.FC = () => {
                 </select>
 
 
-                <input
-                    type="text"
-                    placeholder="Ville (ex: Lyon)"
+                <CitySearchInput
                     value={filters.city || ''}
-                    onChange={(e) => setFilters({ ...filters, city: e.target.value })}
+                    onChange={(city) => setFilters({...filters, city})}
                 />
 
 
