@@ -4,6 +4,7 @@ import { userApi } from '../api/userApi';
 import { useAuth } from '../auth/AuthContext';
 import type { UpdateProfileRequest } from '../types';
 import './EditProfilePage.css';
+import { CitySearch } from '../components/CitySearch';
 
 export function EditProfilePage() {
     const navigate = useNavigate();
@@ -132,35 +133,13 @@ export function EditProfilePage() {
                 </div>
 
                 <div className="form-group">
-                    <label className="form-label">Ville</label>
-                    <input
-                        type="text"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        className="form-input"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label className="form-label">Pays</label>
-                    <input
-                        type="text"
-                        name="country"
-                        value={formData.country}
-                        onChange={handleChange}
-                        className="form-input"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label className="form-label">Code postal</label>
-                    <input
-                        type="text"
-                        name="postalCode"
-                        value={formData.postalCode}
-                        onChange={handleChange}
-                        className="form-input"
+                    <CitySearch
+                        city={formData.city || ''}
+                        postalCode={formData.postalCode || ''}
+                        country={formData.country || ''}
+                        onChange={(city, postalCode, country) => {
+                            setFormData(prev => ({ ...prev, city, postalCode, country }));
+                        }}
                     />
                 </div>
 

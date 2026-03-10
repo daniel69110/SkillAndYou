@@ -100,6 +100,14 @@ export function ProfilePage() {
         try {
             setUpdatingVisibility(true);
             const updateData = {
+                firstName: profile.firstName,
+                lastName: profile.lastName,
+                userName: profile.userName,
+                bio: profile.bio,
+                city: profile.city,
+                country: profile.country,
+                postalCode: profile.postalCode,
+                photoUrl: profile.photoUrl,
                 visibleInSearch: !profile.visibleInSearch
             };
             await userApi.update(profile.id, updateData);
@@ -112,6 +120,7 @@ export function ProfilePage() {
             setUpdatingVisibility(false);
         }
     };
+
 
 
     const getAvatarUrl = () => {
