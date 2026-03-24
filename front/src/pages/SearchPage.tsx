@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { userApi } from '../api/userApi';
-import { skillApi } from '../api/skillApi';  // ← AJOUTEZ cet import
+import { skillApi } from '../api/skillApi';
 import type { UserSearchResult, SearchFilters } from '../types/Search';
-import type { Skill } from '../types';  // ← AJOUTEZ cet import
+import type { Skill } from '../types';
 import UserCard from '../components/UserCard';
+import Pagination from '../components/Pagination';
 import './SearchPage.css';
-import {CitySearchInput} from "../components/CitySearchInput.tsx";
+import { CitySearchInput } from "../components/CitySearchInput.tsx";
+
+const ITEMS_PER_PAGE = 9;
 
 const SearchPage: React.FC = () => {
     const [filters, setFilters] = useState<SearchFilters>({});
     const [results, setResults] = useState<UserSearchResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
-
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [skills, setSkills] = useState<Skill[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [loadingSkills, setLoadingSkills] = useState(true);
-
 
     useEffect(() => {
         const loadSkills = async () => {
             try {
                 const data = await skillApi.getAllSkills();
                 setSkills(data);
-
-
                 const uniqueCategories = [...new Set(data.map(s => s.category).filter(Boolean))] as string[];
                 setCategories(uniqueCategories);
             } catch (error) {
@@ -34,13 +34,13 @@ const SearchPage: React.FC = () => {
                 setLoadingSkills(false);
             }
         };
-
         loadSkills();
     }, []);
 
     const handleSearch = async () => {
         setLoading(true);
         setHasSearched(true);
+        setCurrentPage(1);
         try {
             const data = await userApi.searchUsers(filters);
             setResults(data);
@@ -51,9 +51,21 @@ const SearchPage: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        if (!loadingSkills) {
+            handleSearch();
+        }
+    }, [loadingSkills]);
+
     const filteredSkills = filters.category
         ? skills.filter(s => s.category === filters.category)
         : skills;
+
+
+    const paginatedResults = results.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
 
     if (loadingSkills) {
         return <div className="search-page"><p>Chargement...</p></div>;
@@ -64,13 +76,12 @@ const SearchPage: React.FC = () => {
             <h1>Rechercher des utilisateurs</h1>
 
             <div className="search-filters">
-
                 <select
                     value={filters.category || ''}
                     onChange={(e) => setFilters({
                         ...filters,
                         category: e.target.value || undefined,
-                        skill: undefined  // Reset skill quand on change de catégorie
+                        skill: undefined
                     })}
                 >
                     <option value="">Toutes les catégories</option>
@@ -79,11 +90,10 @@ const SearchPage: React.FC = () => {
                     ))}
                 </select>
 
-
                 <select
                     value={filters.skill || ''}
                     onChange={(e) => setFilters({ ...filters, skill: e.target.value || undefined })}
-                    disabled={!filters.category && skills.length > 50}  // Désactiver si trop de choix
+                    disabled={!filters.category && skills.length > 50}
                 >
                     <option value="">Toutes les compétences</option>
                     {filteredSkills.map((skill) => (
@@ -91,12 +101,10 @@ const SearchPage: React.FC = () => {
                     ))}
                 </select>
 
-
                 <CitySearchInput
                     value={filters.city || ''}
-                    onChange={(city) => setFilters({...filters, city})}
+                    onChange={(city) => setFilters({ ...filters, city })}
                 />
-
 
                 <select
                     value={filters.type || ''}
@@ -114,14 +122,21 @@ const SearchPage: React.FC = () => {
 
             {loading && <p>Chargement...</p>}
 
-            {!loading && hasSearched && (
+            {!loading && hasSearched && results.length > 0 && (
                 <div className="search-results">
                     <p className="results-count">{results.length} résultat(s)</p>
                     <div className="users-grid">
-                        {results.map((user) => (
+                        {paginatedResults.map((user) => (
                             <UserCard key={user.id} user={user} />
                         ))}
                     </div>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalItems={results.length}
+                        itemsPerPage={ITEMS_PER_PAGE}
+                        onPageChange={setCurrentPage}
+                    />
                 </div>
             )}
 
