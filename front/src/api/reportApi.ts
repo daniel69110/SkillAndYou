@@ -1,13 +1,10 @@
-// src/api/reportApi.ts
-import axios from 'axios';
+import api from './axios';
 import type { Report, CreateReportDTO, ProcessReportDTO } from '../types/Report';
-
-const API_URL = 'http://localhost:8080/api/reports';
 
 const reportApi = {
     createReport: async (data: CreateReportDTO): Promise<Report> => {
         const token = localStorage.getItem('token');
-        const response = await axios.post(API_URL, data, {
+        const response = await api.post('/reports', data, {
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;
@@ -15,7 +12,7 @@ const reportApi = {
 
     getMyReports: async (): Promise<Report[]> => {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/my-reports`, {
+        const response = await api.get('/reports/my-reports', {
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;
@@ -23,7 +20,7 @@ const reportApi = {
 
     getPendingReports: async (): Promise<Report[]> => {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/pending`, {
+        const response = await api.get('/reports/pending', {
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;
@@ -31,7 +28,7 @@ const reportApi = {
 
     countPendingReports: async (): Promise<number> => {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/pending/count`, {
+        const response = await api.get('/reports/pending/count', {
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;
@@ -39,7 +36,7 @@ const reportApi = {
 
     getReportById: async (id: number): Promise<Report> => {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/${id}`, {
+        const response = await api.get(`/reports/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;
@@ -47,7 +44,7 @@ const reportApi = {
 
     getReportsByUser: async (userId: number): Promise<Report[]> => {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/reported/${userId}`, {
+        const response = await api.get(`/reports/reported/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;
@@ -55,7 +52,7 @@ const reportApi = {
 
     processReport: async (id: number, data: ProcessReportDTO): Promise<Report> => {
         const token = localStorage.getItem('token');
-        const response = await axios.post(`${API_URL}/${id}/process`, data, {
+        const response = await api.post(`/reports/${id}/process`, data, {
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;

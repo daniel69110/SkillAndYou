@@ -1,17 +1,14 @@
-import axios from 'axios';
-import type { LoginRequest, LoginResponse, RegisterRequest } from '../types';
 import api from "./axios.ts";
-
-const API_URL = 'http://localhost:8080/api';
+import type { LoginRequest, LoginResponse, RegisterRequest } from '../types';
 
 export const authApi = {
     login: async (credentials: LoginRequest): Promise<LoginResponse> => {
-        const response = await axios.post(`${API_URL}/auth/login`, credentials);
+        const response = await api.post('/auth/login', credentials);
         return response.data;
     },
 
     register: async (data: RegisterRequest): Promise<LoginResponse> => {
-        const response = await axios.post(`${API_URL}/users/register`, data);
+        const response = await api.post('/users/register', data);
         return response.data;
     },
 

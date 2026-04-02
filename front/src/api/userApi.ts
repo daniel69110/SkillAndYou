@@ -1,11 +1,8 @@
 import api from './axios';
-import axios from 'axios';
 import type { User } from '../types/User';
 import type { UpdateUserRequest } from '../types/UpdateUser';
 import type { UserSearchResult, SearchFilters } from '../types/Search';
 import type { UserProfile } from "../types";
-
-const API_URL = 'http://localhost:8080/api';
 
 export const userApi = {
     getById: async (userId: number): Promise<User> => {
@@ -38,8 +35,8 @@ export const userApi = {
         formData.append('file', file);
 
         const token = localStorage.getItem('token');
-        const response = await axios.post(  // ← Utilisez axios direct (pas api)
-            `${API_URL}/users/${userId}/profile-picture`,
+        const response = await api.post(
+            `/users/${userId}/profile-picture`,
             formData,
             {
                 headers: {
@@ -53,7 +50,7 @@ export const userApi = {
 
     deleteProfilePicture: async (userId: number): Promise<void> => {
         const token = localStorage.getItem('token');
-        await axios.delete(`${API_URL}/users/${userId}/profile-picture`, {  // ← axios direct
+        await api.delete(`/users/${userId}/profile-picture`, {
             headers: { Authorization: `Bearer ${token}` }
         });
     },
@@ -64,14 +61,11 @@ export const userApi = {
         if (filters.city) params.append('city', filters.city);
         if (filters.type) params.append('type', filters.type);
 
-
-        const response = await axios.get(`${API_URL}/users/search?${params.toString()}`);
+        const response = await api.get(`/users/search?${params.toString()}`);
         return response.data;
     },
-
 
     deleteAccount: async (userId: number, password: string): Promise<void> => {
         return api.delete(`/users/${userId}`, { data: { password } });
     }
-
 };
