@@ -35,7 +35,7 @@ export const MessagesPage: React.FC = () => {
 
 
             const { data: allMessages } = await axios.get<Message[]>(
-                'http://localhost:8080/api/messages/recent',
+                'https://skillandyou.me/api/messages/recent',
                 {
                     params: { userId: user.id },
                     headers: { Authorization: `Bearer ${token}` }
@@ -51,7 +51,7 @@ export const MessagesPage: React.FC = () => {
                 if (!conversationsMap.has(otherUserId)) {
 
                     const { data: otherUser } = await axios.get(
-                        `http://localhost:8080/api/users/${otherUserId}`,
+                        `https://skillandyou.me/api/users/${otherUserId}`,
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
 

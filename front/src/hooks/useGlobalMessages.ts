@@ -29,7 +29,7 @@ export const useGlobalMessages = () => {
     useEffect(() => {
         if (!user) return;
 
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS('https://skillandyou.me/ws');
         const stompClient = new Client({
             webSocketFactory: () => socket as any,
 
