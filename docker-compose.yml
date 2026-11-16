@@ -72,10 +72,24 @@ services:
       context: ./front
       dockerfile: Dockerfile
     container_name: skillandyou-frontend
-    ports:
-      - "80:80"
     depends_on:
       - backend
+    networks:
+      - skillandyou-network
+
+
+  reverse-proxy:
+    image: caddy:latest
+    container_name: skillandyou-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
     networks:
       - skillandyou-network
 
@@ -84,6 +98,8 @@ volumes:
   mysql_data:
   mongo_data:
   uploads_data:
+  caddy_data:
+  caddy_config:
 
 
 networks:
