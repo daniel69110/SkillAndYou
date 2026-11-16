@@ -47,6 +47,8 @@ export const useMessages = (otherUserId?: number) => {
             return;
         }
         const socket = new SockJS('https://skillandyou.me/ws');
+        // const socket = new SockJS('{{local}}/ws');
+
         const stompClient = new Client({
             webSocketFactory: () => socket as any,
             debug: (str) => console.log('STOMP:', str),
