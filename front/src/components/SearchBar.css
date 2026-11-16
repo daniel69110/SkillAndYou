@@ -1,43 +1,14 @@
-.search-home-section {
-    background: linear-gradient(135deg, rgba(26, 76, 149, 0.01), rgba(26, 76, 149, 0.47));
-    padding: 4rem 2rem;
-    color: white;
-    text-align: center;
-}
-
-.search-home-section h2 {
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-}
-
-.users-preview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.search-more-cta {
-    margin-top: 2rem;
-    padding-top: 2rem;
-}
-
-.btn-outline-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: white;
-    color: #007bff;
-    border: 2px solid #007bff;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.2s;
-}
-
-.btn-outline-primary:hover {
-    background: #007bff;
-    color: white;
-    transform: translateY(-2px);
+.search-section { width: 100%; }
+.search-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 18px; border: 1px solid var(--border); border-radius: 20px; background: #F8FAFE; box-shadow: var(--shadow-sm); }
+.search-filters > * { flex: 1 1 170px; min-width: 0; }
+.search-filters select, .search-filters input { width: 100%; min-height: 48px; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 12px; background: #fff; color: var(--ink); font-size: 16px; transition: border-color .18s ease, box-shadow .18s ease; }
+.search-filters select:focus, .search-filters input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(12, 104, 231, .12); }
+.search-filters .btn-search { flex: 0 1 170px; min-height: 48px; border: none; border-radius: 12px; font-weight: 700; }
+.loading-preview { margin: 18px 0 0; color: var(--muted); font-weight: 600; }
+.search-preview { margin-top: 26px; text-align: left; }
+.search-preview h3 { margin-bottom: 14px; }
+.users-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.search-more-cta { margin-top: 24px; text-align: center; }
+@media (max-width: 640px) {
+  .search-filters > * { flex-basis: 100%; }
 }
